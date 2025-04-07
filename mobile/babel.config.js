@@ -1,19 +1,37 @@
 module.exports = function (api) {
-  api.cache(true);
-  return {
-    presets: ['babel-preset-expo'],
-    plugins: [
-      [
-        '@tamagui/babel-plugin',
-        {
-          components: ['tamagui'],
-          config: './tamagui.config.ts',
-          logTimings: true,
-          disableExtraction: process.env.NODE_ENV === 'development',
-        },
-      ],
-
-      'react-native-reanimated/plugin',
-    ],
+    api.cache(true);
+    return {
+      presets: ['babel-preset-expo'],
+      plugins: [
+        [
+          'module-resolver',
+          '@tamagui/babel-plugin',
+          { 
+            components: ['tamagui'],
+            config: './tamagui.config.ts',
+            logTimings: true,
+            disableExtraction: process.env.NODE_ENV === 'development',
+            root: ['./mobile'],
+            alias: {
+              '@components': './mobile/components',
+              '@atoms': './mobile/components/atoms',
+              '@molecules': './mobile/components/molecules',
+              '@organisms': './mobile/components/organisms',
+              '@layout': './mobile/components/layout',
+              '@pages': './mobile/components/pages',
+              '@assets': './mobile/assets',
+              '@hooks': './mobile/hooks',
+              '@utils': './mobile/utils',
+              '@store': './mobile/store',
+              '@services': './mobile/services',
+              '@api': './mobile/api',
+              '@app': './mobile/app'
+            }
+          }
+        ],
+        'react-native-reanimated/plugin',
+      ]
+    };
   };
-};
+  
+
