@@ -21,9 +21,9 @@ jobs:
           echo "Branch name: $BRANCH_NAME"
           
           # Vérifier le format
-          if ! [[ $BRANCH_NAME =~ ^[0-9]+-[a-z]+-[a-z0-9-]+$ ]]; then
-            echo "::error::La branche '$BRANCH_NAME' ne respecte pas le format requis: [numéro-issue]-[type]-[description]"
-            echo "::error::Exemple: 09-feat-login"
+          if ! [[ $BRANCH_NAME =~ ^[0-9]+-[a-z]+$ ]]; then
+            echo "::error::La branche '$BRANCH_NAME' ne respecte pas le format requis: [numéro-issue]-[label]"
+            echo "::error::Exemple: 09-feat"
             exit 1
           fi
           
