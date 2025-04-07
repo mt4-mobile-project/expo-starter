@@ -1,0 +1,49 @@
+# 🏗️ Architecture du projet
+
+Ce projet suit une structure **modulaire et atomique** pour garder le code propre, organisé et facile à maintenir.
+
+## 📁 Structure des dossiers
+
+### `app/`
+Contient le point d’entrée de l’application et la navigation (via `expo-router`).
+
+### `assets/images/`
+Images statiques utilisées dans l’app.
+
+### `components/`
+Composants réutilisables selon l’architecture atomique :
+- `atoms/` → éléments de base (bouton, texte, input).
+- `molecules/` → combinaison d’atomes (ex: champ de recherche avec icône).
+- `organisms/` → parties complètes d’écran (formulaire, header, etc).
+- `layout/` → structures de pages ou wrappers (ex: écran avec safe area, padding, etc).
+
+### `docs/`
+Documentation interne du projet (comme ce fichier).
+
+### `hooks/`
+Custom hooks React (ex: `useAuth`, `useFetch`).
+
+### `scripts/`
+Scripts utiles pour automatiser des tâches (ex: reset du projet).
+
+### `services/`
+Gestion des appels API ou intégrations avec des services externes.
+
+### `store/`
+Gestion de l’état global de l’application (via, Redux, etc).
+
+### `types/`
+Définition des types TypeScript globaux.
+
+### `utils/`
+Fonctions utilitaires (ex: formatage de dates, helpers).
+
+---
+
+## ✅ Avantages
+
+- 🔍 Facile à retrouver et réutiliser un composant.
+- ✨ Code clair, logique et scalable.
+- 📦 Compatible avec les alias (`@components`, `@hooks`, etc).
+
+---
