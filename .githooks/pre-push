@@ -1,0 +1,73 @@
+branch_name=$(git symbolic-ref --short HEAD)
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m'
+
+branch_pattern="^[0-9]+-[a-z]+(-[a-zA-Z0-9-]+)*$"
+
+valid_labels=("build" "ci" "doc" "feat" "fix" "refacto" "style" "test")
+
+if ! [[ $branch_name =~ $branch_pattern ]]; then
+  echo -e "${RED}ERREUR: Le nom de la branche '$branch_name' ne respecte pas la convention.${NC}"
+  echo -e "Le format doit être: [numéro-issue]-[label] ou [numéro-issue]-[label]-[description]"
+  echo -e "Exemples: 09-feat, 09-feat-login, 09-feat-user-authentication"
+  echo -e ""
+  echo -e "Labels acceptés: ${valid_labels[*]}"
+  exit 1
+fi
+
+issue_number=$(echo $branch_name | cut -d'-' -f1)
+label=$(echo $branch_name | cut -d'-' -f2)
+
+if [[ ! " ${valid_labels[*]} " =~ " ${label} " ]]; then
+  echo -e "${RED}ERREUR: Label '$label' non valide.${NC}"
+  echo -e "Labels acceptés: ${valid_labels[*]}"
+  exit 1
+fi
+
+remote_url=$(git config --get remote.origin.url)
+repo_path=$(echo $remote_url | sed -E 's/.*github.com[:/]([^.]*)(\.git)?/\1/')
+
+echo -e "${YELLOW}Vérification de l'existence de l'issue #$issue_number sur GitHub...${NC}"
+
+response=$(curl -s -o /dev/null -w "%{http_code}" \
+  -H "Accept: application/vnd.github.v3+json" \
+  "https://api.github.com/repos/$repo_path/issues/$issue_number")
+
+if [ "$response" != "200" ]; then
+  echo -e "${RED}ERREUR: L'issue #$issue_number n'existe pas dans le dépôt GitHub.${NC}"
+  echo -e "Veuillez créer l'issue avant de travailler sur cette branche."
+  exit 1
+fi
+
+issue_info=$(curl -s \
+  -H "Accept: application/vnd.github.v3+json" \
+  "https://api.github.com/repos/$repo_path/issues/$issue_number")
+
+issue_labels=$(echo "$issue_info" | grep -o '"name": "[^"]*"' | grep -o '[^"]*$')
+
+if ! echo "$issue_labels" | grep -q "^$label$"; then
+  echo -e "${YELLOW}ATTENTION: Le label '$label' n'est pas présent sur l'issue #$issue_number.${NC}"
+  echo -e "Voulez-vous ajouter ce label à l'issue? (y/n)"
+  read -r response
+  
+  if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+    echo -e "${YELLOW}Pour ajouter le label, allez sur GitHub et ajoutez-le manuellement.${NC}"
+    echo -e "URL: https://github.com/$repo_path/issues/$issue_number"
+    
+    echo -e "${YELLOW}Voulez-vous continuer le push malgré tout? (y/n)${NC}"
+    read -r continue_push
+    
+    if [[ ! "$continue_push" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+      echo -e "${RED}Push annulé.${NC}"
+      exit 1
+    fi
+  fi
+fi
+
+echo -e "${GREEN}✓ Issue #$issue_number existe${NC}"
+echo -e "${GREEN}✓ Nom de branche valide: $branch_name${NC}"
+echo -e "${GREEN}✓ Push autorisé${NC}"
+exit 0
