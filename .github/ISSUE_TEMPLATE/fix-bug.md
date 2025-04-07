@@ -1,8 +1,8 @@
 ---
-name: Bug report
-about: Créez un rapport pour nous aider à nous améliorer
-title: "[BUG]"
-labels: feat, fix
+name: Fix bug
+about: Créez un rapport pour résoudre un bug
+title: "[FIX]"
+labels: fix
 assignees: ''
 
 ---
