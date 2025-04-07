@@ -1,0 +1,53 @@
+name: Validate Branch Name
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches-ignore:
+      - main
+      - master
+      - develop
+
+jobs:
+  validate:
+    name: Validate Branch Name
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Branch Name
+        id: check-branch-name
+        run: |
+          BRANCH_NAME="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
+          echo "Branch name: $BRANCH_NAME"
+          
+          # Vérifier le format
+          if ! [[ $BRANCH_NAME =~ ^[0-9]+-[a-z]+-[a-z0-9-]+$ ]]; then
+            echo "::error::La branche '$BRANCH_NAME' ne respecte pas le format requis: [numéro-issue]-[type]-[description]"
+            echo "::error::Exemple: 09-feat-login"
+            exit 1
+          fi
+          
+          # Extraire le numéro d'issue
+          ISSUE_NUMBER=$(echo $BRANCH_NAME | cut -d'-' -f1)
+          
+          echo "Issue number: $ISSUE_NUMBER"
+          echo "✅ Branch name validation passed: $BRANCH_NAME"
+          
+      - name: Verify Issue Exists
+        if: success()
+        run: |
+          BRANCH_NAME="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
+          ISSUE_NUMBER=$(echo $BRANCH_NAME | cut -d'-' -f1)
+          
+          # Vérifier si l'issue existe
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/$ISSUE_NUMBER")
+          
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "::error::L'issue #$ISSUE_NUMBER n'existe pas dans ce dépôt."
+            exit 1
+          fi
+          
+          echo "✅ Issue #$ISSUE_NUMBER exists"
