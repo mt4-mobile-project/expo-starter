@@ -3,18 +3,18 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
+import { useColorScheme } from 'react-native';
 import 'react-native-reanimated';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import tamaguiConfig from '../tamagui.config';
 import { TamaguiProvider, Theme } from 'tamagui';
+import tamaguiConfig from '../tamagui.config';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-// Create a client
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
+  const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -31,15 +31,16 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <TamaguiProvider config={tamaguiConfig} defaultTheme="light">
-        <Theme name="light">
-          <Theme name="blue">
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="+not-found" />
-            </Stack>
-            <StatusBar style="auto" />
-          </Theme>
+      <TamaguiProvider
+        config={tamaguiConfig}
+        defaultTheme={colorScheme === 'dark' ? 'dark' : 'light'}
+      >
+        <Theme name={colorScheme === 'dark' ? 'dark' : 'light'}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
         </Theme>
       </TamaguiProvider>
     </QueryClientProvider>
