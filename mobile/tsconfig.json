@@ -1,51 +1,26 @@
 {
   "compilerOptions": {
-    "baseUrl": "./mobile",
+    "baseUrl": ".",
     "jsx": "react-native",
     "strict": true,
+    "moduleResolution": "node",
+    "module": "esnext",
+    "allowJs": true,
     "paths": {
-      "@components/*": [
-        "components/*"
-      ],
-      "@atoms/*": [
-        "components/atoms/*"
-      ],
-      "@molecules/*": [
-        "components/molecules/*"
-      ],
-      "@organisms/*": [
-        "components/organisms/*"
-      ],
-      "@layout/*": [
-        "components/layout/*"
-      ],
-      "@pages/*": [
-        "components/pages/*"
-      ],
-      "@assets/*": [
-        "assets/*"
-      ],
-      "@hooks/*": [
-        "hooks/*"
-      ],
-      "@utils/*": [
-        "utils/*"
-      ],
-      "@store/*": [
-        "store/*"
-      ],
-      "@services/*": [
-        "services/*"
-      ],
-      "@api/*": [
-        "api/*"
-      ],
-      "@app/*": [
-        "app/*"
-      ]
-    },
-    "module": "NodeNext",
-    "moduleResolution": "nodenext"
+      "@components/*": ["components/*"],
+      "@atoms/*": ["components/atoms/*"],
+      "@molecules/*": ["components/molecules/*"],
+      "@organisms/*": ["components/organisms/*"],
+      "@layout/*": ["components/layout/*"],
+      "@pages/*": ["components/pages/*"],
+      "@assets/*": ["assets/*"],
+      "@hooks/*": ["hooks/*"],
+      "@utils/*": ["utils/*"],
+      "@store/*": ["store/*"],
+      "@services/*": ["services/*"],
+      "@api/*": ["api/*"],
+      "@app/*": ["app/*"]
+    }
   },
   "include": [
     "**/*.ts",
