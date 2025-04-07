@@ -20,6 +20,8 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./mobile
 
       - name: Run TypeScript compiler
         run: npx tsc --noEmit
+        working-directory: ./mobile
