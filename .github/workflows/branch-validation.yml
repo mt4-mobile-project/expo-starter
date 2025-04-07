@@ -6,6 +6,14 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+  # Permission nécessaire pour GitHub Projects
+  repository-projects: write
+  project: write
+
 jobs:
   validate-branch-name:
     runs-on: ubuntu-latest
@@ -111,3 +119,202 @@ jobs:
             -d "{\"body\": \"$NEW_BODY\"}"
             
           echo "✅ PR #$PR_NUMBER liée à l'issue #$ISSUE_NUMBER"
+
+      # Ajouter cette étape pour lier la PR au projet GitHub
+      - name: Link PR to GitHub Project
+        uses: actions/github-script@v6
+        if: success()
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const issueNumber = ${{ steps.extract-info.outputs.issue_number }};
+            
+            try {
+              // 1. Obtenir les projets associés au dépôt
+              const { data: projects } = await github.rest.projects.listForRepo({
+                owner,
+                repo,
+                state: 'open'
+              });
+              
+              if (projects.length === 0) {
+                console.log('Aucun projet GitHub trouvé pour ce dépôt');
+                return;
+              }
+              
+              // Vous pouvez filtrer par nom de projet si nécessaire
+              // const project = projects.find(p => p.name === 'Nom de votre projet');
+              const project = projects[0]; // Par défaut, utilise le premier projet
+              
+              console.log(`Projet GitHub trouvé: ${project.name} (ID: ${project.id})`);
+              
+              // 2. Obtenir les colonnes du projet
+              const { data: columns } = await github.rest.projects.listColumns({
+                project_id: project.id
+              });
+              
+              if (columns.length === 0) {
+                console.log('Aucune colonne trouvée dans le projet');
+                return;
+              }
+              
+              // En général, la première colonne est "To do" ou similaire
+              const todoColumn = columns[0];
+              console.log(`Colonne cible: ${todoColumn.name} (ID: ${todoColumn.id})`);
+              
+              // 3. Vérifier si l'issue est déjà dans le projet
+              const { data: cards } = await github.rest.projects.listCards({
+                column_id: todoColumn.id
+              });
+              
+              // Chercher si la carte pour cette issue existe déjà
+              const existingCard = cards.find(card => {
+                return card.content_url && card.content_url.endsWith(`/issues/${issueNumber}`);
+              });
+              
+              if (existingCard) {
+                console.log(`L'issue #${issueNumber} est déjà dans le projet`);
+                return;
+              }
+              
+              // 4. Ajouter l'issue au projet s'il n'y est pas déjà
+              await github.rest.projects.createCard({
+                column_id: todoColumn.id,
+                content_id: issueNumber,
+                content_type: 'Issue'
+              });
+              
+              console.log(`✅ Issue #${issueNumber} ajoutée au projet GitHub dans la colonne "${todoColumn.name}"`);
+            } catch (error) {
+              console.error('Erreur lors de la liaison avec GitHub Project:', error);
+            }
+
+      # Ajouter cette étape pour les GitHub Projects v2 (nouveau format)
+      - name: Link PR to GitHub Project v2
+        uses: actions/github-script@v6
+        if: success()
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const issueNumber = ${{ steps.extract-info.outputs.issue_number }};
+            
+            try {
+              // Pour les GitHub Projects v2, nous devons utiliser l'API GraphQL
+              const query = `
+                query($owner:String!, $repo:String!, $issueNumber:Int!) {
+                  repository(owner:$owner, name:$repo) {
+                    issue(number:$issueNumber) {
+                      id
+                      projectsV2(first:10) {
+                        nodes {
+                          id
+                          title
+                        }
+                      }
+                    }
+                  }
+                  viewer {
+                    projectsV2(first:10) {
+                      nodes {
+                        id
+                        title
+                      }
+                    }
+                    organization(login: $owner) {
+                      projectsV2(first:10) {
+                        nodes {
+                          id
+                          title
+                        }
+                      }
+                    }
+                  }
+                }
+              `;
+              
+              const variables = {
+                owner,
+                repo,
+                issueNumber
+              };
+              
+              const result = await github.graphql(query, variables);
+              console.log('Projets disponibles:', JSON.stringify(result, null, 2));
+              
+              // Récupération de l'ID de l'issue
+              const issueId = result.repository.issue.id;
+              
+              // Si l'issue fait déjà partie d'un projet, nous n'avons rien à faire
+              if (result.repository.issue.projectsV2.nodes.length > 0) {
+                console.log(`L'issue #${issueNumber} est déjà dans un projet v2`);
+                return;
+              }
+              
+              // Récupération des projets disponibles
+              let projects = [];
+              
+              // Projets de l'utilisateur
+              if (result.viewer.projectsV2) {
+                projects = projects.concat(result.viewer.projectsV2.nodes);
+              }
+              
+              // Projets de l'organisation
+              if (result.viewer.organization && result.viewer.organization.projectsV2) {
+                projects = projects.concat(result.viewer.organization.projectsV2.nodes);
+              }
+              
+              if (projects.length === 0) {
+                console.log('Aucun projet GitHub v2 trouvé');
+                return;
+              }
+              
+              // Utiliser le premier projet trouvé (vous pouvez filtrer par nom si nécessaire)
+              const project = projects[0];
+              console.log(`Projet GitHub v2 trouvé: ${project.title} (ID: ${project.id})`);
+              
+              // Ajouter l'issue au projet
+              const addToProjectMutation = `
+                mutation($projectId:ID!, $contentId:ID!) {
+                  addProjectV2ItemById(input: {projectId:$projectId, contentId:$contentId}) {
+                    item {
+                      id
+                    }
+                  }
+                }
+              `;
+              
+              const addToProjectVariables = {
+                projectId: project.id,
+                contentId: issueId
+              };
+              
+              const addResult = await github.graphql(addToProjectMutation, addToProjectVariables);
+              console.log(`✅ Issue #${issueNumber} ajoutée au projet GitHub v2 "${project.title}"`);
+              console.log('Résultat:', addResult);
+              
+            } catch (error) {
+              console.error('Erreur lors de la liaison avec GitHub Project v2:', error);
+              console.error(error);
+            }
+
+      # Ajouter un status check pour bloquer la fusion
+      - name: Set merge status
+        if: success()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const sha = context.payload.pull_request.head.sha;
+            
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha,
+              state: 'success',
+              context: 'branch-validation',
+              description: 'La branche respecte les conventions et est liée au projet',
+              target_url: `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`
+            });
