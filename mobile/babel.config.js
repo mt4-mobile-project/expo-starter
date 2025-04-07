@@ -6,23 +6,23 @@ module.exports = function (api) {
       [
         'module-resolver',
         {
-          root: ['./mobile'],
+          root: ['.'],
           alias: {
-            '@components': './mobile/components',
-            '@atoms': './mobile/components/atoms',
-            '@molecules': './mobile/components/molecules',
-            '@organisms': './mobile/components/organisms',
-            '@layout': './mobile/components/layout',
-            '@pages': './mobile/components/pages',
-            '@assets': './mobile/assets',
-            '@hooks': './mobile/hooks',
-            '@utils': './mobile/utils',
-            '@store': './mobile/store',
-            '@services': './mobile/services',
-            '@api': './mobile/api',
-            '@app': './mobile/app'
-          }
-        }
+            '@components': './components',
+            '@atoms': './components/atoms',
+            '@molecules': './components/molecules',
+            '@organisms': './components/organisms',
+            '@layout': './components/layout',
+            '@pages': './components/pages',
+            '@assets': './assets',
+            '@hooks': './hooks',
+            '@utils': './utils',
+            '@store': './store',
+            '@services': './services',
+            '@api': './api',
+            '@app': './app',
+          },
+        },
       ],
       [
         '@tamagui/babel-plugin',
