@@ -1,4 +1,5 @@
-import { View, Text, Button } from 'tamagui';
+import { Button } from '../../components/atoms/button';
+import { View, Text } from 'tamagui';
 
 export default function HomeScreen() {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -8,6 +9,8 @@ export default function HomeScreen() {
     <View>
       <Text>Heh</Text>
       <Button>Click me</Button>
+      <Button variant="secondary">Click me</Button>
+      <Button variant="outline">Click me</Button>
     </View>
   );
 }
