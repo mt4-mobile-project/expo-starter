@@ -1,20 +1,24 @@
 mode: auto
 silent: false
-branchName: '${issue.number}-${issue.type}-${issue.title}'
+branchName: '${issue.number}-${issue.label}'
 branches:
-  - label: bug
-    prefix: fix
-  - label: enhancement
-    prefix: feat
-  - label: documentation
-    prefix: docs
-  - label: refactor
-    prefix: refactor
-  - label: tests
-    prefix: test
-  - label: chore
-    prefix: chore
-defaultBranch: '${issue.number}-feat-${issue.title}'
+  - label: fix
+    name: '${issue.number}-fix'
+  - label: feat
+    name: '${issue.number}-feat'
+  - label: doc
+    name: '${issue.number}-doc' 
+  - label: refacto
+    name: '${issue.number}-refacto'
+  - label: test
+    name: '${issue.number}-test'
+  - label: style
+    name: '${issue.number}-style'
+  - label: build
+    name: '${issue.number}-build'
+  - label: ci
+    name: '${issue.number}-ci'
+defaultBranch: '${issue.number}-feat'
 autoCloseIssue: false
 copyIssueDescriptionToPR: true
 copyIssueLabelsToPR: true
