@@ -1,0 +1,118 @@
+name: Branch Validation and PR Linking
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  validate-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Extract branch information
+        id: extract-info
+        run: |
+          BRANCH_NAME=${GITHUB_HEAD_REF}
+          echo "Branch name: $BRANCH_NAME"
+          
+          # Vérifier si le format du nom de branche est correct: [issue-number]-[issue-label]-[branch-name]
+          if [[ ! $BRANCH_NAME =~ ^([0-9]+)-([a-zA-Z]+)-(.+)$ ]]; then
+            echo "❌ Le format du nom de branche n'est pas valide: $BRANCH_NAME"
+            echo "Format requis: [issue-number]-[issue-label]-[branch-name]"
+            exit 1
+          fi
+          
+          ISSUE_NUMBER=${BASH_REMATCH[1]}
+          ISSUE_LABEL=${BASH_REMATCH[2]}
+          
+          echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
+          echo "issue_label=$ISSUE_LABEL" >> $GITHUB_OUTPUT
+          echo "✅ Format du nom de branche validé: Issue #$ISSUE_NUMBER, Label: $ISSUE_LABEL"
+
+      - name: Validate issue exists
+        id: check-issue
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ steps.extract-info.outputs.issue_number }}
+        run: |
+          ISSUE_URL="https://api.github.com/repos/${{ github.repository }}/issues/$ISSUE_NUMBER"
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: token $GITHUB_TOKEN" $ISSUE_URL)
+          
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "❌ L'issue #$ISSUE_NUMBER n'existe pas dans ce projet"
+            exit 1
+          fi
+          
+          echo "✅ Issue #$ISSUE_NUMBER validée"
+          
+          # Récupérer les labels de l'issue
+          ISSUE_DETAILS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" $ISSUE_URL)
+          ISSUE_LABELS=$(echo "$ISSUE_DETAILS" | jq -r '.labels[].name')
+          echo "issue_labels<<EOF" >> $GITHUB_OUTPUT
+          echo "$ISSUE_LABELS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Validate issue label
+        id: check-label
+        env:
+          ISSUE_LABEL: ${{ steps.extract-info.outputs.issue_label }}
+          ISSUE_LABELS: ${{ steps.check-issue.outputs.issue_labels }}
+          VALID_LABELS: "build ci doc feat fix refacto style test"
+        run: |
+          # Vérifier si le label est valide
+          if [[ ! " $VALID_LABELS " =~ " $ISSUE_LABEL " ]]; then
+            echo "❌ Le label '$ISSUE_LABEL' n'est pas un label valide"
+            echo "Labels valides: $VALID_LABELS"
+            exit 1
+          fi
+          
+          # Vérifier si le label est présent dans l'issue
+          if [[ ! "$ISSUE_LABELS" =~ "$ISSUE_LABEL" ]]; then
+            echo "❌ Le label '$ISSUE_LABEL' n'est pas associé à l'issue"
+            echo "Labels de l'issue: $ISSUE_LABELS"
+            exit 1
+          fi
+          
+          echo "✅ Label '$ISSUE_LABEL' validé"
+
+      - name: Link PR to issue
+        if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ steps.extract-info.outputs.issue_number }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          # Ajouter un commentaire à l'issue
+          curl -s -X POST \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/$ISSUE_NUMBER/comments" \
+            -d "{\"body\": \"Cette issue est liée à la PR #$PR_NUMBER\"}"
+            
+          # Ajouter un commentaire à la PR
+          curl -s -X POST \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/comments" \
+            -d "{\"body\": \"Cette PR est liée à l'issue #$ISSUE_NUMBER\"}"
+            
+          # Ajouter l'issue au corps de la PR (cela créera automatiquement un lien)
+          PR_BODY=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER" | jq -r '.body // ""')
+          NEW_BODY="${PR_BODY}\n\nCloses #$ISSUE_NUMBER"
+          
+          curl -s -X PATCH \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER" \
+            -d "{\"body\": \"$NEW_BODY\"}"
+            
+          echo "✅ PR #$PR_NUMBER liée à l'issue #$ISSUE_NUMBER"
