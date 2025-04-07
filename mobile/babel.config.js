@@ -33,7 +33,6 @@ module.exports = function (api) {
           disableExtraction: process.env.NODE_ENV === 'development',
         }
       ],
-      'expo-router/babel',
       'react-native-reanimated/plugin'
     ]
   };
