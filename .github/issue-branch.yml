@@ -1,0 +1,23 @@
+mode: auto
+silent: false
+branchName: '${issue.number}-${issue.type}-${issue.title}'
+branches:
+  - label: bug
+    prefix: fix
+  - label: enhancement
+    prefix: feat
+  - label: documentation
+    prefix: docs
+  - label: refactor
+    prefix: refactor
+  - label: tests
+    prefix: test
+  - label: chore
+    prefix: chore
+defaultBranch: '${issue.number}-feat-${issue.title}'
+autoCloseIssue: false
+copyIssueDescriptionToPR: true
+copyIssueLabelsToPR: true
+copyIssueAssigneeToPR: true
+copyIssueProjectsToPR: true
+copyIssueMilestoneToPR: true
