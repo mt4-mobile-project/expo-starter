@@ -8,7 +8,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import tamaguiConfig from '../tamagui.config';
 import { TamaguiProvider, Theme } from 'tamagui';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useColorScheme } from '../hooks/useColorScheme';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -18,8 +18,8 @@ const queryClient = new QueryClient();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+ /*  const [loaded] = useFonts({
+    SpaceMono: require(''),
   });
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function RootLayout() {
 
   if (!loaded) {
     return null;
-  }
+  } */
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -40,6 +40,7 @@ export default function RootLayout() {
             <Stack>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen name="+not-found" />
+              
             </Stack>
             <StatusBar style="auto" />
           </Theme>
