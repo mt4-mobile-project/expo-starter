@@ -1,4 +1,6 @@
+// @ts-ignore
 import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
+// @ts-ignore
 import { PlatformPressable } from '@react-navigation/elements';
 import * as Haptics from 'expo-haptics';
 
