@@ -1,0 +1,27 @@
+- name: build
+  description: Build the application
+  color: 0366d6
+- name: ci
+  description: CI update
+  color: 5319e7
+- name: doc
+  description: Improvements or additions to documentation
+  color: 06b6d4
+- name: feat
+  description: New feature or request
+  color: 0969da
+- name: fix
+  description: Something isn't working
+  color: d73a4a
+- name: refacto
+  description: Refacto codebase
+  color: fbca04
+- name: style
+  description: Change the style of app
+  color: fd5c63
+- name: test
+  description: Create test
+  color: 22863a
+- name: automated-pr
+  description: PR créée automatiquement
+  color: 0e8a16
