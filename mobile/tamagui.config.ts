@@ -1,76 +1,222 @@
 import { createInterFont } from '@tamagui/font-inter';
 import { shorthands } from '@tamagui/shorthands';
-import { themes, tokens } from '@tamagui/themes';
+import { themes } from '@tamagui/themes';
 import { createMedia } from '@tamagui/react-native-media-driver';
-import { createTamagui } from 'tamagui';
+import { createTamagui, createTokens } from 'tamagui';
 
 // Create our custom font
 const interFont = createInterFont();
 
-// Define our custom colors
-const lightColors = {
-  primary: '#3B82F6', // Blue
-  secondary: '#10B981', // Green
-  background: '#FFFFFF',
-  card: '#F9FAFB',
-  text: '#1F2937',
-  border: '#E5E7EB',
-  notification: '#EF4444',
-  muted: '#6B7280',
-  // Add more colors as needed
-};
+// Define our design tokens (shadcn style)
+const tokens = createTokens({
+  size: {
+    $0: 0,
+    $1: 4,
+    $2: 8,
+    $3: 16,
+    $4: 24,
+    $5: 32,
+    $6: 40,
+    $7: 48,
+    $8: 56,
+    $9: 64,
+    $10: 72,
+    // Add the $true key as required by Tamagui
+    $true: 16, // Setting $3 (16) as the default size
+  },
+  space: {
+    $0: 0,
+    $1: 4,
+    $2: 8,
+    $3: 16,
+    $4: 24,
+    $5: 32,
+    $6: 40,
+    $7: 48,
+    $8: 56,
+    $9: 64,
+    $10: 72,
+    // Add the $true key as required by Tamagui
+    $true: 16, // Setting $3 (16) as the default space
+  },
+  radius: {
+    $0: 0,
+    $1: 4,
+    $2: 8,
+    $3: 16,
+    $4: 24,
+    $full: 9999,
+    // Add the $true key as required by Tamagui
+    $true: 8, // Setting $2 (8) as the default radius
+  },
+  zIndex: {
+    $0: 0,
+    $1: 100,
+    $2: 200,
+    $3: 300,
+    $4: 400,
+    $5: 500,
+    // Add the $true key as required by Tamagui
+    $true: 0, // Setting $0 (0) as the default zIndex
+  },
+  color: {
+    // Base colors
+    white: '#FFFFFF',
+    black: '#000000',
 
-const darkColors = {
-  primary: '#60A5FA', // Lighter blue for dark mode
-  secondary: '#34D399', // Lighter green for dark mode
-  background: '#111827',
-  card: '#1F2937',
-  text: '#F9FAFB',
-  border: '#374151',
-  notification: '#F87171',
-  muted: '#9CA3AF',
-  // Add more colors as needed
-};
+    // Light mode
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    card: '#F9FAFB',
+    cardForeground: '#1F2937',
+    popover: '#FFFFFF',
+    popoverForeground: '#1F2937',
+    primary: '#3B82F6',
+    primaryForeground: '#FFFFFF',
+    secondary: '#10B981',
+    secondaryForeground: '#FFFFFF',
+    muted: '#F3F4F6',
+    mutedForeground: '#6B7280',
+    accent: '#F9FAFB',
+    accentForeground: '#1F2937',
+    destructive: '#EF4444',
+    destructiveForeground: '#FFFFFF',
+    border: '#E5E7EB',
+    input: '#E5E7EB',
+    ring: '#3B82F6',
 
-// Create our custom themes
+    // Dark mode
+    backgroundDark: '#111827',
+    foregroundDark: '#F9FAFB',
+    cardDark: '#1F2937',
+    cardForegroundDark: '#F9FAFB',
+    popoverDark: '#1F2937',
+    popoverForegroundDark: '#F9FAFB',
+    primaryDark: '#60A5FA',
+    primaryForegroundDark: '#FFFFFF',
+    secondaryDark: '#34D399',
+    secondaryForegroundDark: '#FFFFFF',
+    mutedDark: '#374151',
+    mutedForegroundDark: '#9CA3AF',
+    accentDark: '#1F2937',
+    accentForegroundDark: '#F9FAFB',
+    destructiveDark: '#F87171',
+    destructiveForegroundDark: '#FFFFFF',
+    borderDark: '#374151',
+    inputDark: '#374151',
+    ringDark: '#60A5FA',
+  },
+});
+
+// Create our custom themes (shadcn style)
 const customThemes = {
   light: {
-    backgroundHover: lightColors.card,
-    backgroundPress: lightColors.card,
-    backgroundFocus: lightColors.card,
-    color: lightColors.text,
-    colorHover: lightColors.text,
-    colorPress: lightColors.text,
-    colorFocus: lightColors.text,
-    borderColor: lightColors.border,
-    borderColorHover: lightColors.border,
-    borderColorFocus: lightColors.border,
-    borderColorPress: lightColors.border,
+    background: tokens.color.background,
+    color: tokens.color.foreground,
+
+    // Card
+    card: tokens.color.card,
+    cardForeground: tokens.color.cardForeground,
+
+    // Popover
+    popover: tokens.color.popover,
+    popoverForeground: tokens.color.popoverForeground,
+
+    // Primary
+    primary: tokens.color.primary,
+    primaryForeground: tokens.color.primaryForeground,
+
+    // Secondary
+    secondary: tokens.color.secondary,
+    secondaryForeground: tokens.color.secondaryForeground,
+
+    // Muted
+    muted: tokens.color.muted,
+    mutedForeground: tokens.color.mutedForeground,
+
+    // Accent
+    accent: tokens.color.accent,
+    accentForeground: tokens.color.accentForeground,
+
+    // Destructive
+    destructive: tokens.color.destructive,
+    destructiveForeground: tokens.color.destructiveForeground,
+
+    // Border
+    border: tokens.color.border,
+    input: tokens.color.input,
+    ring: tokens.color.ring,
+
+    // Hover states
+    backgroundHover: tokens.color.card,
+    backgroundPress: tokens.color.card,
+    backgroundFocus: tokens.color.card,
+    colorHover: tokens.color.foreground,
+    colorPress: tokens.color.foreground,
+    colorFocus: tokens.color.foreground,
+    borderColorHover: tokens.color.border,
+    borderColorFocus: tokens.color.border,
+    borderColorPress: tokens.color.border,
+
+    // Shadow
     shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowColorHover: 'rgba(0, 0, 0, 0.2)',
     shadowColorFocus: 'rgba(0, 0, 0, 0.2)',
     shadowColorPress: 'rgba(0, 0, 0, 0.2)',
-    // Custom colors
-    ...lightColors,
   },
   dark: {
-    backgroundHover: darkColors.card,
-    backgroundPress: darkColors.card,
-    backgroundFocus: darkColors.card,
-    color: darkColors.text,
-    colorHover: darkColors.text,
-    colorPress: darkColors.text,
-    colorFocus: darkColors.text,
-    borderColor: darkColors.border,
-    borderColorHover: darkColors.border,
-    borderColorFocus: darkColors.border,
-    borderColorPress: darkColors.border,
+    background: tokens.color.backgroundDark,
+    color: tokens.color.foregroundDark,
+
+    // Card
+    card: tokens.color.cardDark,
+    cardForeground: tokens.color.cardForegroundDark,
+
+    // Popover
+    popover: tokens.color.popoverDark,
+    popoverForeground: tokens.color.popoverForegroundDark,
+
+    // Primary
+    primary: tokens.color.primaryDark,
+    primaryForeground: tokens.color.primaryForegroundDark,
+
+    // Secondary
+    secondary: tokens.color.secondaryDark,
+    secondaryForeground: tokens.color.secondaryForegroundDark,
+
+    // Muted
+    muted: tokens.color.mutedDark,
+    mutedForeground: tokens.color.mutedForegroundDark,
+
+    // Accent
+    accent: tokens.color.accentDark,
+    accentForeground: tokens.color.accentForegroundDark,
+
+    // Destructive
+    destructive: tokens.color.destructiveDark,
+    destructiveForeground: tokens.color.destructiveForegroundDark,
+
+    // Border
+    border: tokens.color.borderDark,
+    input: tokens.color.inputDark,
+    ring: tokens.color.ringDark,
+
+    // Hover states
+    backgroundHover: tokens.color.cardDark,
+    backgroundPress: tokens.color.cardDark,
+    backgroundFocus: tokens.color.cardDark,
+    colorHover: tokens.color.foregroundDark,
+    colorPress: tokens.color.foregroundDark,
+    colorFocus: tokens.color.foregroundDark,
+    borderColorHover: tokens.color.borderDark,
+    borderColorFocus: tokens.color.borderDark,
+    borderColorPress: tokens.color.borderDark,
+
+    // Shadow
     shadowColor: 'rgba(0, 0, 0, 0.3)',
     shadowColorHover: 'rgba(0, 0, 0, 0.4)',
     shadowColorFocus: 'rgba(0, 0, 0, 0.4)',
     shadowColorPress: 'rgba(0, 0, 0, 0.4)',
-    // Custom colors
-    ...darkColors,
   },
 };
 
@@ -81,7 +227,7 @@ const allThemes = {
 };
 
 // Create the Tamagui config
-export const tamaguiConfig = createTamagui({
+const config = createTamagui({
   defaultFont: 'body',
   fonts: {
     body: interFont,
@@ -108,9 +254,11 @@ export const tamaguiConfig = createTamagui({
   }),
 });
 
-export default tamaguiConfig;
+// Export the config directly as default
+export default config;
 
-export type Conf = typeof tamaguiConfig;
+// For type safety
+export type Conf = typeof config;
 
 declare module 'tamagui' {
   interface TamaguiCustomConfig extends Conf {}
