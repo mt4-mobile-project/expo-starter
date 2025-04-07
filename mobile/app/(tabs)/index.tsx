@@ -5,7 +5,7 @@ export default function HomeScreen() {
   console.log('API URL:', apiUrl);
 
   return (
-    <View backgroundColor="$background">
+    <View>
       <Text>Heh</Text>
       <Button>Click me</Button>
     </View>
