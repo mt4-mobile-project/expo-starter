@@ -7,6 +7,9 @@ import { ThemedView } from '@/components/ThemedView';
 import { Button } from 'tamagui'
 
 export default function HomeScreen() {
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+  console.log('API URL:', apiUrl);
+  
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -17,12 +20,12 @@ export default function HomeScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
+        <ThemedText type="title">Welcome! Rayane Mabrouki</ThemedText>
         <HelloWave />
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <Button theme="blue">Hello world</Button>
+        <ThemedText type="subtitle">Step 1: Dynastie Mabrouki</ThemedText>
+        <Button theme="blue">{apiUrl}</Button>
         <ThemedText>
           Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
           Press{' '}
