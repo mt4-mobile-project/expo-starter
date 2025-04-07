@@ -64,3 +64,10 @@ coverage/
 *.swp
 *.swo
 .tmp/
+
+#Java
+.vs/
+backend/mvnw
+
+/bin/
+/obj/
