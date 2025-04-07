@@ -1,0 +1,47 @@
+name: Auto Create Pull Request
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - master
+      - develop
+
+jobs:
+  auto-pr:
+    name: Create Pull Request if needed
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' && success() && github.actor != 'github-actions[bot]' }}
+    steps:
+      - name: Check Branch Format
+        id: check-branch
+        run: |
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          if [[ $BRANCH_NAME =~ ^[0-9]+-[a-z]+$ ]]; then
+            echo "ISSUE_NUMBER=$(echo $BRANCH_NAME | cut -d'-' -f1)" >> $GITHUB_ENV
+            echo "BRANCH_TYPE=$(echo $BRANCH_NAME | cut -d'-' -f2)" >> $GITHUB_ENV
+            echo "is_issue_branch=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_issue_branch=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request
+        if: steps.check-branch.outputs.is_issue_branch == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "PR automatique pour l'issue #${{ env.ISSUE_NUMBER }}"
+          title: "[${{ env.BRANCH_TYPE }}] Résolution de l'issue #${{ env.ISSUE_NUMBER }}"
+          body: |
+            Cette Pull Request a été créée automatiquement pour résoudre l'issue #${{ env.ISSUE_NUMBER }}.
+            
+            ### Modifications proposées
+            - Résout l'issue #${{ env.ISSUE_NUMBER }}
+            
+            Merci de revoir les changements et de fournir vos commentaires.
+          branch: ${{ github.ref }}
+          base: main
+          draft: false
+          labels: |
+            automated-pr
+            ${{ env.BRANCH_TYPE }}
