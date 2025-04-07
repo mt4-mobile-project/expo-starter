@@ -8,8 +8,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import tamaguiConfig from '../tamagui.config';
 import { TamaguiProvider, Theme } from 'tamagui';
 
-import { useColorScheme } from '../hooks/useColorScheme';
-
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -17,7 +15,6 @@ SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
