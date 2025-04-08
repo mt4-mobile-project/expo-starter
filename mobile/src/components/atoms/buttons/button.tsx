@@ -7,7 +7,7 @@ type ButtonSize = 'default' | 'sm' | 'lg' | 'icon';
 
 const ButtonFrame = styled(TamaguiButton, {
   name: 'Button',
-  minHeight: 44, // iOS standard minimum touch target
+  minHeight: 44,
   paddingHorizontal: '$4',
   borderRadius: '$full',
   justifyContent: 'center',
@@ -15,6 +15,8 @@ const ButtonFrame = styled(TamaguiButton, {
   flexDirection: 'row',
   gap: '$2',
   fontWeight: '600',
+  fontSize: 14,
+  letterSpacing: -0.2,
 
   variants: {
     variant: {

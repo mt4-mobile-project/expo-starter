@@ -1,46 +1,40 @@
-// import { Button } from '@/components/atoms/buttons/button';
-import { Input } from '@/components/atoms/inputs/input';
-import { LabelButton } from '@/components/atoms/buttons/label-button';
-import { ChevronRight } from '@tamagui/lucide-icons';
-import { View } from 'tamagui';
+import { H1, H2, H3, H4, H5, H6 } from '@/components/atoms/typography/heading';
+import { Text } from '@/components/atoms/typography/text';
+import { View, YStack } from 'tamagui';
 
 export default function HomeScreen() {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   console.log('API URL:', apiUrl);
 
   return (
-    <View
-      flex={1}
-      backgroundColor="$background"
-      padding="$4"
-      justifyContent="center"
-      alignItems="center"
-      gap="$4"
-    >
-      {/*       <Button>Click me</Button>
-      <Button variant="secondary" size="lg">
-        Click me
-      </Button>
-      <Button variant="outline">Click me</Button>
-      <Button variant="link">Click me</Button>
-      <Button variant="ghost">Click me</Button>
-      <Button variant="destructive">Click me</Button> */}
+    <View flex={1} backgroundColor="$background" padding="$4" gap="$4">
+      <YStack space="$4">
+        <H1>Heading 1</H1>
+        <H2>Heading 2</H2>
+        <H3>Heading 3</H3>
+        <H4>Heading 4</H4>
+        <H5>Heading 5</H5>
+        <H6>Heading 6</H6>
 
-      <Input placeholder="Default input" />
-      <Input variant="outline" placeholder="Outline variant" />
-      <Input variant="filled" placeholder="Filled variant" />
-      <Input size="sm" placeholder="Small size" />
-      <Input size="lg" placeholder="Large size" />
-      <Input disabled placeholder="Disabled input" />
-      <LabelButton variant="primary" icon={<ChevronRight size={20} />}>
-        Voir l'évenement
-      </LabelButton>
-      <LabelButton variant="secondary" icon={<ChevronRight size={20} />}>
-        Voir l'évenement
-      </LabelButton>
-      <LabelButton variant="destructive" icon={<ChevronRight size={20} />}>
-        Voir l'évenement
-      </LabelButton>
+        <YStack space="$2">
+          <Text size="xl" weight="bold">
+            Extra Large Text
+          </Text>
+          <Text size="lg" weight="semibold">
+            Large Text
+          </Text>
+          <Text size="base" weight="medium">
+            Base Text
+          </Text>
+          <Text>Default Text (14px - semibold)</Text>
+          <Text size="sm" weight="normal">
+            Small Text
+          </Text>
+          <Text size="xs" weight="normal">
+            Extra Small Text
+          </Text>
+        </YStack>
+      </YStack>
     </View>
   );
 }
