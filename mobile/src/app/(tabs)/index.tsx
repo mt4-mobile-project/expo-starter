@@ -1,5 +1,7 @@
 import { Button } from '@/components/atoms/buttons/button';
 import { Input } from '@/components/atoms/inputs/input';
+import { LabelButton } from '@/components/atoms/buttons/label-button';
+import { ChevronRight } from '@tamagui/lucide-icons';
 import { View } from 'tamagui';
 
 export default function HomeScreen() {
@@ -30,6 +32,18 @@ export default function HomeScreen() {
       <Input size="sm" placeholder="Small size" />
       <Input size="lg" placeholder="Large size" />
       <Input disabled placeholder="Disabled input" />
+      <LabelButton variant="primary" icon={<ChevronRight size={20} />}>
+        Voir l'évenement
+      </LabelButton>
+      <LabelButton variant="secondary" icon={<ChevronRight size={20} />}>
+        Voir l'évenement
+      </LabelButton>
+      <LabelButton variant="destructive" icon={<ChevronRight size={20} />}>
+        Voir l'évenement
+      </LabelButton>
+
+
+
     </View>
   );
 }
