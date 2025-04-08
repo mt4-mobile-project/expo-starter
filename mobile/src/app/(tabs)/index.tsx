@@ -3,19 +3,50 @@ import { Text } from '@/components/atoms/typography/text';
 import { Input } from '@/components/atoms/inputs/input';
 import { View, YStack } from 'tamagui';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useEffect } from 'react';
+import { login } from '@/services/auth';
+import { getCurrentUser } from '@/services/user';
 
 export default function HomeScreen() {
-  const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-  console.log('API URL:', apiUrl);
+  useEffect(() => {
+    const tryLogin = async () => {
+      try {
+        const credentials = {
+          username: 'string',
+          password: 'string',
+        };
+
+        const response = await login(credentials);
+        console.log('Logged in successfully', response);
+      } catch (error) {
+        console.error('Login failed:', error);
+      }
+    };
+
+    tryLogin();
+  }, []);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = await getCurrentUser();
+        console.log('Current user:', user);
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   return (
     <View flex={1} backgroundColor="$background" padding="$4" gap="$4">
-       <Input
-          placeholder="Rechercher"
-          variant="outline"
-          size="lg"
-          icon={<FontAwesome name="search" size={18} color="#aaa" />}
-        />
+      <Input
+        placeholder="Rechercher"
+        variant="outline"
+        size="lg"
+        icon={<FontAwesome name="search" size={18} color="#aaa" />}
+      />
 
       <YStack space="$4">
         <H1>Heading 1</H1>
