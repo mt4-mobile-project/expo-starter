@@ -1,5 +1,4 @@
-import { styled, GetProps, Theme, ThemeProps } from 'tamagui';
-import { Button as TamaguiButton, Text } from 'tamagui';
+import { styled, GetProps, Theme, ThemeProps, Button as TamaguiButton, Text } from 'tamagui';
 import { forwardRef } from 'react';
 
 // Define the variant types explicitly

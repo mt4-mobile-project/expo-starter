@@ -7,26 +7,9 @@
     "module": "esnext",
     "allowJs": true,
     "paths": {
-      "@components/*": ["components/*"],
-      "@atoms/*": ["components/atoms/*"],
-      "@molecules/*": ["components/molecules/*"],
-      "@organisms/*": ["components/organisms/*"],
-      "@layout/*": ["components/layout/*"],
-      "@pages/*": ["components/pages/*"],
-      "@assets/*": ["assets/*"],
-      "@hooks/*": ["hooks/*"],
-      "@utils/*": ["utils/*"],
-      "@store/*": ["store/*"],
-      "@services/*": ["services/*"],
-      "@api/*": ["api/*"],
-      "@app/*": ["app/*"]
+      "@/*": ["src/*"]
     }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-  ],
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"],
   "extends": "expo/tsconfig.base"
 }
