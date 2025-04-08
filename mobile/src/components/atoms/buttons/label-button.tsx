@@ -14,7 +14,7 @@ const StyledLabel = styled(Text, {
   textDecorationLine: 'underline',
   cursor: 'pointer',
 
-  variants: {
+  variants: { 
     variant: {
       default: { color: '$color' },
       primary: { color: '$primary' },
