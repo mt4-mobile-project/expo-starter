@@ -6,6 +6,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useEffect } from 'react';
 import { login } from '@/services/auth';
 import { getCurrentUser } from '@/services/user';
+import { UserCard } from '@/components/molecules/users-card/users-card';
 
 export default function HomeScreen() {
   useEffect(() => {
@@ -41,12 +42,49 @@ export default function HomeScreen() {
 
   return (
     <View flex={1} backgroundColor="$background" padding="$4" gap="$4">
-      <Input
-        placeholder="Rechercher"
-        variant="outline"
-        size="lg"
-        icon={<FontAwesome name="search" size={18} color="#aaa" />}
-      />
+       <Input
+          placeholder="Rechercher"
+          variant="outline"
+          size="lg"
+          icon={<FontAwesome name="search" size={18} color="#aaa" />}
+        />
+        <UserCard
+          imageUrl="https://picsum.photos/200"
+          name="Nom de profil"
+          region="Île-de-France"
+          status="En ligne"
+        />
+        <UserCard
+          imageUrl="https://picsum.photos/200"
+          name="Nom de profil"
+          region="Île-de-France"
+          status="En ligne"
+        />
+        <UserCard
+          imageUrl="https://picsum.photos/200"
+          name="Nom de profil"
+          region="Île-de-France"
+          status="En ligne"
+        />
+        <UserCard
+          imageUrl="https://picsum.photos/200"
+          name="Nom de profil"
+          region="Île-de-France"
+          status="En ligne"
+        />
+        <UserCard
+          imageUrl="https://picsum.photos/200"
+          name="Nom de profil"
+          region="Île-de-France"
+          status="En ligne"
+        />
+        <UserCard
+          imageUrl="https://picsum.photos/200"
+          name="Nom de profil"
+          region="Île-de-France"
+          status="En ligne"
+        />
+
 
       <YStack space="$4">
         <H1>Heading 1</H1>
