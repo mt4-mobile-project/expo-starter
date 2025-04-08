@@ -31,7 +31,6 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            // Active le CORS et fournit le bean de configuration personnalisé
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(
@@ -44,7 +43,8 @@ public class SecurityConfig {
                     "/hello",
                     "/info",
                     "/ws/**",
-                    "/topic/**"
+                    "/topic/**",
+                    "/static/**"
                 ).permitAll()
                 .anyRequest().authenticated()
             )
@@ -61,13 +61,11 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Définir les motifs d'origine autorisés, sans utiliser "*"
         configuration.setAllowedOriginPatterns(Arrays.asList(
             "http://localhost:*",
             "http://127.0.0.1:*"
         ));
 
-        // Liste simplifiée des headers autorisés
         configuration.setAllowedHeaders(Arrays.asList(
             "Authorization", 
             "Content-Type",
