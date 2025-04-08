@@ -12,7 +12,7 @@ const InputFrame = styled(TamaguiInput, {
   backgroundColor: '#1c1c1e',
   borderWidth: 1,
   borderColor: '#3a3a3c',
-  borderRadius: '$md',
+  borderRadius: '$lg',
   paddingHorizontal: '$4',
   height: 48,
   color: 'white',
