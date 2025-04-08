@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import { View, Paragraph } from 'tamagui';
 
-export default function Events() {
+export default function EventScreen() {
   const { id } = useLocalSearchParams();
 
   return (

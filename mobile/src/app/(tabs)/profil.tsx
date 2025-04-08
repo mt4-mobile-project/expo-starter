@@ -1,6 +1,6 @@
 import { View, Paragraph } from 'tamagui';
 
-export default function HomeScreen() {
+export default function ProfilScreen() {
   return (
     <View
       flex={1}
