@@ -7,7 +7,7 @@ import { useColorScheme } from 'react-native';
 import 'react-native-reanimated';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TamaguiProvider, Theme } from 'tamagui';
-import config from '@/config/tamagui.config';
+import config from '@/configs/tamagui.config';
 
 SplashScreen.preventAutoHideAsync();
 

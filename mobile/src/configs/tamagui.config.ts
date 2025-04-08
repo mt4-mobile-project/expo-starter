@@ -1,9 +1,9 @@
 import { createInterFont } from '@tamagui/font-inter';
 import { shorthands } from '@tamagui/shorthands';
 import { createTamagui } from 'tamagui';
-import { tokens } from '@/theme/tokens';
-import { allThemes } from '@/theme/themes';
-import { media } from '@/theme/media';
+import { tokens } from '@/themes/tokens';
+import { allThemes } from '@/themes/theme';
+import { media } from '@/themes/media';
 
 // Create our custom font
 const interFont = createInterFont();
