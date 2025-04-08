@@ -6,8 +6,12 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useEffect } from 'react';
 import { login } from '@/services/auth';
 import { getCurrentUser } from '@/services/user';
+import { useUsers } from '@/hooks/useUsers';
 
 export default function HomeScreen() {
+
+  const { data: users, isLoading, error } = useUsers();
+
   useEffect(() => {
     const tryLogin = async () => {
       try {
@@ -47,108 +51,21 @@ export default function HomeScreen() {
           size="lg"
           icon={<FontAwesome name="search" size={18} color="#aaa" />}
         />
-        <UserCard
-          imageUrl="https://picsum.photos/200"
-          name="Nom de profil"
-          region="Île-de-France"
-          status="En ligne"
-        />
-        <UserCard
-          imageUrl="https://picsum.photos/200"
-          name="Nom de profil"
-          region="Île-de-France"
-          status="En ligne"
-        />
-        <UserCard
-          imageUrl="https://picsum.photos/200"
-          name="Nom de profil"
-          region="Île-de-France"
-          status="En ligne"
-        />
-        <UserCard
-          imageUrl="https://picsum.photos/200"
-          name="Nom de profil"
-          region="Île-de-France"
-          status="En ligne"
-        />
-        <UserCard
-          imageUrl="https://picsum.photos/200"
-          name="Nom de profil"
-          region="Île-de-France"
-          status="En ligne"
-        />
-        <UserCard
-          imageUrl="https://picsum.photos/200"
-          name="Nom de profil"
-          region="Île-de-France"
-          status="En ligne"
-        />
 
-        <UserCard
-          imageUrl="https://picsum.photos/200"
-          name="Nom de profil"
-          region="Île-de-France"
-          status="En ligne"
-        />
-        <UserCard
-          imageUrl="https://picsum.photos/200"
-          name="Nom de profil"
-          region="Île-de-France"
-          status="En ligne"
-        />
-        <UserCard
-          imageUrl="https://picsum.photos/200"
-          name="Nom de profil"
-          region="Île-de-France"
-          status="En ligne"
-        />
-        <UserCard
-          imageUrl="https://picsum.photos/200"
-          name="Nom de profil"
-          region="Île-de-France"
-          status="En ligne"
-        />
-        <UserCard
-          imageUrl="https://picsum.photos/200"
-          name="Nom de profil"
-          region="Île-de-France"
-          status="En ligne"
-        />
-        <UserCard
-          imageUrl="https://picsum.photos/200"
-          name="Nom de profil"
-          region="Île-de-France"
-          status="En ligne"
-        />
+      {isLoading && <Text>Chargement des utilisateurs...</Text>}
+      {error && <Text>Erreur lors du chargement.</Text>}
 
-
-      <YStack space="$4">
-        <H1>Heading 1</H1>
-        <H2>Heading 2</H2>
-        <H3>Heading 3</H3>
-        <H4>Heading 4</H4>
-        <H5>Heading 5</H5>
-        <H6>Heading 6</H6>
-
-        <YStack space="$2">
-          <Text size="xl" weight="bold">
-            Extra Large Text
-          </Text>
-          <Text size="lg" weight="semibold">
-            Large Text
-          </Text>
-          <Text size="base" weight="medium">
-            Base Text
-          </Text>
-          <Text>Default Text (14px - semibold)</Text>
-          <Text size="sm" weight="normal">
-            Small Text
-          </Text>
-          <Text size="xs" weight="normal">
-            Extra Small Text
-          </Text>
-        </YStack>
-      </YStack>
+      {users?.map((user) => (
+        <UserCard
+          key={user.id}
+          imageUrl="https://picsum.photos/200"
+          name={user.username}
+          region="France"
+          status="En ligne"
+        />
+      ))}
+     
     </View>
   );
 }
+
