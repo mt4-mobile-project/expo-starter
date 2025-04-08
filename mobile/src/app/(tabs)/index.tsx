@@ -7,6 +7,8 @@ import { useEffect } from 'react';
 import { login } from '@/services/auth';
 import { getCurrentUser } from '@/services/user';
 import { useUsers } from '@/hooks/useUsers';
+import { UserCard } from '@/components/molecules/users-card/users-card';
+
 
 export default function HomeScreen() {
 
