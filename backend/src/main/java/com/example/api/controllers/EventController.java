@@ -105,4 +105,11 @@ public class EventController {
     ) {
         return ResponseEntity.ok(eventService.getEventParticipants(id));
     }
+
+    @GetMapping("/joined")
+    @Operation(summary = "Récupérer tous les événements auxquels l'utilisateur a rejoint")
+    public ResponseEntity<List<EventResponseDto>> getJoinedEvents(Authentication authentication) {
+        User currentUser = (User) authentication.getPrincipal();
+        return ResponseEntity.ok(eventService.getJoinedEvents(currentUser.getId()));
+    }
 }

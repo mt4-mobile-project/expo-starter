@@ -123,4 +123,15 @@ public class EventService {
         
         return userMapper.toDtoList(participants);
     }
+
+    public List<EventResponseDto> getJoinedEvents(Integer userId) {
+        User user = new User();
+        user.setId(userId);
+        
+        List<Event> events = eventParticipantRepository.findByUser(user).stream()
+            .map(EventParticipant::getEvent)
+            .collect(Collectors.toList());
+        
+        return eventMapper.toDtoList(events);
+    }
 }
