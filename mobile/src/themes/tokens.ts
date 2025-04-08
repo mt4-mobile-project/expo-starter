@@ -104,29 +104,29 @@ export const tokens = createTokens({
   color: {
     // Base colors
     white: '#FFFFFF',
-    black: '#171717',
+    black: '#090909',
 
     // Semantic colors (shadcn style)
     background: '#FFFFFF',
-    foreground: '#171717',
+    foreground: '#090909',
 
     card: '#FFFFFF',
-    cardForeground: '#171717',
+    cardForeground: '#090909',
 
     popover: '#FFFFFF',
-    popoverForeground: '#171717',
+    popoverForeground: '#090909',
 
     // Brand colors
     primary: '#262626',
     primaryForeground: '#FAFAFA',
 
-    secondary: '#F5F5F5',
+    secondary: '#EEEEEE',
     secondaryForeground: '#262626',
 
-    muted: '#F5F5F5',
+    muted: '#EEEEEE',
     mutedForeground: '#737373',
 
-    accent: '#F5F5F5',
+    accent: '#EEEEEE',
     accentForeground: '#262626',
 
     destructive: '#EF4444',
@@ -136,14 +136,14 @@ export const tokens = createTokens({
     successForeground: '#FAFAFA',
 
     warning: '#F59E0B',
-    warningForeground: '#171717',
+    warningForeground: '#090909',
 
     info: '#3B82F6',
     infoForeground: '#FAFAFA',
 
     // UI elements
-    border: '#E5E5E5',
-    input: '#E5E5E5',
+    border: '#F4F2F2',
+    input: '#F4F2F2',
     ring: '#A3A3A3',
 
     // Chart colors
@@ -155,44 +155,44 @@ export const tokens = createTokens({
 
     // Sidebar
     sidebar: '#FAFAFA',
-    sidebarForeground: '#171717',
+    sidebarForeground: '#090909',
     sidebarPrimary: '#262626',
     sidebarPrimaryForeground: '#FAFAFA',
-    sidebarAccent: '#F5F5F5',
+    sidebarAccent: '#EEEEEE',
     sidebarAccentForeground: '#262626',
-    sidebarBorder: '#E5E5E5',
+    sidebarBorder: '#F4F2F2',
     sidebarRing: '#A3A3A3',
 
     // Dark mode variants
-    backgroundDark: '#171717',
+    backgroundDark: '#090909',
     foregroundDark: '#FAFAFA',
 
     cardDark: '#262626',
     cardForegroundDark: '#FAFAFA',
 
-    popoverDark: '#404040',
+    popoverDark: '#292929',
     popoverForegroundDark: '#FAFAFA',
 
-    primaryDark: '#E5E5E5',
+    primaryDark: '#F4F2F2',
     primaryForegroundDark: '#262626',
 
-    secondaryDark: '#404040',
+    secondaryDark: '#292929',
     secondaryForegroundDark: '#FAFAFA',
 
-    mutedDark: '#404040',
+    mutedDark: '#292929',
     mutedForegroundDark: '#A3A3A3',
 
     accentDark: '#525252',
     accentForegroundDark: '#FAFAFA',
 
-    destructiveDark: '#F87171',
+    destructiveDark: '#E1523F',
     destructiveForegroundDark: '#FAFAFA',
 
     successDark: '#8B5CF6',
     successForegroundDark: '#FAFAFA',
 
     warningDark: '#EF4444',
-    warningForegroundDark: '#171717',
+    warningForegroundDark: '#090909',
 
     infoDark: '#38BDF8',
     infoForegroundDark: '#FAFAFA',
@@ -213,7 +213,7 @@ export const tokens = createTokens({
     sidebarForegroundDark: '#FAFAFA',
     sidebarPrimaryDark: '#8B5CF6',
     sidebarPrimaryForegroundDark: '#FAFAFA',
-    sidebarAccentDark: '#404040',
+    sidebarAccentDark: '#292929',
     sidebarAccentForegroundDark: '#FAFAFA',
     sidebarBorderDark: 'rgba(255, 255, 255, 0.1)',
     sidebarRingDark: '#606060',

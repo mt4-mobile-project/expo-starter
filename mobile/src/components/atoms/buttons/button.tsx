@@ -1,4 +1,4 @@
-import { styled, GetProps, Theme, ThemeProps, Button as TamaguiButton } from 'tamagui';
+import { styled, GetProps, Button as TamaguiButton } from 'tamagui';
 import { forwardRef } from 'react';
 
 // Define the variant types explicitly
@@ -16,7 +16,6 @@ const ButtonFrame = styled(TamaguiButton, {
   gap: '$2',
   fontWeight: '700',
 
-  // Variants
   variants: {
     variant: {
       default: {
@@ -24,7 +23,7 @@ const ButtonFrame = styled(TamaguiButton, {
         color: '$primaryForeground',
         borderWidth: 0,
         pressStyle: {
-          opacity: 0.9,
+          opacity: 0.8,
           backgroundColor: '$primary',
         },
       },
@@ -33,17 +32,25 @@ const ButtonFrame = styled(TamaguiButton, {
         color: '$destructiveForeground',
         borderWidth: 0,
         pressStyle: {
-          opacity: 0.9,
+          opacity: 0.8,
           backgroundColor: '$destructive',
         },
       },
       outline: {
         backgroundColor: 'transparent',
-        color: '$foreground',
+        color: '$primary', // Changed from $foreground to $primary for better visibility
         borderWidth: 1,
-        borderColor: '$border',
+        borderColor: '$border', // Changed from $border to $primary
         pressStyle: {
-          backgroundColor: '$muted',
+          backgroundColor: '$secondary',
+        },
+      },
+      ghost: {
+        backgroundColor: 'transparent',
+        color: '$primary',
+        borderWidth: 0,
+        pressStyle: {
+          opacity: 0.8,
         },
       },
       secondary: {
@@ -51,16 +58,8 @@ const ButtonFrame = styled(TamaguiButton, {
         color: '$secondaryForeground',
         borderWidth: 0,
         pressStyle: {
-          opacity: 0.9,
+          opacity: 0.8,
           backgroundColor: '$secondary',
-        },
-      },
-      ghost: {
-        backgroundColor: 'transparent',
-        color: '$foreground',
-        borderWidth: 0,
-        pressStyle: {
-          backgroundColor: '$muted',
         },
       },
       link: {
@@ -72,33 +71,33 @@ const ButtonFrame = styled(TamaguiButton, {
         textDecorationLine: 'underline',
         pressStyle: {
           backgroundColor: 'transparent',
-          opacity: 0.6,
+          opacity: 0.8,
         },
       },
     },
     size: {
       default: {
-        height: '$10', // 40px comme shadcn
+        height: '$12',
         paddingHorizontal: '$4',
         fontSize: 16,
       },
       sm: {
-        height: '$8', // 32px comme shadcn
+        height: '$8',
         paddingHorizontal: '$3',
         fontSize: 14,
-        borderRadius: '$sm',
+        borderRadius: '$full',
       },
       lg: {
-        height: '$12', // 48px comme shadcn
+        height: '$16',
         paddingHorizontal: '$6',
         fontSize: 18,
-        borderRadius: '$lg',
+        borderRadius: '$full',
       },
       icon: {
-        height: '$10', // 40px comme shadcn
+        height: '$10',
         width: '$10',
         paddingHorizontal: 0,
-        borderRadius: '$md',
+        borderRadius: '$full',
         justifyContent: 'center',
         alignItems: 'center',
       },
@@ -127,25 +126,11 @@ interface ButtonProps extends Omit<GetProps<typeof ButtonFrame>, 'variant'> {
 
 export const Button = forwardRef<React.ElementRef<typeof ButtonFrame>, ButtonProps>(
   ({ children, variant = 'default', ...props }, ref) => {
-    // Pour les variantes qui nécessitent un thème spécifique
-    const themeName: ThemeProps['name'] =
-      variant === 'outline' || variant === 'ghost' ? 'light' : undefined;
-
-    // Simplification du rendu pour le variant link
-    if (variant === 'link') {
-      return (
-        <ButtonFrame ref={ref} variant={variant as any} {...props}>
-          {children}
-        </ButtonFrame>
-      );
-    }
-
+    // Remove the theme override since we now handle colors through tokens
     return (
-      <Theme name={themeName}>
-        <ButtonFrame ref={ref} variant={variant as any} {...props}>
-          {children}
-        </ButtonFrame>
-      </Theme>
+      <ButtonFrame ref={ref} variant={variant as any} {...props}>
+        {children}
+      </ButtonFrame>
     );
   }
 );
