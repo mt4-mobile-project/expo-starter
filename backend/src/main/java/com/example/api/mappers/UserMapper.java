@@ -1,28 +1,21 @@
 package com.example.api.mappers;
 
 import com.example.api.dtos.UserDto;
+import com.example.api.dtos.UserResponseDto;
 import com.example.api.entities.User;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-@Component
-public class UserMapper {
-    public UserDto toDto(User user) {
-        return new UserDto()
-                .setId(user.getId())
-                .setUsername(user.getUsername());
-    }
+import java.util.List;
 
-    public User toEntity(UserDto dto) {
-        User user = new User();
-        
-        if (dto.getUsername() != null) {
-            user.setUsername(dto.getUsername());
-        }
-        
-        if (dto.getPassword() != null) {
-            user.setPassword(dto.getPassword());
-        }
-        
-        return user;
-    }
+@Mapper(componentModel = "spring")
+public interface UserMapper {
+    @Mapping(source = "online", target = "isOnline")
+    UserResponseDto toResponseDto(User user);
+    
+    List<UserResponseDto> toDtoList(List<User> users);
+    
+    UserDto toDto(User user);
+    
+    User toEntity(UserDto userDto);
 }
