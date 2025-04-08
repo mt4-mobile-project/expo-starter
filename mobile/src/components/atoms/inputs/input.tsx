@@ -1,10 +1,10 @@
 // src/components/atoms/inputs/input.tsx
-import { styled, GetProps, Input as TamaguiInput } from 'tamagui';
+import { styled, GetProps, Input as TamaguiInput, XStack, YStack } from 'tamagui';
 import { forwardRef } from 'react';
 
 // Définition des variants
 type InputVariant = 'default' | 'outline' | 'filled';
-type InputSize = 'default' | 'sm' | 'lg';
+type InputSize = 'sm' | 'md' | 'lg';
 
 const InputFrame = styled(TamaguiInput, {
   name: 'Input',
@@ -18,7 +18,7 @@ const InputFrame = styled(TamaguiInput, {
   color: 'white',
   placeholderTextColor: '#aaa',
   fontWeight: '500',
-  /*  width: '100%', */ // dans le cas où vous voulez une taille fixe
+  width: '100%',
 
   variants: {
     variant: {
@@ -37,15 +37,9 @@ const InputFrame = styled(TamaguiInput, {
       },
     },
     size: {
-      default: {
-        fontSize: 16,
-      },
-      sm: {
-        fontSize: 14,
-      },
-      lg: {
-        fontSize: 18,
-      },
+      sm: { fontSize: 14 },
+      md: { fontSize: 16 },
+      lg: { fontSize: 18 },
     },
     disabled: {
       true: {
@@ -57,19 +51,49 @@ const InputFrame = styled(TamaguiInput, {
 
   defaultVariants: {
     variant: 'default',
-    size: 'default',
+    size: 'md',
   },
 });
 
+// Typage des props
 interface InputProps extends Omit<GetProps<typeof InputFrame>, 'variant'> {
+  icon?: JSX.Element;
   variant?: InputVariant;
   size?: InputSize;
   disabled?: boolean;
 }
 
 export const Input = forwardRef<React.ElementRef<typeof InputFrame>, InputProps>(
-  ({ variant = 'default', ...props }, ref) => {
-    return <InputFrame ref={ref} variant={variant} {...props} />;
+  ({ variant = 'default', icon, size = 'md', ...props }, ref) => {
+    const paddingLeftMap: Record<InputSize, string> = {
+      sm: '$6',
+      md: '$7',
+      lg: '$8',
+    };
+
+    return (
+      <XStack position="relative" width="100%" alignItems="center">
+        {icon && (
+          <YStack
+            position="absolute"
+            left="$3"
+            top={0}
+            bottom={0}
+            justifyContent="center"
+            pointerEvents="none"
+          >
+            {icon}
+          </YStack>
+        )}
+        <InputFrame
+          ref={ref}
+          variant={variant}
+          size={size}
+          paddingLeft={icon ? paddingLeftMap[size] : '$3'}
+          {...props}
+        />
+      </XStack>
+    );
   }
 );
 
