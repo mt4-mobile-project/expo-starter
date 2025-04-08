@@ -5,10 +5,8 @@ import { tokens } from '@/themes/tokens';
 import { allThemes } from '@/themes/theme';
 import { media } from '@/themes/media';
 
-// Create our custom font
 const interFont = createInterFont();
 
-// Create the Tamagui config
 const config = createTamagui({
   defaultFont: 'body',
   fonts: {
