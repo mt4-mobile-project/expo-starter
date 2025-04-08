@@ -1,4 +1,5 @@
-import { View, Paragraph } from 'tamagui';
+import { View } from 'tamagui';
+import ProfileCard from '@/components/molecules/profile-card/profil-card';
 
 export default function ProfilScreen() {
   return (
@@ -8,9 +9,8 @@ export default function ProfilScreen() {
       padding="$4"
       justifyContent="center"
       alignItems="center"
-      gap="$4"
     >
-      <Paragraph>Profil Page</Paragraph>
+      <ProfileCard />
     </View>
   );
 }
