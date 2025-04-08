@@ -64,8 +64,11 @@ CREATE TABLE IF NOT EXISTS `files` (
     `file_path` VARCHAR(1024) NOT NULL,
     `file_type` VARCHAR(100) NOT NULL,
     `file_size` INT NOT NULL,
+    `filable_type` VARCHAR(100) NOT NULL,
+    `filable_id` INT NOT NULL,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY `unique_filable` (`filable_type`, `filable_id`),
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
 );
 

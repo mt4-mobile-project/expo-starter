@@ -17,6 +17,8 @@ services:
         - path: ./backend/src
           target: /app/src
           action: sync+restart
+    volumes:
+      - ./uploads:/app/uploads
 
   mariadb:
     container_name: mariadb-java
