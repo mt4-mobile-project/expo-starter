@@ -1,7 +1,6 @@
 import { forwardRef } from 'react';
 import { TamaguiTextElement, styled, Text, XStack } from 'tamagui';
 import { GetProps } from 'tamagui';
-import { ChevronRight } from '@tamagui/lucide-icons';
 
 // 1. On définit les variants manuellement
 type LabelButtonVariant = 'default' | 'primary' | 'secondary' | 'destructive';
@@ -16,11 +15,10 @@ const StyledLabel = styled(Text, {
 
   variants: { 
     variant: {
-      default: { color: '$color' },
+      default: { color: '$primary' },
       primary: { color: '$primary' },
       secondary: { color: '$secondary' },
       destructive: { color: '$destructive' },
-      muted: { color: '$gray10' },
     },
     size: {
       sm: { fontSize: 12 },
