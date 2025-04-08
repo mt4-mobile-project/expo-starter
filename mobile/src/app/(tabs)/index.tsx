@@ -85,6 +85,43 @@ export default function HomeScreen() {
           status="En ligne"
         />
 
+        <UserCard
+          imageUrl="https://picsum.photos/200"
+          name="Nom de profil"
+          region="Île-de-France"
+          status="En ligne"
+        />
+        <UserCard
+          imageUrl="https://picsum.photos/200"
+          name="Nom de profil"
+          region="Île-de-France"
+          status="En ligne"
+        />
+        <UserCard
+          imageUrl="https://picsum.photos/200"
+          name="Nom de profil"
+          region="Île-de-France"
+          status="En ligne"
+        />
+        <UserCard
+          imageUrl="https://picsum.photos/200"
+          name="Nom de profil"
+          region="Île-de-France"
+          status="En ligne"
+        />
+        <UserCard
+          imageUrl="https://picsum.photos/200"
+          name="Nom de profil"
+          region="Île-de-France"
+          status="En ligne"
+        />
+        <UserCard
+          imageUrl="https://picsum.photos/200"
+          name="Nom de profil"
+          region="Île-de-France"
+          status="En ligne"
+        />
+
 
       <YStack space="$4">
         <H1>Heading 1</H1>
