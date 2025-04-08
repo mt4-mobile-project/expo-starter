@@ -13,6 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.MediaTypeFactory;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/files")
@@ -47,6 +54,20 @@ public class FileController {
     ) {
         FileResponseDto file = fileService.getFileByFilableTypeAndId(filableType, filableId);
         return ResponseEntity.ok(file);
+    }
+
+    @GetMapping("/images/{filename:.+}")
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename) throws MalformedURLException {
+        Path filePath = Paths.get("uploads").resolve(filename).normalize();
+        Resource resource = new UrlResource(filePath.toUri());
+
+        if (!resource.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaTypeFactory.getMediaType(resource).orElse(MediaType.APPLICATION_OCTET_STREAM))
+                .body(resource);
     }
 
     @DeleteMapping("/{filableType}/{filableId}")
