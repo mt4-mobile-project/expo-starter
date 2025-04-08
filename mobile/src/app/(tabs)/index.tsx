@@ -1,4 +1,4 @@
-import { Button } from '@/components/atoms/button';
+import { Button } from '@/components/atoms/buttons/button';
 import { View, Text } from 'tamagui';
 
 export default function HomeScreen() {
