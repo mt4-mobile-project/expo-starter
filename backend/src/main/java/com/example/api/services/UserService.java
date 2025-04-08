@@ -28,6 +28,11 @@ public class UserService {
                 .orElseThrow(() -> new ApiException("User not found", HttpStatus.NOT_FOUND));
     }
 
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ApiException("User not found", HttpStatus.NOT_FOUND));
+    }
+
     public User createUser(User user) {
         return userRepository.save(user);
     }
