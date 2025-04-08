@@ -1,5 +1,5 @@
 // src/components/molecules/user-card/UserCard.tsx
-import { View, XStack, YStack, Text, styled } from 'tamagui';
+import { XStack, YStack, Text, styled } from 'tamagui';
 import { Image } from 'react-native';
 
 interface UserCardProps {
@@ -15,7 +15,12 @@ const StyledImage = styled(Image, {
   borderRadius: 30,
 });
 
-export const UserCard = ({ imageUrl, name, region, status = "Statut sur l'app" }: UserCardProps) => {
+export const UserCard = ({
+  imageUrl,
+  name,
+  region,
+  status = "Statut sur l'app",
+}: UserCardProps) => {
   return (
     <XStack
       padding="$3"
