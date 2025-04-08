@@ -1,7 +1,6 @@
-import { H1, H2, H3, H4, H5, H6 } from '@/components/atoms/typography/heading';
 import { Text } from '@/components/atoms/typography/text';
 import { Input } from '@/components/atoms/inputs/input';
-import { View, YStack } from 'tamagui';
+import { View } from 'tamagui';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useEffect } from 'react';
 import { login } from '@/services/auth';
@@ -9,9 +8,7 @@ import { getCurrentUser } from '@/services/user';
 import { useUsers } from '@/hooks/useUsers';
 import { UserCard } from '@/components/molecules/users-card/users-card';
 
-
 export default function HomeScreen() {
-
   const { data: users, isLoading, error } = useUsers();
 
   useEffect(() => {
@@ -47,12 +44,12 @@ export default function HomeScreen() {
 
   return (
     <View flex={1} backgroundColor="$background" padding="$4" gap="$4">
-       <Input
-          placeholder="Rechercher"
-          variant="outline"
-          size="lg"
-          icon={<FontAwesome name="search" size={18} color="#aaa" />}
-        />
+      <Input
+        placeholder="Rechercher"
+        variant="outline"
+        size="lg"
+        icon={<FontAwesome name="search" size={18} color="#aaa" />}
+      />
 
       {isLoading && <Text>Chargement des utilisateurs...</Text>}
       {error && <Text>Erreur lors du chargement.</Text>}
@@ -66,8 +63,6 @@ export default function HomeScreen() {
           status="En ligne"
         />
       ))}
-     
     </View>
   );
 }
-
