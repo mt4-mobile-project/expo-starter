@@ -1,6 +1,6 @@
 import { View, Paragraph } from 'tamagui';
 
-export default function Events() {
+export default function VitoExampleScreen() {
   return (
     <View
       flex={1}

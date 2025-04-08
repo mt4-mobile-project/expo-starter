@@ -1,7 +1,7 @@
 import { Link } from 'expo-router';
 import { View } from 'tamagui';
 
-export default function HomeScreen() {
+export default function EventsScreen() {
   return (
     <View
       flex={1}
