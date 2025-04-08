@@ -31,7 +31,7 @@ const ButtonFrame = styled(TamaguiButton, {
         borderWidth: 0,
         pressStyle: {
           opacity: 0.8,
-          backgroundColor: '$primary',
+          backgroundColor: '',
         },
       },
     },

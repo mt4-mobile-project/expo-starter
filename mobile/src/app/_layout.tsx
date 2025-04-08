@@ -1,13 +1,15 @@
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { Stack, Link } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 import 'react-native-reanimated';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { TamaguiProvider, Theme } from 'tamagui';
+import { TamaguiProvider, Theme, View } from 'tamagui';
 import config from '@/configs/tamagui.config';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { IconButton } from '@/components/atoms/buttons/icon-button';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -27,11 +29,33 @@ export default function RootLayout() {
     return null;
   }
 
+  const HeaderRight = () => {
+    return (
+      <View style={{ flexDirection: 'row' }}>
+        <IconButton variant="bottomless">
+          <Link href="/messages">
+            <MaterialIcons name="message" size={24} color="black" />
+          </Link>
+        </IconButton>
+
+        <IconButton variant="bottomless">
+          <Link href="/notifications">
+            <MaterialIcons name="notifications-active" size={24} color="black" />
+          </Link>
+        </IconButton>
+      </View>
+    );
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
       <TamaguiProvider config={config} defaultTheme={colorScheme === 'dark' ? 'dark' : 'light'}>
         <Theme name={colorScheme === 'dark' ? 'dark' : 'light'}>
-          <Stack>
+          <Stack
+            screenOptions={{
+              headerRight: () => <HeaderRight />,
+            }}
+          >
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="+not-found" />
           </Stack>
