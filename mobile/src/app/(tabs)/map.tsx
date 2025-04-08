@@ -1,19 +1,31 @@
 import { StyleSheet } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import { View } from 'tamagui';
+import { useRef } from 'react';
+import { useLocation } from '@/hooks/useLocation';
 
 export default function MapScreen() {
+  const mapRef = useRef<MapView | null>(null);
+  const { location, PARIS_LOCATION } = useLocation();
+
   return (
     <View style={styles.container}>
       <MapView
+        ref={mapRef}
         style={styles.map}
-        initialRegion={{
-          latitude: 48.8566, // Paris coordinates
-          longitude: 2.3522,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-      />
+        initialRegion={PARIS_LOCATION}
+        showsUserLocation={true}
+        showsMyLocationButton={true}
+        followsUserLocation={true}
+      >
+        <Marker
+          coordinate={{
+            latitude: location.latitude,
+            longitude: location.longitude,
+          }}
+          title="Ma position"
+        />
+      </MapView>
     </View>
   );
 }
