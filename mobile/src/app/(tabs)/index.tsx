@@ -6,7 +6,6 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useEffect } from 'react';
 import { login } from '@/services/auth';
 import { getCurrentUser } from '@/services/user';
-import { UserCard } from '@/components/molecules/users-card/users-card';
 
 export default function HomeScreen() {
   useEffect(() => {
