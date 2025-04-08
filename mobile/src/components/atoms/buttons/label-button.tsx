@@ -1,6 +1,5 @@
 import { forwardRef } from 'react';
-import { TamaguiTextElement, styled, Text, XStack } from 'tamagui';
-import { GetProps } from 'tamagui';
+import { TamaguiTextElement, styled, Text, XStack, GetProps } from 'tamagui';
 
 // 1. On définit les variants manuellement
 type LabelButtonVariant = 'default' | 'primary' | 'secondary' | 'destructive';
@@ -13,7 +12,7 @@ const StyledLabel = styled(Text, {
   textDecorationLine: 'underline',
   cursor: 'pointer',
 
-  variants: { 
+  variants: {
     variant: {
       default: { color: '$primary' },
       primary: { color: '$primary' },

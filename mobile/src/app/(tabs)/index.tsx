@@ -1,4 +1,4 @@
-import { Button } from '@/components/atoms/buttons/button';
+// import { Button } from '@/components/atoms/buttons/button';
 import { Input } from '@/components/atoms/inputs/input';
 import { LabelButton } from '@/components/atoms/buttons/label-button';
 import { ChevronRight } from '@tamagui/lucide-icons';
@@ -41,9 +41,6 @@ export default function HomeScreen() {
       <LabelButton variant="destructive" icon={<ChevronRight size={20} />}>
         Voir l'évenement
       </LabelButton>
-
-
-
     </View>
   );
 }
