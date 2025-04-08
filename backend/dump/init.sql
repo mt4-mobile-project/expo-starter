@@ -76,5 +76,7 @@ CREATE TABLE IF NOT EXISTS `addresses` (
     `id` INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `street` VARCHAR(500) NOT NULL,
     `city` VARCHAR(255) NOT NULL,
-    `coordinates` POINT NOT NULL
+    `coordinates` POINT NOT NULL,
+    `event_id` INT NOT NULL,
+    FOREIGN KEY (`event_id`) REFERENCES `events`(`id`)
 );
