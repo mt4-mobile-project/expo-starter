@@ -27,6 +27,21 @@ export default function MapScreen() {
 
   const [currentSnapIndex, setCurrentSnapIndex] = useState(1);
 
+  // Ajout de useEffect pour centrer la carte sur l'événement sélectionné
+  useEffect(() => {
+    if (selectedEvent && mapRef.current) {
+      mapRef.current.animateToRegion(
+        {
+          latitude: selectedEvent.address.latitude,
+          longitude: selectedEvent.address.longitude,
+          latitudeDelta: 0.005,
+          longitudeDelta: 0.005,
+        },
+        500
+      );
+    }
+  }, [selectedEvent]);
+
   const handleMapPress = () => {
     if (currentSnapIndex === 2 || currentSnapIndex === 3) {
       bottomSheetRef.current?.snapToIndex(1);
