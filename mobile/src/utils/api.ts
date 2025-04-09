@@ -6,6 +6,7 @@ type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 
 interface RequestConfig extends RequestInit {
   params?: Record<string, string>;
+  responseType?: 'arraybuffer' | 'blob' | 'json' | 'text';
 }
 
 interface ApiError extends Error {
@@ -31,12 +32,11 @@ const handleResponse = async (response: Response) => {
     const error: ApiError = new Error('API Error');
     error.status = response.status;
     error.data = isJson ? await response.json() : await response.text();
-    console.log('API Error Details:', {
-      status: response.status,
-      url: response.url,
-      data: error.data,
-    });
     throw error;
+  }
+
+  if (response.headers.get('content-type')?.includes('image/')) {
+    return response.arrayBuffer();
   }
 
   return isJson ? response.json() : response.text();

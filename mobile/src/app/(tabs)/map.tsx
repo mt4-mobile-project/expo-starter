@@ -52,8 +52,8 @@ export default function MapScreen() {
           title={selectedEvent ? selectedEvent.name : 'Événements à proximité'}
           bottomSheetRef={bottomSheetRef}
           onChange={handleSheetChanges}
-          snapPoints={['25%', '50%', '75%']}
-          initialIndex={0}
+          snapPoints={['15%', '25%', '50%', '75%']}
+          initialIndex={selectedEvent ? 2 : 1}
           onClose={handleClose}
           showCloseButton={!!selectedEvent}
         >
