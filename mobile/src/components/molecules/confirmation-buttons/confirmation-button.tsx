@@ -6,7 +6,7 @@ interface ConfirmationButtonsProps {
   onSubmit: () => void;
 }
 
-export const ConfirmationButtons: React.FC<ConfirmationButtonsProps> = ({ onCancel, onSubmit }) => {
+const ConfirmationButtons: React.FC<ConfirmationButtonsProps> = ({ onCancel, onSubmit }) => {
   return (
     <XStack justifyContent="space-between" alignItems="center" marginTop="$4" width="100%">
       <Button variant="outline" size="lg" onPress={onCancel} flex={1} marginRight="$2" height={50}>
