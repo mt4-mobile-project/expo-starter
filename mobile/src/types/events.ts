@@ -5,6 +5,7 @@ export interface Event {
   start_date: string;
   end_date: string;
   user_id: number;
+  image?: string; // Add this line for the image URL
   address: {
     id: number;
     street: string;
