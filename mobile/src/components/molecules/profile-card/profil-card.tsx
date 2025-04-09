@@ -9,10 +9,7 @@ export default function ProfileCard() {
       justifyContent="center"
       padding="$4"
       borderRadius="$lg"
-      shadowColor="rgba(0, 0, 0, 0.1)"
-      shadowOffset={{ width: 0, height: 2 }}
-      shadowOpacity={0.8}
-      shadowRadius={4}
+
     >
       <ProfileImage
         width={100}

@@ -1,7 +1,20 @@
-import { Link } from 'expo-router';
 import { View } from 'tamagui';
+import { FormGenerator } from '@/utils/generator/input-generator';
+import { REGISTER_INPUT_CONFIGS } from '@/configs/inputs/register-input.config';
+import { Link } from 'expo-router';
+
+interface RegisterFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
 
 export default function EventsScreen() {
+  const handleRegister = (data: RegisterFormData) => {
+    console.log('Register data:', data);
+  };
+
   return (
     <View
       flex={1}
@@ -9,9 +22,8 @@ export default function EventsScreen() {
       padding="$4"
       justifyContent="center"
       alignItems="center"
-      gap="$4"
     >
-      <Link
+            <Link
         href={{
           pathname: '/event/[id]',
           params: { id: 567890 },
@@ -45,6 +57,17 @@ export default function EventsScreen() {
       >
         View Vito example page
       </Link>
+
+      <FormGenerator<RegisterFormData>
+        configs={REGISTER_INPUT_CONFIGS}
+        onSubmit={handleRegister}
+        defaultValues={{
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: ''
+        }}
+      />
     </View>
   );
 }
