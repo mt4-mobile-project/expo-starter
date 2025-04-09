@@ -1,8 +1,7 @@
-// src/components/atoms/inputs/input.tsx
 import { styled, GetProps, Input as TamaguiInput, XStack, YStack } from 'tamagui';
 import { forwardRef } from 'react';
+import { Text } from '@/components/atoms/typography/text';
 
-// Définition des variants
 type InputVariant = 'default' | 'outline' | 'filled';
 type InputSize = 'sm' | 'md' | 'lg';
 
@@ -61,10 +60,11 @@ interface InputProps extends Omit<GetProps<typeof InputFrame>, 'variant'> {
   variant?: InputVariant;
   size?: InputSize;
   disabled?: boolean;
+  error?: string; // Add this line
 }
 
 export const Input = forwardRef<React.ElementRef<typeof InputFrame>, InputProps>(
-  ({ variant = 'default', icon, size = 'md', ...props }, ref) => {
+  ({ variant = 'default', icon, size = 'md', error, ...props }, ref) => {
     const paddingLeftMap: Record<InputSize, string> = {
       sm: '$6',
       md: '$7',
@@ -72,27 +72,34 @@ export const Input = forwardRef<React.ElementRef<typeof InputFrame>, InputProps>
     };
 
     return (
-      <XStack position="relative" width="100%" alignItems="center">
-        {icon && (
-          <YStack
-            position="absolute"
-            left="$3"
-            top={0}
-            bottom={0}
-            justifyContent="center"
-            pointerEvents="none"
-          >
-            {icon}
-          </YStack>
+      <YStack width="100%">
+        <XStack position="relative" width="100%" alignItems="center">
+          {icon && (
+            <YStack
+              position="absolute"
+              left="$3"
+              top={0}
+              bottom={0}
+              justifyContent="center"
+              pointerEvents="none"
+            >
+              {icon}
+            </YStack>
+          )}
+          <InputFrame
+            ref={ref}
+            variant={variant}
+            size={size}
+            paddingLeft={icon ? paddingLeftMap[size] : '$3'}
+            {...props}
+          />
+        </XStack>
+        {error && (
+          <Text color="$destructive" marginTop="$1">
+            {error}
+          </Text>
         )}
-        <InputFrame
-          ref={ref}
-          variant={variant}
-          size={size}
-          paddingLeft={icon ? paddingLeftMap[size] : '$3'}
-          {...props}
-        />
-      </XStack>
+      </YStack>
     );
   }
 );
