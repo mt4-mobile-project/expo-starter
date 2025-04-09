@@ -1,5 +1,5 @@
 import { Link } from 'expo-router';
-import { View } from 'tamagui';
+import { View, YStack } from 'tamagui';
 
 export default function TemporaryScreen() {
   return (
@@ -10,13 +10,11 @@ export default function TemporaryScreen() {
       justifyContent="center"
       alignItems="center"
     >
-      <Link
-        href={{
-          pathname: '/temporary/form',
-        }}
-      >
-        Temporary Form page
-      </Link>
+      <YStack space="$4" alignItems="center">
+        <Link href="/temporary/button">Temporary Button Showcase</Link>
+
+        <Link href="/temporary/form">Temporary Form page</Link>
+      </YStack>
     </View>
   );
 }
