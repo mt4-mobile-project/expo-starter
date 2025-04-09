@@ -11,6 +11,8 @@ export default function TemporaryScreen() {
       alignItems="center"
     >
       <YStack space="$4" alignItems="center">
+        <Link href="/temporary/typography">Temporary Typo Showcase</Link>
+
         <Link href="/temporary/button">Temporary Button Showcase</Link>
 
         <Link href="/temporary/input">Temporary Input Showcase</Link>
