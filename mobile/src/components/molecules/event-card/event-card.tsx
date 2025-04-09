@@ -12,8 +12,7 @@ interface EventCardProps {
 const StyledImage = styled(Image, {
   width: '100%',
   height: 200, // Hauteur fixe
-  borderTopLeftRadius: 12,
-  borderTopRightRadius: 12,
+  borderRadius: 8,
 });
 
 export const EventCard = ({ image, title, address, datetime }: EventCardProps) => {
@@ -22,18 +21,7 @@ export const EventCard = ({ image, title, address, datetime }: EventCardProps) =
     : { uri: Image.resolveAssetSource(require('@/assets/images/placeholder.png')).uri };
 
   return (
-    <YStack
-      borderRadius={12}
-      overflow="hidden"
-      background="white"
-      shadowColor="#000"
-      shadowOpacity={0.1}
-      shadowRadius={10}
-      width="100%"
-      maxWidth={400}
-      marginBottom="$6"
-      borderColor="#333"
-    >
+    <YStack overflow="hidden" width="100%" maxWidth={400}>
       <StyledImage source={imageSource} resizeMode="cover" />
       <YStack padding="$4">
         <Text fontWeight="700" fontSize={18} color="#000">
