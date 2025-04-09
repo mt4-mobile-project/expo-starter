@@ -12,7 +12,7 @@ export default function HomeScreen() {
   const [activeFilter, setActiveFilter] = useState<'all' | 'date' | 'city'>('all');
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
-  const { data: events, isLoading, error }  = useEvents();
+  const { data: events, isLoading, error } = useEvents();
 
   const handleSearchSubmit = () => {
     Keyboard.dismiss();
@@ -31,8 +31,7 @@ export default function HomeScreen() {
       event.name.toLowerCase().includes(lowerSearch) ||
       event.address.city.toLowerCase().includes(lowerSearch);
 
-    const matchDate =
-      !selectedDate || event.start_date.startsWith(selectedDate);
+    const matchDate = !selectedDate || event.start_date.startsWith(selectedDate);
 
     const matchCity =
       !selectedCity || event.address.city.toLowerCase() === selectedCity.toLowerCase();
@@ -69,28 +68,17 @@ export default function HomeScreen() {
         >
           Par ville
         </Button>
-        <Button
-          variant="ghost"
-          onPress={handleResetFilters}
-        >
+        <Button variant="ghost" onPress={handleResetFilters}>
           Fermer les filtres
         </Button>
       </View>
 
       {activeFilter === 'date' && (
-        <Input
-          placeholder="YYYY-MM-DD"
-          value={selectedDate || ''}
-          onChangeText={setSelectedDate}
-        />
+        <Input placeholder="YYYY-MM-DD" value={selectedDate || ''} onChangeText={setSelectedDate} />
       )}
 
       {activeFilter === 'city' && (
-        <Input
-          placeholder="Ville"
-          value={selectedCity || ''}
-          onChangeText={setSelectedCity}
-        />
+        <Input placeholder="Ville" value={selectedCity || ''} onChangeText={setSelectedCity} />
       )}
 
       {isLoading && <Text>Chargement des événements...</Text>}
