@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { getAllEvents, getEventImage } from '@/services/events';
+import { getAllEvents } from '@/services/events';
 import type { Event } from '@/types/events';
+import { getFileImage } from '@/services/files';
+import { FileType } from '@/types/files';
 
 export const useEvents = () => {
   return useQuery<Event[]>({
@@ -11,7 +13,7 @@ export const useEvents = () => {
       // Fetch all images in parallel for better performance
       const eventsWithImages = await Promise.all(
         events.map(async (event) => {
-          const imageUrl = await getEventImage(event.id);
+          const imageUrl = await getFileImage(FileType.Event, event.id);
           return {
             ...event,
             image: imageUrl,
