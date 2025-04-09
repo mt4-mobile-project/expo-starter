@@ -11,6 +11,7 @@ import { EventDetails } from '@/components/molecules/event-details/event-details
 import { MapMarkers } from '@/components/molecules/map-markers/map-markers';
 import { useMarkerPress } from '@/hooks/maps/useMarkerPress';
 import { EventCard } from '@/components/molecules/event-card/event-card';
+import { Event } from '@/types/events'; // Ensure this import is correct
 
 export default function MapScreen() {
   const mapRef = useRef<MapView | null>(null);
@@ -59,6 +60,24 @@ export default function MapScreen() {
   useEffect(() => {
     console.log(events.length);
   }, [events]);
+
+  const handleEventCardPress = (event: Event) => {
+    setSelectedEvent(event);
+    bottomSheetRef.current?.snapToIndex(2);
+
+    // Center the map on the selected event
+    if (mapRef.current) {
+      mapRef.current.animateToRegion(
+        {
+          latitude: event.address.latitude,
+          longitude: event.address.longitude,
+          latitudeDelta: 0.005,
+          longitudeDelta: 0.005,
+        },
+        500
+      );
+    }
+  };
 
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -113,6 +132,7 @@ export default function MapScreen() {
                     title={event.name}
                     address={`${event.address.street}, ${event.address.city}`}
                     datetime={event.start_date}
+                    onPress={() => handleEventCardPress(event)}
                   />
                 ))}
               </View>

@@ -3,10 +3,11 @@ import { YStack, Text, styled } from 'tamagui';
 import { Image } from 'react-native';
 
 interface EventCardProps {
-  image: string; // Ce sera maintenant une chaîne base64
+  image: string;
   title: string;
   address: string;
   datetime: string;
+  onPress?: () => void; // Add this line
 }
 
 const StyledImage = styled(Image, {
@@ -15,13 +16,13 @@ const StyledImage = styled(Image, {
   borderRadius: 8,
 });
 
-export const EventCard = ({ image, title, address, datetime }: EventCardProps) => {
+export const EventCard = ({ image, title, address, datetime, onPress }: EventCardProps) => {
   const imageSource = image
     ? { uri: `data:image/jpeg;base64,${image}` }
     : { uri: Image.resolveAssetSource(require('@/assets/images/placeholder.png')).uri };
 
   return (
-    <YStack overflow="hidden" width="100%" maxWidth={400}>
+    <YStack overflow="hidden" width="100%" maxWidth={400} onPress={onPress}>
       <StyledImage source={imageSource} resizeMode="cover" />
       <YStack padding="$4">
         <Text fontWeight="700" fontSize={18} color="#000">
