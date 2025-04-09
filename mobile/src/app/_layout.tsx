@@ -10,6 +10,7 @@ import { TamaguiProvider, Theme, View } from 'tamagui';
 import config from '@/configs/tamagui.config';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { IconButton } from '@/components/atoms/buttons/icon-button';
+import { useCheckAuth } from '@/hooks/useCheckAuth';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -18,6 +19,7 @@ const queryClient = new QueryClient();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({});
+  useCheckAuth();
 
   useEffect(() => {
     if (loaded) {
@@ -51,11 +53,14 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <TamaguiProvider config={config} defaultTheme={colorScheme === 'dark' ? 'dark' : 'light'}>
         <Theme name={colorScheme === 'dark' ? 'dark' : 'light'}>
-          <Stack
+        <Stack
             screenOptions={{
-              headerRight: () => <HeaderRight />,
+              headerShown: false 
             }}
           >
+            <Stack.Screen name="index" />
+            <Stack.Screen name="auth/login" />
+            <Stack.Screen name="auth/register" />
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="+not-found" />
           </Stack>
