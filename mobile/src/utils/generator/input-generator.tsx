@@ -44,7 +44,7 @@ export function FormGenerator<T extends FieldValues>({
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <Input
               placeholder={config.placeholder}
-              icon={<MaterialCommunityIcons name={config.icon} size={20} color="#aaa" />}
+              icon={<MaterialCommunityIcons name={config.icon} size={20} />}
               variant={config.variant}
               value={value}
               onChangeText={onChange}
