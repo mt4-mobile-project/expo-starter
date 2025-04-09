@@ -3,34 +3,12 @@ import MapView, { Marker } from 'react-native-maps';
 import { View } from 'tamagui';
 import { useRef } from 'react';
 import { useLocation } from '@/hooks/useLocation';
-
-// Mock data for musical events
-const mockEvents = [
-  {
-    id: 1,
-    title: 'Dragon Gate Jazz Night',
-    location: {
-      latitude: 37.7936,
-      longitude: -122.4053,
-      venue: 'Dragon Gate, Chinatown',
-    },
-    date: '2024-02-15',
-  },
-  {
-    id: 2,
-    title: 'SFMOMA Music Festival',
-    location: {
-      latitude: 37.7858,
-      longitude: -122.4008,
-      venue: 'SF Museum of Modern Art',
-    },
-    date: '2024-02-20',
-  },
-];
+import { useEvents } from '@/hooks/useEvents';
 
 export default function MapScreen() {
   const mapRef = useRef<MapView | null>(null);
   const { location } = useLocation();
+  const { data: events = [] } = useEvents();
 
   return (
     <View style={styles.container}>
@@ -38,8 +16,8 @@ export default function MapScreen() {
         ref={mapRef}
         style={styles.map}
         initialRegion={{
-          latitude: 37.7749,
-          longitude: -122.4194,
+          latitude: 48.8566,
+          longitude: 2.3522,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
@@ -55,15 +33,15 @@ export default function MapScreen() {
           title="Ma position"
           pinColor="blue"
         />
-        {mockEvents.map((event) => (
+        {events.map((event) => (
           <Marker
             key={event.id}
             coordinate={{
-              latitude: event.location.latitude,
-              longitude: event.location.longitude,
+              latitude: event.address.latitude,
+              longitude: event.address.longitude,
             }}
-            title={event.title}
-            description={`${event.location.venue} - ${event.date}`}
+            title={event.name}
+            description={`${event.address.street}, ${event.address.city}`}
             pinColor="red"
           />
         ))}
