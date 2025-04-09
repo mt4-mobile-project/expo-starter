@@ -13,6 +13,8 @@ export default function TemporaryScreen() {
       <YStack space="$4" alignItems="center">
         <Link href="/temporary/button">Temporary Button Showcase</Link>
 
+        <Link href="/temporary/input">Temporary Input Showcase</Link>
+
         <Link href="/temporary/form">Temporary Form page</Link>
       </YStack>
     </View>
