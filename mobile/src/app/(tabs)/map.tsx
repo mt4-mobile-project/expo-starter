@@ -3,7 +3,7 @@ import MapView from 'react-native-maps';
 import { View } from 'tamagui';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from '@/hooks/maps/useLocation';
-import { useEvents } from '@/hooks/useEvents';
+import { useEvents } from '@/hooks/events/useEvents';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { CustomBottomSheet } from '@/components/molecules/bottom-sheet/bottom-sheet';
 import { useBottomSheet } from '@/hooks/useBottomSheet';
