@@ -14,9 +14,6 @@ export const getUsers = async (searchTerm: string = ''): Promise<User[]> => {
   return [response as User];
 };
 
-
-
 export const getCurrentUser = async (): Promise<User> => {
   return await api.get<User>('/users/me');
 };
-  

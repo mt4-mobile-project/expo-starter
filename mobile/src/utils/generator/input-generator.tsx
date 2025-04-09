@@ -24,17 +24,13 @@ interface FormGeneratorProps<T extends FieldValues> {
   defaultValues: DefaultValues<T>;
 }
 
-export function FormGenerator<T extends FieldValues>({ 
-  onSubmit, 
+export function FormGenerator<T extends FieldValues>({
+  onSubmit,
   configs,
-  defaultValues 
+  defaultValues,
 }: FormGeneratorProps<T>) {
-  const { control, handleSubmit } = useForm<T>({
-    defaultValues
-  });
-
-  const onSubmitForm = handleSubmit((data: T) => {
-    onSubmit?.(data);
+  const { control } = useForm<T>({
+    defaultValues,
   });
 
   return (

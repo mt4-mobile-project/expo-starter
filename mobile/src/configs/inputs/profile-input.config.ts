@@ -8,8 +8,8 @@ export const PROFILE_INPUT_CONFIGS: BaseInputConfig[] = [
     variant: 'outline',
     validation: {
       required: 'Le nom est requis',
-      minLength: { value: 2, message: 'Le nom doit contenir au moins 2 caractères' }
-    }
+      minLength: { value: 2, message: 'Le nom doit contenir au moins 2 caractères' },
+    },
   },
   {
     name: 'email',
@@ -19,12 +19,12 @@ export const PROFILE_INPUT_CONFIGS: BaseInputConfig[] = [
     keyboardType: 'email-address',
     autoCapitalize: 'none',
     validation: {
-      required: 'L\'email est requis',
+      required: "L'email est requis",
       pattern: {
         value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-        message: 'Email invalide'
-      }
-    }
+        message: 'Email invalide',
+      },
+    },
   },
   {
     name: 'phone',
@@ -33,8 +33,8 @@ export const PROFILE_INPUT_CONFIGS: BaseInputConfig[] = [
     variant: 'outline',
     keyboardType: 'phone-pad',
     validation: {
-      required: 'Le téléphone est requis'
-    }
+      required: 'Le téléphone est requis',
+    },
   },
   {
     name: 'address',
@@ -42,7 +42,7 @@ export const PROFILE_INPUT_CONFIGS: BaseInputConfig[] = [
     icon: 'map-marker',
     variant: 'outline',
     validation: {
-      required: 'L\'adresse est requise'
-    }
-  }
+      required: "L'adresse est requise",
+    },
+  },
 ];

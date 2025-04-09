@@ -23,7 +23,7 @@ export default function EventsScreen() {
       justifyContent="center"
       alignItems="center"
     >
-            <Link
+      <Link
         href={{
           pathname: '/event/[id]',
           params: { id: 567890 },
@@ -65,7 +65,7 @@ export default function EventsScreen() {
           firstName: '',
           lastName: '',
           email: '',
-          password: ''
+          password: '',
         }}
       />
     </View>

@@ -8,8 +8,8 @@ export const REGISTER_INPUT_CONFIGS: BaseInputConfig[] = [
     variant: 'outline',
     validation: {
       required: 'Le nom est requis',
-      minLength: { value: 2, message: 'Le nom doit contenir au moins 2 caractères' }
-    }
+      minLength: { value: 2, message: 'Le nom doit contenir au moins 2 caractères' },
+    },
   },
   {
     name: 'firstName',
@@ -18,8 +18,8 @@ export const REGISTER_INPUT_CONFIGS: BaseInputConfig[] = [
     variant: 'outline',
     validation: {
       required: 'Le prénom est requis',
-      minLength: { value: 2, message: 'Le prénom doit contenir au moins 2 caractères' }
-    }
+      minLength: { value: 2, message: 'Le prénom doit contenir au moins 2 caractères' },
+    },
   },
   {
     name: 'email',
@@ -29,12 +29,12 @@ export const REGISTER_INPUT_CONFIGS: BaseInputConfig[] = [
     keyboardType: 'email-address',
     autoCapitalize: 'none',
     validation: {
-      required: 'L\'email est requis',
+      required: "L'email est requis",
       pattern: {
         value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-        message: 'Email invalide'
-      }
-    }
+        message: 'Email invalide',
+      },
+    },
   },
   {
     name: 'password',
@@ -45,7 +45,7 @@ export const REGISTER_INPUT_CONFIGS: BaseInputConfig[] = [
     autoCapitalize: 'none',
     validation: {
       required: 'Le mot de passe est requis',
-      minLength: { value: 6, message: 'Le mot de passe doit contenir au moins 6 caractères' }
-    }
-  }
+      minLength: { value: 6, message: 'Le mot de passe doit contenir au moins 6 caractères' },
+    },
+  },
 ];

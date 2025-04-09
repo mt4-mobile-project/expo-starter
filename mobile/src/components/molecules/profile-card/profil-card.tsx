@@ -4,13 +4,7 @@ import ProfileName from '@/components/atoms/profile-cards/profil-name';
 
 export default function ProfileCard() {
   return (
-    <View
-      alignItems="center"
-      justifyContent="center"
-      padding="$4"
-      borderRadius="$lg"
-
-    >
+    <View alignItems="center" justifyContent="center" padding="$4" borderRadius="$lg">
       <ProfileImage
         width={100}
         height={100}
