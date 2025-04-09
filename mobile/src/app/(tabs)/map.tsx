@@ -1,73 +1,28 @@
 import { StyleSheet } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
-import { View, YStack } from 'tamagui';
-import { useRef, useCallback, useState } from 'react';
+import MapView from 'react-native-maps';
+import { View } from 'tamagui';
+import { useRef } from 'react';
 import { useLocation } from '@/hooks/useLocation';
 import { useEvents } from '@/hooks/useEvents';
-import BottomSheet from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { CustomBottomSheet } from '@/components/molecules/bottom-sheet/bottom-sheet';
-import { Event } from '@/types/events';
-import { Text } from '@/components/atoms/typography/text';
+import { useBottomSheet } from '@/hooks/useBottomSheet';
+import { EventDetails } from '@/components/molecules/event-details/event-details';
+import { MapMarkers } from '@/components/molecules/map-markers/map-markers';
+import { useMarkerPress } from '@/hooks/useMarkerPress';
 
 export default function MapScreen() {
   const mapRef = useRef<MapView | null>(null);
-  const bottomSheetRef = useRef<BottomSheet>(null);
   const { location } = useLocation();
   const { data: events = [] } = useEvents();
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const { bottomSheetRef, selectedEvent, setSelectedEvent, handleSheetChanges, handleClose } =
+    useBottomSheet();
 
-  const handleSheetChanges = useCallback((index: number) => {
-    if (index === 0) {
-      setSelectedEvent(null);
-      // Ajout d'un petit délai pour laisser le temps à l'animation de se terminer
-      setTimeout(() => {
-        bottomSheetRef.current?.snapToIndex(0);
-      }, 100);
-    }
-  }, []);
-
-  const handleMarkerPress = useCallback(
-    (event: Event) => {
-      if (selectedEvent?.id === event.id) {
-        // Si on clique sur le même marqueur, on le désélectionne
-        setSelectedEvent(null);
-        bottomSheetRef.current?.snapToIndex(0);
-      } else {
-        // Sinon on sélectionne le nouveau marqueur
-        setSelectedEvent(event);
-        bottomSheetRef.current?.snapToIndex(1);
-      }
-    },
-    [selectedEvent]
-  );
-
-  console.log(events, 'lllllllllllllll');
-
-  const renderEventDetails = () => {
-    if (!selectedEvent) return null;
-
-    return (
-      <YStack space="$4" padding="$4">
-        <Text size="base">{selectedEvent.description}</Text>
-        <Text size="lg" weight="bold">
-          Adresse
-        </Text>
-        <Text size="base">{selectedEvent.address.street}</Text>
-        <Text size="base">{selectedEvent.address.city}</Text>
-        <Text size="lg" weight="bold">
-          Date
-        </Text>
-        <Text size="base">Du: {new Date(selectedEvent.start_date).toLocaleDateString()}</Text>
-        <Text size="base">Au: {new Date(selectedEvent.end_date).toLocaleDateString()}</Text>
-      </YStack>
-    );
-  };
-
-  const handleClose = useCallback(() => {
-    setSelectedEvent(null);
-    bottomSheetRef.current?.snapToIndex(0);
-  }, []);
+  const { handleMarkerPress } = useMarkerPress({
+    bottomSheetRef,
+    selectedEvent,
+    setSelectedEvent,
+  });
 
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -85,27 +40,12 @@ export default function MapScreen() {
           showsMyLocationButton={true}
           followsUserLocation={true}
         >
-          <Marker
-            coordinate={{
-              latitude: location.latitude,
-              longitude: location.longitude,
-            }}
-            title="Ma position"
-            pinColor="blue"
+          <MapMarkers
+            events={events}
+            selectedEvent={selectedEvent}
+            userLocation={location}
+            onMarkerPress={handleMarkerPress}
           />
-          {events.map((event) => (
-            <Marker
-              key={event.id}
-              coordinate={{
-                latitude: event.address.latitude,
-                longitude: event.address.longitude,
-              }}
-              title={event.name}
-              description={`${event.address.street}, ${event.address.city}`}
-              pinColor={selectedEvent?.id === event.id ? 'green' : 'red'}
-              onPress={() => handleMarkerPress(event)}
-            />
-          ))}
         </MapView>
 
         <CustomBottomSheet
@@ -117,7 +57,7 @@ export default function MapScreen() {
           onClose={handleClose}
           showCloseButton={!!selectedEvent}
         >
-          {renderEventDetails()}
+          {selectedEvent && <EventDetails event={selectedEvent} />}
         </CustomBottomSheet>
       </View>
     </GestureHandlerRootView>
