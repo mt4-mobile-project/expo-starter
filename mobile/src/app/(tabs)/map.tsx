@@ -1,6 +1,6 @@
 import { StyleSheet, ActivityIndicator } from 'react-native';
 import MapView from 'react-native-maps';
-import { View } from 'tamagui';
+import { View, ScrollView } from 'tamagui';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from '@/hooks/maps/useLocation';
 import { useEvents } from '@/hooks/events/useEvents';
@@ -10,6 +10,7 @@ import { useBottomSheet } from '@/hooks/bottomSheet/useBottomSheet';
 import { EventDetails } from '@/components/molecules/event-details/event-details';
 import { MapMarkers } from '@/components/molecules/map-markers/map-markers';
 import { useMarkerPress } from '@/hooks/maps/useMarkerPress';
+import { EventCard } from '@/components/molecules/event-card/event-card';
 
 export default function MapScreen() {
   const mapRef = useRef<MapView | null>(null);
@@ -80,7 +81,26 @@ export default function MapScreen() {
           onClose={handleClose}
           showCloseButton={!!selectedEvent}
         >
-          {selectedEvent && <EventDetails event={selectedEvent} />}
+          {selectedEvent ? (
+            <EventDetails event={selectedEvent} />
+          ) : (
+            <ScrollView
+              scrollEnabled={currentSnapIndex !== 1}
+              contentContainerStyle={styles.scrollContent}
+            >
+              <View padding="$4" gap="$1">
+                {events.map((event) => (
+                  <EventCard
+                    key={event.id}
+                    image={event.image || ''}
+                    title={event.name}
+                    address={`${event.address.street}, ${event.address.city}`}
+                    datetime={event.start_date}
+                  />
+                ))}
+              </View>
+            </ScrollView>
+          )}
         </CustomBottomSheet>
       </View>
     </GestureHandlerRootView>
@@ -94,5 +114,8 @@ const styles = StyleSheet.create({
   map: {
     width: '100%',
     height: '100%',
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
 });
