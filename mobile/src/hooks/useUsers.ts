@@ -1,9 +1,10 @@
+// hooks/useUsers.ts
 import { useQuery } from '@tanstack/react-query';
 import { getUsers } from '@/services/user';
 
-export const useUsers = () => {
+export const useUsers = (searchTerm: string) => {
   return useQuery({
-    queryKey: ['users'],
-    queryFn: getUsers,
+    queryKey: ['users', searchTerm],
+    queryFn: () => getUsers(searchTerm),
   });
 };
