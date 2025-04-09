@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import { View, YStack, Text } from 'tamagui';
+import { View, YStack } from 'tamagui';
 import { useRef, useCallback, useState } from 'react';
 import { useLocation } from '@/hooks/useLocation';
 import { useEvents } from '@/hooks/useEvents';
@@ -8,6 +8,7 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { CustomBottomSheet } from '@/components/molecules/bottom-sheet/bottom-sheet';
 import { Event } from '@/types/events';
+import { Text } from '@/components/atoms/typography/text';
 
 export default function MapScreen() {
   const mapRef = useRef<MapView | null>(null);
@@ -34,17 +35,17 @@ export default function MapScreen() {
 
     return (
       <YStack space="$4" padding="$4">
-        <Text>{selectedEvent.description}</Text>
-        <Text fontSize={16} fontWeight="500">
+        <Text size="base">{selectedEvent.description}</Text>
+        <Text size="lg" weight="bold">
           Adresse
         </Text>
-        <Text>{selectedEvent.address.street}</Text>
-        <Text>{selectedEvent.address.city}</Text>
-        <Text fontSize={16} fontWeight="500">
+        <Text size="base">{selectedEvent.address.street}</Text>
+        <Text size="base">{selectedEvent.address.city}</Text>
+        <Text size="lg" weight="bold">
           Date
         </Text>
-        <Text>Du: {new Date(selectedEvent.start_date).toLocaleDateString()}</Text>
-        <Text>Au: {new Date(selectedEvent.end_date).toLocaleDateString()}</Text>
+        <Text size="base">Du: {new Date(selectedEvent.start_date).toLocaleDateString()}</Text>
+        <Text size="base">Au: {new Date(selectedEvent.end_date).toLocaleDateString()}</Text>
       </YStack>
     );
   };

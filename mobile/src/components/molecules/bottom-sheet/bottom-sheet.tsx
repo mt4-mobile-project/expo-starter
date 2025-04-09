@@ -1,9 +1,10 @@
 import { ReactNode } from 'react';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { StyleSheet } from 'react-native';
-import { H4, XStack } from 'tamagui';
+import { XStack } from 'tamagui';
 import { IconButton } from '@/components/atoms/buttons/icon-button';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { H4 } from '@/components/atoms/typography/heading';
 
 interface CustomBottomSheetProps {
   title: string;
