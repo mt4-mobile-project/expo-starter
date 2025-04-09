@@ -34,6 +34,14 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="temporary"
+        options={{
+          title: 'Temporary',
+          tabBarLabel: 'Temporary',
+          tabBarIcon: ({ color }: Color) => <MaterialIcons name="code" size={28} color={color} />,
+        }}
+      />
     </Tabs>
   );
 }
