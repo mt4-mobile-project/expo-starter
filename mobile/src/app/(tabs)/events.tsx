@@ -9,27 +9,27 @@ import { useEventFilters } from '@/hooks/events/useEventFilters';
 
 export default function HomeScreen() {
   const { data: events, isLoading, error } = useEvents();
-  const {
-    searchTerm,
-    setSearchTerm,
-    activeFilter,
-    setActiveFilter,
-    selectedDate,
-    setSelectedDate,
-    selectedAddress, // Ensure this is included
-    setSelectedAddress, // Ensure this is included
-    filteredEvents,
-    handleResetFilters,
-  } = useEventFilters(events);
+  const { searchTerm, setSearchTerm, activeFilter, setActiveFilter, filteredEvents } =
+    useEventFilters(events);
 
   const handleSearchSubmit = () => {
     Keyboard.dismiss();
   };
 
+  // Determine the placeholder based on the active filter
+  const placeholder =
+    activeFilter === 'title'
+      ? 'Rechercher par titre'
+      : activeFilter === 'date'
+        ? '(YYYY-MM-DD)'
+        : activeFilter === 'address'
+          ? 'Rechercher par adresse'
+          : 'Rechercher';
+
   return (
     <View flex={1} backgroundColor="$background" padding="$4" gap="$4">
       <Input
-        placeholder="Rechercher"
+        placeholder={placeholder}
         variant="outline"
         size="lg"
         value={searchTerm}
@@ -39,39 +39,29 @@ export default function HomeScreen() {
         icon={<FontAwesome name="search" size={18} color="#aaa" />}
       />
 
-      {/* Filter buttons remain unchanged */}
+      {/* Filter buttons */}
       <View flexDirection="row" gap="$2">
         <Button
-          variant={activeFilter === 'date' ? 'default' : 'outline'}
+          variant={activeFilter === 'title' ? 'secondary' : 'outline'}
+          onPress={() => setActiveFilter('title')}
+        >
+          Par titre
+        </Button>
+        <Button
+          variant={activeFilter === 'date' ? 'secondary' : 'outline'}
           onPress={() => setActiveFilter('date')}
         >
           Par date
         </Button>
         <Button
-          variant={activeFilter === 'address' ? 'default' : 'outline'} // Use 'address' instead of 'city'
+          variant={activeFilter === 'address' ? 'secondary' : 'outline'}
           onPress={() => setActiveFilter('address')}
         >
           Par adresse
         </Button>
-        <Button variant="ghost" onPress={handleResetFilters}>
-          Fermer les filtres
-        </Button>
       </View>
 
-      {/* Conditional inputs remain unchanged */}
-      {activeFilter === 'date' && (
-        <Input placeholder="YYYY-MM-DD" value={selectedDate || ''} onChangeText={setSelectedDate} />
-      )}
-
-      {activeFilter === 'address' && ( // Use 'address' instead of 'city'
-        <Input
-          placeholder="Adresse"
-          value={selectedAddress || ''}
-          onChangeText={setSelectedAddress}
-        />
-      )}
-
-      {/* Results section remains unchanged */}
+      {/* Results section */}
       {isLoading && <Text>Chargement des événements...</Text>}
       {error && <Text>Erreur lors du chargement.</Text>}
       {filteredEvents.map((event) => (
