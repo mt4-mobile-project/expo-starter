@@ -20,7 +20,7 @@ export const useMarkerPress = ({
         bottomSheetRef.current?.snapToIndex(0);
       } else {
         setSelectedEvent(event);
-        bottomSheetRef.current?.snapToIndex(1);
+        bottomSheetRef.current?.snapToIndex(2);
       }
     },
     [selectedEvent, setSelectedEvent, bottomSheetRef]

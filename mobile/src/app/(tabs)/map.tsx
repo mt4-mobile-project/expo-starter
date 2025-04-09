@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import MapView from 'react-native-maps';
 import { View } from 'tamagui';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useLocation } from '@/hooks/useLocation';
 import { useEvents } from '@/hooks/useEvents';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -24,6 +24,20 @@ export default function MapScreen() {
     setSelectedEvent,
   });
 
+  const [currentSnapIndex, setCurrentSnapIndex] = useState(1);
+
+  const handleMapPress = () => {
+    if (currentSnapIndex === 2 || currentSnapIndex === 3) {
+      bottomSheetRef.current?.snapToIndex(1);
+      setCurrentSnapIndex(1);
+    }
+  };
+
+  const onBottomSheetChange = (index: number) => {
+    setCurrentSnapIndex(index);
+    handleSheetChanges(index);
+  };
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <View style={styles.container}>
@@ -39,6 +53,7 @@ export default function MapScreen() {
           showsUserLocation={true}
           showsMyLocationButton={true}
           followsUserLocation={true}
+          onPress={handleMapPress}
         >
           <MapMarkers
             events={events}
@@ -51,8 +66,8 @@ export default function MapScreen() {
         <CustomBottomSheet
           title={selectedEvent ? selectedEvent.name : 'Événements à proximité'}
           bottomSheetRef={bottomSheetRef}
-          onChange={handleSheetChanges}
-          snapPoints={['15%', '25%', '50%', '75%']}
+          onChange={onBottomSheetChange}
+          snapPoints={['5%', '25%', '50%', '90%']}
           initialIndex={selectedEvent ? 2 : 1}
           onClose={handleClose}
           showCloseButton={!!selectedEvent}
