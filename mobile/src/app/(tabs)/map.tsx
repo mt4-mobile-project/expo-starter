@@ -51,7 +51,9 @@ export default function MapScreen() {
 
   const onBottomSheetChange = (index: number) => {
     setCurrentSnapIndex(index);
-    handleSheetChanges(index);
+    if (index !== 0) {
+      handleSheetChanges(index);
+    }
   };
 
   useEffect(() => {
