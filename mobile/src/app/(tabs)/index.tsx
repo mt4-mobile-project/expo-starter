@@ -4,7 +4,7 @@ import { Keyboard } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { login } from '@/services/auth';
 import { getCurrentUser } from '@/services/user';
-import { useUsers } from '@/hooks/useUsers';
+import { useUsers } from '@/hooks/users/useUsers';
 import { Input } from '@/components/atoms/inputs/input';
 import { UserCard } from '@/components/molecules/users-card/users-card';
 
