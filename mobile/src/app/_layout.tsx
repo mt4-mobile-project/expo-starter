@@ -15,6 +15,7 @@ import { API_URL } from '@/utils/api';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { asyncStorageToken } from '@/utils/asyncStorageToken';
+import { useCheckAuth } from '@/hooks/useCheckAuth';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -25,6 +26,7 @@ export default function RootLayout() {
   const [socket, setSocket] = useState<Client | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loaded] = useFonts({});
+  useCheckAuth();
 
   useEffect(() => {
     if (loaded) {
@@ -91,6 +93,13 @@ export default function RootLayout() {
         <TamaguiProvider config={config} defaultTheme={colorScheme === 'dark' ? 'dark' : 'light'}>
           <Theme name={colorScheme === 'dark' ? 'dark' : 'light'}>
             <Stack screenOptions={{ headerRight: () => <HeaderRight /> }}>
+              <Stack.Screen name="index" />
+              <Stack.Screen name="auth/login"            screenOptions={{
+              headerShown: false 
+            }} />
+              <Stack.Screen name="auth/register"             screenOptions={{
+              headerShown: false 
+            }}/>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen name="+not-found" />
             </Stack>

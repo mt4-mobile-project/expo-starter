@@ -27,7 +27,7 @@ interface InputGeneratorProps<T extends FieldValues> {
 export function InputGenerator<T extends FieldValues>({
   configs,
   defaultValues,
-  control, // Use the passed control instead of creating new form
+  control, 
 }: InputGeneratorProps<T>) {
   return (
     <YStack space="$4" width="100%">
@@ -40,7 +40,7 @@ export function InputGenerator<T extends FieldValues>({
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <Input
               placeholder={config.placeholder}
-              icon={<MaterialCommunityIcons name={config.icon} size={20} />}
+              icon={<MaterialCommunityIcons name={config.icon} size={20} color="#aaa"/>}
               variant={config.variant}
               value={value}
               onChangeText={onChange}
