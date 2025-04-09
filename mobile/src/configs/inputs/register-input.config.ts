@@ -2,7 +2,7 @@ import { BaseInputConfig } from '@/utils/generator/input-generator';
 
 export const REGISTER_INPUT_CONFIGS: BaseInputConfig[] = [
   {
-    name: 'lastName',
+    name: 'last_name',
     placeholder: 'Nom',
     icon: 'account',
     variant: 'outline',
@@ -12,7 +12,7 @@ export const REGISTER_INPUT_CONFIGS: BaseInputConfig[] = [
     },
   },
   {
-    name: 'firstName',
+    name: 'first_name',
     placeholder: 'Prénom',
     icon: 'account-outline',
     variant: 'outline',
