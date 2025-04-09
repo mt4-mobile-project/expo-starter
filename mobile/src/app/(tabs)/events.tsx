@@ -1,7 +1,9 @@
 import { View } from 'tamagui';
-import { FormGenerator } from '@/utils/generator/input-generator';
+import { useForm } from 'react-hook-form';
+import { InputGenerator } from '@/utils/generator/input-generator';
 import { REGISTER_INPUT_CONFIGS } from '@/configs/inputs/register-input.config';
 import { Link } from 'expo-router';
+import { Button } from '@/components/atoms/buttons/button';
 
 interface RegisterFormData {
   firstName: string;
@@ -11,6 +13,15 @@ interface RegisterFormData {
 }
 
 export default function EventsScreen() {
+  const form = useForm<RegisterFormData>({
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+    },
+  });
+
   const handleRegister = (data: RegisterFormData) => {
     console.log('Register data:', data);
   };
@@ -58,16 +69,20 @@ export default function EventsScreen() {
         View Vito example page
       </Link>
 
-      <FormGenerator<RegisterFormData>
+      <InputGenerator<RegisterFormData>
         configs={REGISTER_INPUT_CONFIGS}
-        onSubmit={handleRegister}
-        defaultValues={{
-          firstName: '',
-          lastName: '',
-          email: '',
-          password: '',
-        }}
+        control={form.control}
+        defaultValues={form.getValues()}
       />
+      <Button
+        variant="default"
+        size="lg"
+        onPress={form.handleSubmit(handleRegister)}
+        width="100%"
+        marginTop="$4"
+      >
+        Register
+      </Button>
     </View>
   );
 }

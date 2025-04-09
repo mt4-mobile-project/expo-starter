@@ -20,6 +20,8 @@ export default function ShowcaseScreen() {
         <Link href="/showcase/form">Form page</Link>
 
         <Link href="/showcase/profile-cards">Profile Cards Showcase</Link>
+
+        <Link href="/showcase/login">Login Showcase</Link>
       </YStack>
     </View>
   );

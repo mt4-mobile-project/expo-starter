@@ -1,6 +1,6 @@
 import { YStack } from 'tamagui';
 import { Input } from '@/components/atoms/inputs/input';
-import { useForm, Controller, FieldValues, Path, DefaultValues } from 'react-hook-form';
+import { Control, Controller, FieldValues, Path, DefaultValues } from 'react-hook-form';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export interface BaseInputConfig {
@@ -18,21 +18,17 @@ export interface BaseInputConfig {
   };
 }
 
-interface FormGeneratorProps<T extends FieldValues> {
-  onSubmit?: (data: T) => void;
+interface InputGeneratorProps<T extends FieldValues> {
+  control: Control<T>; // Add control prop
   configs: BaseInputConfig[];
   defaultValues: DefaultValues<T>;
 }
 
-export function FormGenerator<T extends FieldValues>({
-  onSubmit,
+export function InputGenerator<T extends FieldValues>({
   configs,
   defaultValues,
-}: FormGeneratorProps<T>) {
-  const { control } = useForm<T>({
-    defaultValues,
-  });
-
+  control, // Use the passed control instead of creating new form
+}: InputGeneratorProps<T>) {
   return (
     <YStack space="$4" width="100%">
       {configs.map((config) => (

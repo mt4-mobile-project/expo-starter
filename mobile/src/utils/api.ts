@@ -31,6 +31,11 @@ const handleResponse = async (response: Response) => {
     const error: ApiError = new Error('API Error');
     error.status = response.status;
     error.data = isJson ? await response.json() : await response.text();
+    console.log('API Error Details:', {
+      status: response.status,
+      url: response.url,
+      data: error.data,
+    });
     throw error;
   }
 
