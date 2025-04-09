@@ -15,7 +15,7 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-export default function TemporaryFormScreen() {
+export default function ShowcaseFormScreen() {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {

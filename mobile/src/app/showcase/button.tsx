@@ -3,7 +3,7 @@ import { Text } from '@/components/atoms/typography/text';
 import { Button } from '@/components/atoms/buttons/button';
 import { MaterialIcons } from '@expo/vector-icons';
 
-export default function TemporaryButtonScreen() {
+export default function ShowcaseButtonScreen() {
   return (
     <ScrollView flex={1} backgroundColor="$background" padding="$4">
       <YStack space="$6">

@@ -2,7 +2,7 @@ import { View, YStack, ScrollView } from 'tamagui';
 import { Text } from '@/components/atoms/typography/text';
 import { H1, H2, H3, H4, H5, H6 } from '@/components/atoms/typography/heading';
 
-export default function TypographyScreen() {
+export default function ShowcaseScreen() {
   return (
     <ScrollView>
       <View flex={1} backgroundColor="$background" padding="$4">
