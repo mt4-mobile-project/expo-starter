@@ -47,8 +47,9 @@ public class UserController {
 
     @GetMapping("/username/{username}")
     public ResponseEntity<UserDto> getUserByUsername(@PathVariable String username) {
-        User user = userService.getUserByUsername(username);
-        return ResponseEntity.ok(userMapper.toDto(user));
+    // Look up the user by the username in their profile
+    User user = userService.getUserByProfileUsername(username);
+    return ResponseEntity.ok(userMapper.toDto(user));
     }
 
     @PutMapping("/{id}")

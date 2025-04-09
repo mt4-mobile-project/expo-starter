@@ -34,8 +34,8 @@ public class ChatController {
             @Header("Authorization") String token
     ) {
         String jwt = token.replace("Bearer ", "");
-        String username = jwtService.extractUsername(jwt);
-        User user = userRepository.findByUsername(username)
+        String username = jwtService.extractEmail(jwt);
+        User user = userRepository.findByEmail(username)
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         
         SecurityContext context = SecurityContextHolder.createEmptyContext();

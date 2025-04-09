@@ -33,13 +33,15 @@ public class AuthenticationService {
     public User signup(RegisterUserDto input) {
         try {
             User user = new User()
-                    .setUsername(input.getUsername())
+                    .setEmail(input.getEmail())
+                    .setFirstName(input.getFirstName())
+                    .setLastName(input.getLastName())
                     .setPassword(passwordEncoder.encode(input.getPassword()));
 
             return userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
             System.out.println("erreur User = " + e.getMessage());
-            throw new ApiException("Un utilisateur avec ce nom existe déjà", HttpStatus.CONFLICT);
+            throw new ApiException("Un utilisateur avec cet email existe déjà", HttpStatus.CONFLICT);
         } catch (Exception e) {
             System.out.println("erreur User = " + e.getMessage());
             throw new ApiException("Erreur lors de la création de l'utilisateur", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -50,14 +52,15 @@ public class AuthenticationService {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            input.getUsername(),
+                            input.getEmail(),
                             input.getPassword()
                     )
             );
 
-            return userRepository.findByUsername(input.getUsername())
+            return userRepository.findByEmail(input.getEmail())
                     .orElseThrow(() -> new ApiException("Utilisateur non trouvé", HttpStatus.NOT_FOUND));
         } catch (Exception e) {
+            System.out.println("erreur User = " + e.getMessage());
             throw new ApiException("Authentification échouée", HttpStatus.UNAUTHORIZED);
         }
     }
