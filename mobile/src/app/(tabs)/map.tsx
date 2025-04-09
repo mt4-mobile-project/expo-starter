@@ -4,9 +4,9 @@ import { View } from 'tamagui';
 import { useRef, useCallback } from 'react';
 import { useLocation } from '@/hooks/useLocation';
 import { useEvents } from '@/hooks/useEvents';
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import BottomSheet from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { H4 } from '@/components/atoms/typography/heading';
+import { CustomBottomSheet } from '@/components/molecules/bottom-sheet/bottom-sheet';
 
 export default function MapScreen() {
   const mapRef = useRef<MapView | null>(null);
@@ -14,10 +14,6 @@ export default function MapScreen() {
   const { location } = useLocation();
   const { data: events = [] } = useEvents();
 
-  // Bottom sheet snap points
-  const snapPoints = ['25%', '50%', '75%'];
-
-  // Callbacks
   const handleSheetChanges = useCallback((index: number) => {
     console.log('handleSheetChanges', index);
   }, []);
@@ -60,18 +56,13 @@ export default function MapScreen() {
           ))}
         </MapView>
 
-        <BottomSheet
-          ref={bottomSheetRef}
-          index={1}
-          snapPoints={snapPoints}
+        <CustomBottomSheet
+          title="Événements à proximité"
+          bottomSheetRef={bottomSheetRef}
           onChange={handleSheetChanges}
-          enablePanDownToClose={false}
         >
-          <BottomSheetView style={styles.contentContainer}>
-            <H4>Événements à proximité</H4>
-            {/* Add your bottom sheet content here */}
-          </BottomSheetView>
-        </BottomSheet>
+          {/* Add your bottom sheet content here */}
+        </CustomBottomSheet>
       </View>
     </GestureHandlerRootView>
   );
@@ -84,9 +75,5 @@ const styles = StyleSheet.create({
   map: {
     width: '100%',
     height: '100%',
-  },
-  contentContainer: {
-    flex: 1,
-    padding: 16,
   },
 });
