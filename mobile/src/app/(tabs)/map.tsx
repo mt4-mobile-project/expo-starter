@@ -49,6 +49,11 @@ export default function MapScreen() {
     );
   };
 
+  const handleClose = useCallback(() => {
+    setSelectedEvent(null);
+    bottomSheetRef.current?.snapToIndex(0);
+  }, []);
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <View style={styles.container}>
@@ -94,6 +99,8 @@ export default function MapScreen() {
           onChange={handleSheetChanges}
           snapPoints={['25%', '50%', '75%']}
           initialIndex={0}
+          onClose={handleClose}
+          showCloseButton={!!selectedEvent}
         >
           {renderEventDetails()}
         </CustomBottomSheet>
