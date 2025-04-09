@@ -51,20 +51,15 @@ public class FileController {
         @ApiResponse(responseCode = "404", description = "Fichier non trouvé")
     })
     @GetMapping("/{filableType}/{filableId}")
-    public ResponseEntity<FileResponseDto> getFile(
+    public ResponseEntity<Resource> getFile(
             @Parameter(description = "Type du fichier (profile ou event)") 
             @PathVariable("filableType") String filableType,
             @Parameter(description = "ID de l'entité associée") 
             @PathVariable("filableId") Integer filableId
-    ) {
+    ) throws MalformedURLException {
         FileResponseDto file = fileService.getFileByFilableTypeAndId(filableType, filableId);
-        file.setFilePath(baseUrl + "/files/images/" + file.getFileName());
-        return ResponseEntity.ok(file);
-    }
 
-    @GetMapping("/images/{filename:.+}")
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) throws MalformedURLException {
-        Path filePath = Paths.get("uploads").resolve(filename).normalize();
+        Path filePath = Paths.get("uploads").resolve(file.getFileName()).normalize();
         Resource resource = new UrlResource(filePath.toUri());
 
         if (!resource.exists()) {
