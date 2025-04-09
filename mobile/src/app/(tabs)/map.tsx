@@ -20,15 +20,29 @@ export default function MapScreen() {
   const handleSheetChanges = useCallback((index: number) => {
     if (index === 0) {
       setSelectedEvent(null);
+      // Ajout d'un petit délai pour laisser le temps à l'animation de se terminer
+      setTimeout(() => {
+        bottomSheetRef.current?.snapToIndex(0);
+      }, 100);
     }
   }, []);
 
-  const handleMarkerPress = useCallback((event: Event) => {
-    setSelectedEvent(event);
-    bottomSheetRef.current?.snapToIndex(1);
-  }, []);
+  const handleMarkerPress = useCallback(
+    (event: Event) => {
+      if (selectedEvent?.id === event.id) {
+        // Si on clique sur le même marqueur, on le désélectionne
+        setSelectedEvent(null);
+        bottomSheetRef.current?.snapToIndex(0);
+      } else {
+        // Sinon on sélectionne le nouveau marqueur
+        setSelectedEvent(event);
+        bottomSheetRef.current?.snapToIndex(1);
+      }
+    },
+    [selectedEvent]
+  );
 
-  console.log(events, "lllllllllllllll");
+  console.log(events, 'lllllllllllllll');
 
   const renderEventDetails = () => {
     if (!selectedEvent) return null;
@@ -88,7 +102,7 @@ export default function MapScreen() {
               }}
               title={event.name}
               description={`${event.address.street}, ${event.address.city}`}
-              pinColor="red"
+              pinColor={selectedEvent?.id === event.id ? 'green' : 'red'}
               onPress={() => handleMarkerPress(event)}
             />
           ))}
