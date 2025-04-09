@@ -37,7 +37,7 @@ export default function ProfilScreen() {
           fullName: '',
           email: '',
           phone: '',
-          address: ''
+          address: '',
         }}
       />
       <ConfirmationButtons

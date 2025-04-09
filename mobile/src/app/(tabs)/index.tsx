@@ -44,11 +44,11 @@ export default function HomeScreen() {
     fetchUser();
   }, []);
 
-    useEffect(() => {
-      if(users){
-        console.log('users', users);
-        console.log('users.length', users.length);
-      }
+  useEffect(() => {
+    if (users) {
+      console.log('users', users);
+      console.log('users.length', users.length);
+    }
   }, [users]);
 
   const handleSearchSubmit = () => {
@@ -73,8 +73,8 @@ export default function HomeScreen() {
       {isLoading && <Text>Chargement des utilisateurs...</Text>}
       {error && <Text>Erreur lors du chargement.</Text>}
 
-
-      {users && users.length > 0 && (
+      {users &&
+        users.length > 0 &&
         users.map((user) => (
           <UserCard
             key={user.id}
@@ -83,8 +83,7 @@ export default function HomeScreen() {
             region="France"
             status="En ligne"
           />
-        ))
-      )}
+        ))}
     </View>
   );
 }
