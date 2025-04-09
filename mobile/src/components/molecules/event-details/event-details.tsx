@@ -9,12 +9,17 @@ interface EventDetailsProps {
 }
 
 export const EventDetails = ({ event }: EventDetailsProps) => {
-  // Utiliser directement le blob en base64
-  const imageUrl = `data:image/jpeg;base64,${event.image}`;
+  const imageUrl = event.image
+    ? `data:image/jpeg;base64,${event.image}`
+    : require('@/assets/images/placeholder.png');
 
   return (
     <YStack space="$4" padding="$4">
-      <Image style={styles.image} source={{ uri: imageUrl }} contentFit="cover" />
+      <Image
+        style={styles.image}
+        source={typeof imageUrl === 'string' ? { uri: imageUrl } : imageUrl}
+        contentFit="cover"
+      />
       <Text size="base">{event.description}</Text>
       <Text size="lg" weight="bold">
         Adresse
