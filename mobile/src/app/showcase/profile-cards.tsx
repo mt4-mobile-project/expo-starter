@@ -5,7 +5,7 @@ import ProfileImage from '@/components/atoms/profile-cards/profil-image';
 import ProfileName from '@/components/atoms/profile-cards/profil-name';
 import { UserCard } from '@/components/molecules/users-card/users-card';
 
-export default function ProfileCardsScreen() {
+export default function ShowcaseCardsScreen() {
   return (
     <ScrollView>
       <View flex={1} backgroundColor="$background" padding="$4">

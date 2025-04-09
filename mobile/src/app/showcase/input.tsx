@@ -4,7 +4,7 @@ import { Text } from '@/components/atoms/typography/text';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useState } from 'react';
 
-export default function TemporaryInputScreen() {
+export default function ShowcaseInputScreen() {
   const [value, setValue] = useState('');
 
   return (
