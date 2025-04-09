@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,9 @@ import java.nio.file.Paths;
 @Tag(name = "Files", description = "API pour la gestion des fichiers")
 public class FileController {
     private final FileService fileService;
+    
+    @Value("${app.base-url}")
+    private String baseUrl;
 
     @PostMapping("/upload")
     public ResponseEntity<FileResponseDto> uploadFile(
@@ -37,6 +41,7 @@ public class FileController {
     ) {
         User currentUser = (User) authentication.getPrincipal();
         FileResponseDto response = fileService.uploadFile(file, filableType, filableId, currentUser);
+        response.setFilePath(baseUrl + "/files/images/" + response.getFileName());
         return ResponseEntity.ok(response);
     }
 
@@ -50,9 +55,10 @@ public class FileController {
             @Parameter(description = "Type du fichier (profile ou event)") 
             @PathVariable("filableType") String filableType,
             @Parameter(description = "ID de l'entité associée") 
-            @PathVariable("filableId") Integer filableId   
+            @PathVariable("filableId") Integer filableId
     ) {
         FileResponseDto file = fileService.getFileByFilableTypeAndId(filableType, filableId);
+        file.setFilePath(baseUrl + "/files/images/" + file.getFileName());
         return ResponseEntity.ok(file);
     }
 
