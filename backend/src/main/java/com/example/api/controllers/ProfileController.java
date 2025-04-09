@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 public class ProfileController {
     private final ProfileService profileService;
+
     @GetMapping("/{id}")
     public ResponseEntity<ProfileResponseDto> getProfileById(@PathVariable Integer id) {
         return ResponseEntity.ok(profileService.getProfileById(id));

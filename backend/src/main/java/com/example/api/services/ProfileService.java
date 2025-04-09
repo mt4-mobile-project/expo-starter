@@ -33,10 +33,21 @@ public class ProfileService {
             .orElseThrow(() -> new ResourceNotFoundException("Profile not found for user: " + userId));
     }
 
+    public ProfileResponseDto getProfileByUsername(String username) {
+        return profileRepository.findByUsername(username)
+            .map(profileMapper::toDto)
+            .orElseThrow(() -> new ResourceNotFoundException("Profile not found with username: " + username));
+    }
+
     @Transactional
     public ProfileResponseDto createProfile(Integer userId, ProfileRequestDto profileDto) {
         if (profileRepository.findByUserId(userId).isPresent()) {
             throw new ApiException("User already has a profile", HttpStatus.CONFLICT);
+        }
+        
+        // Check if username is already taken
+        if (profileRepository.existsByUsername(profileDto.getUsername())) {
+            throw new ApiException("Username already taken", HttpStatus.CONFLICT);
         }
 
         User user = userService.getUserById(userId);
@@ -51,7 +62,16 @@ public class ProfileService {
     public ProfileResponseDto updateProfile(Integer id, ProfileRequestDto profileDto) {
         Profile profile = profileRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Profile not found with id: " + id));
-            
+        
+        // Check if username is being changed and is not already taken
+        if (profileDto.getUsername() != null && !profileDto.getUsername().isEmpty() && 
+                !profileDto.getUsername().equals(profile.getUsername())) {
+            if (profileRepository.existsByUsername(profileDto.getUsername())) {
+                throw new ApiException("Username already taken", HttpStatus.CONFLICT);
+            }
+            profile.setUsername(profileDto.getUsername());
+        }
+        
         profile.setDescription(profileDto.getDescription());
         profile.setInstrumentPlayed(profileDto.getInstrumentPlayed());
         profile.setMusicalInfluence(profileDto.getMusicalInfluence());
