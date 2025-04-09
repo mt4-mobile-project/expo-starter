@@ -39,6 +39,7 @@ export default function TabLayout() {
         options={{
           title: 'Map',
           tabBarLabel: 'Map',
+          headerShown: false, // Add this line to hide the header
           tabBarIcon: ({ color }: Color) => <MaterialIcons name="map" size={28} color={color} />,
         }}
       />
