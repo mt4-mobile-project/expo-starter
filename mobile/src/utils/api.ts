@@ -1,6 +1,6 @@
 import { asyncStorageToken } from './asyncStorageToken';
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8080';
+export const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8080';
 
 type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 

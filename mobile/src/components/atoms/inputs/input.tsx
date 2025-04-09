@@ -62,10 +62,14 @@ interface InputProps extends Omit<GetProps<typeof InputFrame>, 'variant'> {
   disabled?: boolean;
   error?: string;
   secureTextEntry?: boolean;
+  width?: string;
 }
 
 export const Input = forwardRef<React.ElementRef<typeof InputFrame>, InputProps>(
-  ({ variant = 'default', icon, size = 'md', error, secureTextEntry, ...props }, ref) => {
+  (
+    { variant = 'default', icon, size = 'md', width = '100%', error, secureTextEntry, ...props },
+    ref
+  ) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     const paddingLeftMap: Record<InputSize, string> = {
@@ -79,7 +83,7 @@ export const Input = forwardRef<React.ElementRef<typeof InputFrame>, InputProps>
     };
 
     return (
-      <YStack width="100%">
+      <YStack width={width}>
         <XStack position="relative" width="100%" alignItems="center">
           {icon && (
             <YStack

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Test WebSocket Spring</title>
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+  <style>
+    #notifCount {
+      background-color: red;
+      color: white;
+      padding: 2px 5px;
+      border-radius: 50%;
+      font-weight: bold;
+      margin-left: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h2>WebSocket Chat Test</h2>
+  
+  <label for="roomId">Room ID:</label>
+  <input type="number" id="roomId" value="1" /><br><br>
+  
+  <label for="messageInput">Message:</label>
+  <input type="text" id="messageInput" placeholder="Écris ton message ici..." />
+  <button onclick="sendMessage()">Envoyer</button>
+
+  <h3>Messages reçus :</h3>
+  <ul id="messages"></ul>
+
+  <h3>
+    Notifications :
+    Nouveaux messages non lus
+    <span id="notifCount">0</span>
+  </h3>
+
+  <script>
+    let stompClient = null;
+    let currentRoomId = null;
+
+    function connect(roomId) {
+      const socket = new SockJS('http://localhost:8081/ws');
+      stompClient = Stomp.over(socket);
+      
+      stompClient.debug = function(str) {
+          console.log('STOMP: ' + str);
+      };
+      
+      const headers = {
+        'Authorization': 'Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdHJpbmcyIiwiaWF0IjoxNzQ0MjA5Mzk4LCJleHAiOjE3NDQyOTU3OTh9.DHTCZLoTFxhtXx0EdHEa7w8-rBv1ReJmtfX4-XFrQA89_RaQtbeftOMU1voveBk8' // votre token
+      };
+
+      stompClient.connect(headers, function(frame) {
+          console.log('Connected: ' + frame);
+          currentRoomId = roomId;
+
+          stompClient.subscribe(`/topic/room.${roomId}`, function(message) {
+              console.log('Message reçu:', message);
+              const msg = JSON.parse(message.body);
+              const messagesList = document.getElementById('messages');
+              const li = document.createElement('li');
+              li.textContent = `[${msg.username}] ${msg.content}`;
+              messagesList.appendChild(li);
+          });
+
+          const user = 'stringg';
+          console.log('Username from token:', user);
+          
+          stompClient.subscribe('/user/stringg/queue/unreadCount', function(notification) {
+              console.log('Notification brute reçue:', notification);
+              const data = JSON.parse(notification.body);
+              console.log('Notification parsée:', data);
+              document.getElementById('notifCount').textContent = data.count;
+          }, headers);
+
+      }, function(error) {
+          console.error('STOMP error:', error);
+      });
+
+      socket.onerror = function(error) {
+          console.error('SockJS error:', error);
+      };
+    }
+
+    function sendMessage() {
+      const messageContent = document.getElementById('messageInput').value;
+      const roomId = document.getElementById('roomId').value;
+
+      if (!stompClient || roomId !== currentRoomId) {
+        if (stompClient) {
+          stompClient.disconnect(() => {
+            console.log('🔌 Déconnecté');
+          });
+        }
+        connect(roomId);
+        setTimeout(() => sendMessage(), 500);
+        return;
+      }
+
+      if (stompClient && messageContent.trim() !== '') {
+        const headers = {
+          'Authorization': 'Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdHJpbmciLCJpYXQiOjE3NDM3MjAzNTIsImV4cCI6MTc0MzgwNjc1Mn0.6dXXgsp5M7Q8k8X2u86BPA7DLQfkmzSgyNR9JX0liYnO5kU7yGbeOKXO6RPOkCNV'
+        };
+
+        stompClient.send(
+          `/app/chat.send/${roomId}`, 
+          headers, 
+          JSON.stringify({ content: messageContent })
+        );
+        document.getElementById('messageInput').value = '';
+      }
+    }
+
+    window.onload = () => {
+      const initialRoomId = document.getElementById('roomId').value;
+      connect(initialRoomId);
+    };
+  </script>
+</body>
+</html>

@@ -1,4 +1,5 @@
 import { View, Paragraph } from 'tamagui';
+import { Link } from 'expo-router';
 
 export default function MessagesScreen() {
   return (
@@ -11,6 +12,7 @@ export default function MessagesScreen() {
       gap="$4"
     >
       <Paragraph>Page des Messages</Paragraph>
+      <Link href="/envoiunmessage">Tester l'envoi de message</Link>
     </View>
   );
 }
