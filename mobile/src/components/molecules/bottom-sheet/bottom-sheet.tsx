@@ -1,7 +1,9 @@
 import { ReactNode } from 'react';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { StyleSheet } from 'react-native';
-import { H4 } from '@/components/atoms/typography/heading';
+import { H4, XStack } from 'tamagui';
+import { IconButton } from '@/components/atoms/buttons/icon-button';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 interface CustomBottomSheetProps {
   title: string;
@@ -10,6 +12,8 @@ interface CustomBottomSheetProps {
   initialIndex?: number;
   onChange?: (index: number) => void;
   bottomSheetRef?: React.RefObject<BottomSheet>;
+  onClose?: () => void;
+  showCloseButton?: boolean;
 }
 
 export function CustomBottomSheet({
@@ -19,6 +23,8 @@ export function CustomBottomSheet({
   initialIndex = 1,
   onChange,
   bottomSheetRef,
+  onClose,
+  showCloseButton = false,
 }: CustomBottomSheetProps) {
   return (
     <BottomSheet
@@ -29,7 +35,14 @@ export function CustomBottomSheet({
       enablePanDownToClose={false}
     >
       <BottomSheetView style={styles.contentContainer}>
-        <H4>{title}</H4>
+        <XStack justifyContent="space-between" alignItems="center" marginBottom="$4">
+          <H4>{title}</H4>
+          {showCloseButton && (
+            <IconButton variant="bottomless" onPress={onClose}>
+              <MaterialIcons name="close" size={24} color="black" />
+            </IconButton>
+          )}
+        </XStack>
         {children}
       </BottomSheetView>
     </BottomSheet>
