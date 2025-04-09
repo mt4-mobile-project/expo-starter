@@ -6,7 +6,7 @@ import { useLocation } from '@/hooks/maps/useLocation';
 import { useEvents } from '@/hooks/events/useEvents';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { CustomBottomSheet } from '@/components/molecules/bottom-sheet/bottom-sheet';
-import { useBottomSheet } from '@/hooks/useBottomSheet';
+import { useBottomSheet } from '@/hooks/bottomSheet/useBottomSheet';
 import { EventDetails } from '@/components/molecules/event-details/event-details';
 import { MapMarkers } from '@/components/molecules/map-markers/map-markers';
 import { useMarkerPress } from '@/hooks/maps/useMarkerPress';
