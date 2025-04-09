@@ -17,10 +17,10 @@ export const useMarkerPress = ({
     (event: Event) => {
       if (selectedEvent?.id === event.id) {
         setSelectedEvent(null);
-        bottomSheetRef.current?.snapToIndex(0);
+        bottomSheetRef.current?.snapToIndex(1); // Close the sheet if the same event is clicked again
       } else {
         setSelectedEvent(event);
-        bottomSheetRef.current?.snapToIndex(2);
+        bottomSheetRef.current?.snapToIndex(2); // Snap to 50% when an event is clicked
       }
     },
     [selectedEvent, setSelectedEvent, bottomSheetRef]
