@@ -30,10 +30,7 @@ export const EventCard = ({ imageUrl, title, address, datetime }: EventCardProps
       marginBottom="$6"
       borderColor="#333"
     >
-      <StyledImage
-        source={{ uri: imageUrl }}
-        resizeMode="cover"
-      />
+      <StyledImage source={{ uri: imageUrl }} resizeMode="cover" />
       <YStack padding="$4">
         <Text fontWeight="700" fontSize={18} color="#000">
           {title}
