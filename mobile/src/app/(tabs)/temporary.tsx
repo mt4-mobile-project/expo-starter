@@ -18,6 +18,8 @@ export default function TemporaryScreen() {
         <Link href="/temporary/input">Temporary Input Showcase</Link>
 
         <Link href="/temporary/form">Temporary Form page</Link>
+
+        <Link href="/temporary/profile-cards">Temporary Profile Cards Showcase</Link>
       </YStack>
     </View>
   );
