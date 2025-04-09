@@ -1,7 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ActivityIndicator } from 'react-native';
 import MapView from 'react-native-maps';
 import { View } from 'tamagui';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation } from '@/hooks/useLocation';
 import { useEvents } from '@/hooks/useEvents';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -14,7 +14,7 @@ import { useMarkerPress } from '@/hooks/useMarkerPress';
 export default function MapScreen() {
   const mapRef = useRef<MapView | null>(null);
   const { location } = useLocation();
-  const { data: events = [] } = useEvents();
+  const { data: events = [], isLoading } = useEvents();
   const { bottomSheetRef, selectedEvent, setSelectedEvent, handleSheetChanges, handleClose } =
     useBottomSheet();
 
@@ -38,30 +38,38 @@ export default function MapScreen() {
     handleSheetChanges(index);
   };
 
+  useEffect(() => {
+    console.log(events.length);
+  }, [events]);
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <View style={styles.container}>
-        <MapView
-          ref={mapRef}
-          style={styles.map}
-          initialRegion={{
-            latitude: 48.8566,
-            longitude: 2.3522,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-          showsUserLocation={true}
-          showsMyLocationButton={true}
-          followsUserLocation={true}
-          onPress={handleMapPress}
-        >
-          <MapMarkers
-            events={events}
-            selectedEvent={selectedEvent}
-            userLocation={location}
-            onMarkerPress={handleMarkerPress}
-          />
-        </MapView>
+        {isLoading ? (
+          <ActivityIndicator size="large" color="#0000ff" />
+        ) : (
+          <MapView
+            ref={mapRef}
+            style={styles.map}
+            initialRegion={{
+              latitude: 48.8566,
+              longitude: 2.3522,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+            showsUserLocation={true}
+            showsMyLocationButton={true}
+            followsUserLocation={true}
+            onPress={handleMapPress}
+          >
+            <MapMarkers
+              events={events}
+              selectedEvent={selectedEvent}
+              userLocation={location}
+              onMarkerPress={handleMarkerPress}
+            />
+          </MapView>
+        )}
 
         <CustomBottomSheet
           title={selectedEvent ? selectedEvent.name : 'Événements à proximité'}
