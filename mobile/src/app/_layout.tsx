@@ -92,18 +92,24 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <TamaguiProvider config={config} defaultTheme={colorScheme === 'dark' ? 'dark' : 'light'}>
           <Theme name={colorScheme === 'dark' ? 'dark' : 'light'}>
-            <Stack screenOptions={{ headerRight: () => <HeaderRight /> }}>
-              <Stack.Screen name="index" />
-              <Stack.Screen name="auth/login"            screenOptions={{
-              headerShown: false 
-            }} />
-              <Stack.Screen name="auth/register"             screenOptions={{
-              headerShown: false 
-            }}/>
-             <Stack.Screen name="/create-profile" options={{ title: 'Créer votre profil' }} />
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="+not-found" />
-            </Stack>
+          <Stack screenOptions={{ headerRight: () => <HeaderRight /> }}>
+  <Stack.Screen name="index" />
+  <Stack.Screen 
+    name="auth/login" 
+    options={{
+      headerShown: false 
+    }} 
+  />
+  <Stack.Screen 
+    name="auth/register" 
+    options={{
+      headerShown: false 
+    }}
+  />
+  <Stack.Screen name="/create-profile" options={{ title: 'Créer votre profil' }} />
+  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+  <Stack.Screen name="+not-found" />
+</Stack>
             <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
           </Theme>
         </TamaguiProvider>

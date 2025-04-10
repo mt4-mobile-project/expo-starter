@@ -15,7 +15,7 @@ export default function ShowcaseCardsScreen() {
             <Text size="xl" weight="bold">
               Standard Profile Card
             </Text>
-            <ProfileCard />
+            <ProfileCard profileName="John Doe" />
           </YStack>
 
           {/* Profile Images Variations */}
