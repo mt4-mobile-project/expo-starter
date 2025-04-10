@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, YStack, XStack } from 'tamagui';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Form } from '@/components/molecules/form/form';
+import { Form } from '@/components/atoms/form/form';
 import { Text } from '@/components/atoms/typography/text';
 import { InputGenerator } from '@/utils/generator/input-generator';
 import { PROFILE_INPUT_CONFIGS } from '@/configs/inputs/profile-input.config';
 import { Button } from '@/components/atoms/buttons/button';
 import { useEditProfile } from '@/hooks/profile/useEditProfile';
-import ProfileCard from '@/components/molecules/profile-card/profil-card';
+import ProfileCard from '@/components/molecules/cards/profil-card';
 import * as ImagePicker from 'expo-image-picker';
 import { useProfileImage } from '@/hooks/profile/useProfileImage';
 import ProfileImage from '@/components/atoms/profile-cards/profil-image';
@@ -24,9 +24,9 @@ const profileSchema = z.object({
 type ProfileFormData = z.infer<typeof profileSchema>;
 
 export default function EditProfileScreen() {
-  const [profileName, setProfileName] = useState('Nom de profil');
+  const [profileName] = useState('Nom de profil');
   const { profile, isFetching, editProfile, isUpdating } = useEditProfile();
-  const { imageUrl, isUploading, uploadProfileImage } = useProfileImage(profile?.id || 0);
+  const { imageUrl, uploadProfileImage } = useProfileImage(profile?.id || 0);
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {

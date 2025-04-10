@@ -5,12 +5,12 @@ import { InputGenerator } from '@/utils/generator/input-generator';
 import { LOGIN_INPUT_CONFIGS } from '@/configs/inputs/login-input.config';
 import { LoginCredentials } from '@/types/login';
 import { Button } from '@/components/atoms/buttons/button';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/auth/useAuth';
 
 export default function ShowcaseLoginScreen() {
   const form = useForm<LoginCredentials>({
     defaultValues: {
-      username: '',
+      email: '',
       password: '',
     },
   });
