@@ -33,7 +33,6 @@ export const MapMarkers = ({
           }}
           title={event.name}
           description={`${event.address.street}, ${event.address.city}`}
-          pinColor={selectedEvent?.id === event.id ? 'green' : 'red'}
           onPress={() => onMarkerPress(event)}
         />
       ))}
