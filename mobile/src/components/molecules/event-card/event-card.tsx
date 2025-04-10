@@ -22,18 +22,20 @@ export const EventCard = ({ image, title, address, datetime, onPress }: EventCar
     : { uri: Image.resolveAssetSource(require('@/assets/images/placeholder.png')).uri };
 
   return (
-    <YStack overflow="hidden" width="100%" maxWidth={400} onPress={onPress}>
+    <YStack overflow="hidden" width="100%" maxWidth={400} gap="$3" onPress={onPress}>
       <StyledImage source={imageSource} resizeMode="cover" />
-      <YStack padding="$4">
-        <Text fontWeight="700" fontSize={18} color="#000">
+      <YStack gap="$1">
+        <Text fontWeight="700" fontSize={18} color="$cardForeground">
           {title}
         </Text>
-        <Text fontSize={14} color="#444" marginTop="$1">
-          {address}
-        </Text>
-        <Text fontSize={13} color="#666" marginTop="$1">
-          {datetime}
-        </Text>
+        <YStack>
+          <Text fontSize={14} color="#cardForeground" opacity={0.6} marginTop="$1">
+            {address}
+          </Text>
+          <Text fontSize={13} color="#cardForeground" opacity={0.6} marginTop="$1">
+            {datetime}
+          </Text>
+        </YStack>
       </YStack>
     </YStack>
   );

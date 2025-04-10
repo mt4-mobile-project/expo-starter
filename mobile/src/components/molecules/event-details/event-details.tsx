@@ -14,7 +14,7 @@ export const EventDetails = ({ event }: EventDetailsProps) => {
     : require('@/assets/images/placeholder.png');
 
   return (
-    <YStack space="$4" padding="$4">
+    <YStack space="$4">
       <Image
         style={styles.image}
         source={typeof imageUrl === 'string' ? { uri: imageUrl } : imageUrl}
