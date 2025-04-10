@@ -2,7 +2,7 @@ import { useFonts } from 'expo-font';
 import { Stack, Link } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useColorScheme } from 'react-native';
 import 'react-native-reanimated';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -31,14 +31,14 @@ export default function RootLayout() {
   }, [loaded]);
 
   const stompClient = useRef<Client | null>(null);
-  const [messages, setMessages] = React.useState<any[]>([]);
+  const [messages, setMessages] = useState<any[]>([]);
 
   const token =
-    'eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdHJpbmciLCJpYXQiOjE3NDQyNDYxMjgsImV4cCI6MTc0NDMzMjUyOH0.U49RDB4W02BaXtFLuznRqXymmAd1PS9gEg3M6C7ZYeRMIXbZPH_Kmcz_NB-rDGTF';
+    'eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdHJpbmciLCJpYXQiOjE3NDQyODgxNjAsImV4cCI6MTc0NDM3NDU2MH0.q0Lun19__832gawO4JCMo9a1vJChhCpsfvO5CDHgWY-0iUUVZBfPuT4sQMlHp_lW';
 
   useEffect(() => {
     stompClient.current = new Client({
-      webSocketFactory: () => new SockJS("http://localhost:8080/ws"),
+      webSocketFactory: () => new SockJS(`${API_URL}/ws`),
       reconnectDelay: 5000,
       connectHeaders: {
         Authorization: `Bearer ${token}`,
@@ -46,21 +46,26 @@ export default function RootLayout() {
       onConnect: () => {
         console.log('Connecté au serveur WebSocket');
 
-        stompClient.current?.subscribe(`/topic/room.1`, (message) => {
-          console.log('📩 Message reçu:', message);
-          const msg = JSON.parse(message.body);
-          setMessages((prev) => [...prev, msg]);
-        },
-        {
-          Authorization: `Bearer ${token}`,
-        }
-      );
-    },
-    onStompError: (frame) => {
-      console.error('❌ Erreur STOMP:', frame.headers['message']);
-      console.error('Détails:', frame.body);
-    },
-  });
+        setSocket(stompClient.current);
+
+        // TODO code exemple pour gérer la réception de message
+        // stompClient.current?.subscribe(
+        //   `/topic/room.1`,
+        //   (message) => {
+        //     console.log('📩 Message reçu:', message);
+        //     const msg = JSON.parse(message.body);
+        //     setMessages((prev) => [...prev, msg]);
+        //   },
+        //   {
+        //     Authorization: `Bearer ${token}`,
+        //   }
+        // );
+      },
+      onStompError: (frame) => {
+        console.error('❌ Erreur STOMP:', frame.headers['message']);
+        console.error('Détails:', frame.body);
+      },
+    });
 
     stompClient.current.activate();
 
