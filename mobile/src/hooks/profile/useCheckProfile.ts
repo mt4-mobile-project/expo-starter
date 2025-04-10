@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getProfile } from '@/services/profile';
 import { router } from 'expo-router';
+import { ProfileResponse } from '@/types/profile';
 
 export const useCheckProfile = () => {
   const query = useQuery<ProfileResponse>({
