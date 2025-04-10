@@ -38,7 +38,7 @@ export const EventCard = ({ image, title, address, datetime, onPress }: EventCar
           <Text fontSize={14} color="#cardForeground" opacity={0.6} marginTop="$1">
             {address}
           </Text>
-          <Text fontSize={13} color="#cardForeground" opacity={0.6} marginTop="$1">
+          <Text fontSize={14} color="#cardForeground" opacity={0.6} marginTop="$1">
             {datetime}
           </Text>
         </YStack>

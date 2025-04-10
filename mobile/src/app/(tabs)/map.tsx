@@ -100,7 +100,6 @@ export default function MapScreen() {
         )}
 
         <CustomBottomSheet
-          title={selectedEvent?.name}
           bottomSheetRef={bottomSheetRef}
           onChange={onBottomSheetChange}
           snapPoints={['5%', '25%', '50%', '90%']}
