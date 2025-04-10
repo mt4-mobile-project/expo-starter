@@ -35,13 +35,13 @@ export default function RoomScreen() {
 
             if (!token) return;
 
-            socket.send(
-                `/app/chat.send/${id}`,
-                {
+            socket.publish({
+                destination: `/app/chat.send/${id}`,
+                headers: {
                     Authorization: `Bearer ${token}`,
                 },
-                JSON.stringify({ content: message })
-            );
+                body: JSON.stringify({ content: message }),
+            });
 
             setMessage('');
         }
