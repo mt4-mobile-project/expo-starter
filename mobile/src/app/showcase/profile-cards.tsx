@@ -1,9 +1,9 @@
 import { View, YStack, ScrollView } from 'tamagui';
 import { Text } from '@/components/atoms/typography/text';
-import ProfileCard from '@/components/molecules/profile-card/profil-card';
+import ProfileCard from '@/components/molecules/cards/profil-card';
 import ProfileImage from '@/components/atoms/profile-cards/profil-image';
 import ProfileName from '@/components/atoms/profile-cards/profil-name';
-import { UserCard } from '@/components/molecules/users-card/users-card';
+import { UserCard } from '@/components/molecules/cards/users-card';
 
 export default function ShowcaseCardsScreen() {
   return (

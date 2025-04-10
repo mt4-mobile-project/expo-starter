@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { Keyboard } from 'react-native';
 import MapView from 'react-native-maps';
 import { Event } from '@/types/events';
-import { useEventCreationStore } from '@/stores/event-creation-store';
+import { useEventCreationStore } from '@/stores/events/event-creation-store';
 
 export const useMapInteractions = (
   bottomSheetRef: any,

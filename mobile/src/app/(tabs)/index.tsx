@@ -5,7 +5,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { getCurrentUser } from '@/services/user';
 import { useUsers } from '@/hooks/users/useUsers';
 import { Input } from '@/components/atoms/inputs/input';
-import { UserCard } from '@/components/molecules/users-card/users-card';
+import { UserCard } from '@/components/molecules/cards/users-card';
 import { Link } from 'expo-router';
 import { useAuth } from '@/hooks/auth/useAuth';
 

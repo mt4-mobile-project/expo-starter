@@ -4,7 +4,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Input } from '@/components/atoms/inputs/input';
 import { Button } from '@/components/atoms/buttons/button';
 import { useEvents } from '@/hooks/events/useEvents';
-import { EventCard } from '@/components/molecules/event-card/event-card';
+import { EventCard } from '@/components/molecules/cards/event-card';
 import { useEventFilters } from '@/hooks/events/useEventFilters';
 import { useEffect } from 'react';
 

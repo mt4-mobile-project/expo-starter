@@ -10,7 +10,7 @@ import { TamaguiProvider, Theme, View } from 'tamagui';
 import config from '@/configs/tamagui.config';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { IconButton } from '@/components/atoms/buttons/icon-button';
-import { SocketContext } from '@/context/socket';
+import { SocketContext } from '@/contexts/socket';
 import { API_URL } from '@/utils/api';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
@@ -38,8 +38,8 @@ export default function RootLayout() {
 
   useEffect(() => {
     async function fetchToken() {
-        const storedToken = await asyncStorageToken.get();
-        setToken(storedToken);
+      const storedToken = await asyncStorageToken.get();
+      setToken(storedToken);
     }
 
     fetchToken();

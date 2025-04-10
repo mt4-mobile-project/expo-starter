@@ -2,7 +2,7 @@ import { View, YStack } from 'tamagui';
 import { Text } from '@/components/atoms/typography/text';
 import { Input } from '@/components/atoms/inputs/input';
 import { Button } from '@/components/atoms/buttons/button';
-import { Form } from '@/components/molecules/form/form';
+import { Form } from '@/components/atoms/form/form';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
