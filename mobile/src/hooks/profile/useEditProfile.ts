@@ -3,7 +3,7 @@ import { getProfile, editProfile } from '@/services/profile';
 import { ProfileResponse } from '@/types/profile';
 
 export const useEditProfile = () => {
-  const { data: profile, isPending : isFetching } = useQuery<ProfileResponse>({
+  const { data: profile, isPending: isFetching } = useQuery<ProfileResponse>({
     queryKey: ['profile'],
     queryFn: getProfile,
   });

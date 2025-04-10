@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View, YStack, XStack } from 'tamagui';
-import ProfileCard from '@/components/molecules/profile-card/profil-card';
+import ProfileCard from '@/components/molecules/cards/profil-card';
 import { InputGenerator } from '@/utils/generator/input-generator';
 import { PROFILE_INPUT_CONFIGS } from '@/configs/inputs/profile-input.config';
 import { Button } from '@/components/atoms/buttons/button';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form } from '@/components/molecules/form/form';
+import { Form } from '@/components/atoms/form/form';
 import { CreateProfileData } from '@/types/profile';
 import { useCreateProfile } from '@/hooks/profile/useCreateProfile';
 
@@ -34,7 +34,7 @@ type ProfileFormData = z.infer<typeof profileSchema>;
 
 export default function ProfilScreen() {
   const [profileName, setProfileName] = useState('Nom de profil');
-  const { createProfile, isLoading } = useCreateProfile();
+  const { createProfile } = useCreateProfile();
 
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),

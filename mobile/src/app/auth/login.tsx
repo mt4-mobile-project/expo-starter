@@ -1,7 +1,7 @@
 import { View, YStack } from 'tamagui';
 import { useForm } from 'react-hook-form';
 import { Text } from '@/components/atoms/typography/text';
-import { Form } from '@/components/molecules/form/form';
+import { Form } from '@/components/atoms/form/form';
 import { InputGenerator } from '@/utils/generator/input-generator';
 import { LOGIN_INPUT_CONFIGS } from '@/configs/inputs/login-input.config';
 import { LoginCredentials } from '@/types/login';
