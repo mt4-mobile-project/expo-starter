@@ -2,16 +2,17 @@ import { useState, useEffect } from 'react';
 import { Text, View } from 'tamagui';
 import { Keyboard } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { login } from '@/services/auth';
 import { getCurrentUser } from '@/services/user';
 import { useUsers } from '@/hooks/users/useUsers';
 import { Input } from '@/components/atoms/inputs/input';
 import { UserCard } from '@/components/molecules/users-card/users-card';
 import { Link } from 'expo-router';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function HomeScreen() {
   const [searchTerm, setSearchTerm] = useState('');
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
+  const { login } = useAuth();
 
   const { data: users, isLoading, error } = useUsers(submittedSearchTerm);
 
@@ -22,15 +23,14 @@ export default function HomeScreen() {
           username: 'string',
           password: 'string',
         };
-        const response = await login(credentials);
-        console.log('Logged in successfully', response);
+        await login(credentials);
       } catch (error) {
         console.error('Login failed:', error);
       }
     };
 
     tryLogin();
-  }, []);
+  }, [login]);
 
   useEffect(() => {
     const fetchUser = async () => {
