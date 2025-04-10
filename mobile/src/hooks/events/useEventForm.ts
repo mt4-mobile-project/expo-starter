@@ -5,6 +5,7 @@ import { useFileUpload } from '@/hooks/files/useFileUpload';
 import { FileType } from '@/types/files';
 import { useEventCreationStore } from '@/stores/events/event-creation-store';
 import { useEvents } from './useEvents';
+import { useCreationModeStore } from '@/stores/creation-mode-store';
 
 interface EventFormData {
   name: string;
@@ -96,6 +97,9 @@ export const useEventForm = (bottomSheetRef: any) => {
           resetCreationState();
           bottomSheetRef.current?.snapToIndex(1);
           refetch();
+
+          // Reset creation mode
+          useCreationModeStore.getState().setIsCreating(false);
         },
         onError: (error: unknown) => {
           console.error("Erreur lors de l'upload de l'image:", error);
@@ -111,6 +115,9 @@ export const useEventForm = (bottomSheetRef: any) => {
       form.reset();
       resetCreationState();
       bottomSheetRef.current?.snapToIndex(1);
+
+      // Reset creation mode
+      useCreationModeStore.getState().setIsCreating(false);
     }
   };
 
