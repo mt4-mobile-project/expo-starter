@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { StyleSheet } from 'react-native';
 import { XStack } from 'tamagui';
@@ -7,6 +7,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { H4 } from '@/components/atoms/typography/heading';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useCreationModeStore } from '@/stores/creation-mode-store';
 
 interface CustomBottomSheetProps {
   title?: string;
@@ -31,7 +32,8 @@ export function CustomBottomSheet({
   showCloseButton = false,
   onCreateModeChange,
 }: CustomBottomSheetProps) {
-  const [isCreating, setIsCreating] = useState(false);
+  // Utiliser le store Zustand au lieu du state local
+  const { isCreating, setIsCreating } = useCreationModeStore();
   const animatedPosition = useSharedValue(0);
 
   const animatedStyle = useAnimatedStyle(() => {
