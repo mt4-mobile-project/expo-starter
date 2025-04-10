@@ -34,7 +34,6 @@ export default function RootLayout() {
 
   const stompClient = useRef<Client | null>(null);
 
-
   useEffect(() => {
     async function fetchToken() {
         const storedToken = await asyncStorageToken.get();
