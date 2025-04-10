@@ -87,4 +87,38 @@ Aucun test unitaire ou fonctionnel n’a été mis en place dans le projet.
 
 ## 7. Déploiement
 
+Le déploiement du **backend** a été automatisé avec **Terraform** (provisionnement de l’infrastructure) et **Ansible** (configuration du serveur et déploiement de l’application).
+
+### 🏗️ Provisionnement – Terraform
+
+```bash
+terraform init
+terraform plan
+terraform apply -auto-approve
+```
+---
+
+### 🔧 Déploiement – Ansible
+
+Ansible est **déclenché automatiquement par Terraform** en fin de provisionnement. Il est cependant possible de le relancer manuellement :
+
+```bash
+ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook \
+   -i ansible/inventory/prod-france-instance \
+   -u {ssh_user} \
+   --private-key keys/prod-france-instance-key.pem \
+   ansible/playbook.yml
+```
+
+#### 🧰 Tâches réalisées automatiquement :
+
+- Installation de **Nginx**, **Docker**, **Docker Compose**
+- Activation et démarrage des services (`nginx`, `docker`)
+- Ajout de l’utilisateur au groupe `docker`
+- Génération d’une **clé SSH** pour l’authentification avec GitHub
+- Ajout de la clé publique à GitHub via son **API REST**
+- Clonage du **repository privé** contenant le backend
+- Copie du fichier `.env` dans le bon répertoire
+
+
 ### TODO
