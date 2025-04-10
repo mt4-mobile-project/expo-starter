@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { StyleSheet } from 'react-native';
 import { XStack } from 'tamagui';
@@ -17,6 +17,7 @@ interface CustomBottomSheetProps {
   bottomSheetRef?: React.RefObject<BottomSheet>;
   onClose?: () => void;
   showCloseButton?: boolean;
+  onCreateModeChange?: (isCreating: boolean) => void;
 }
 
 export function CustomBottomSheet({
@@ -28,7 +29,9 @@ export function CustomBottomSheet({
   bottomSheetRef,
   onClose,
   showCloseButton = false,
+  onCreateModeChange,
 }: CustomBottomSheetProps) {
+  const [isCreating, setIsCreating] = useState(false);
   const animatedPosition = useSharedValue(0);
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -38,14 +41,25 @@ export function CustomBottomSheet({
   });
 
   const handlePlusButtonPress = () => {
+    const newCreatingState = !isCreating;
+    setIsCreating(newCreatingState);
+    onCreateModeChange?.(newCreatingState);
     bottomSheetRef?.current?.snapToIndex(0);
   };
 
   return (
     <>
       <Animated.View style={[styles.floatingButton, animatedStyle]}>
-        <IconButton variant="bottomless" style={styles.iconButton} onPress={handlePlusButtonPress}>
-          <AntDesign name="plus" size={24} color="black" />
+        <IconButton
+          variant="bottomless"
+          style={isCreating ? styles.iconButtonClose : styles.iconButtonCreated}
+          onPress={handlePlusButtonPress}
+        >
+          {isCreating ? (
+            <AntDesign name="close" size={24} color="black" />
+          ) : (
+            <AntDesign name="plus" size={24} color="white" />
+          )}
         </IconButton>
       </Animated.View>
       <BottomSheet
@@ -82,8 +96,20 @@ const styles = StyleSheet.create({
     right: 24,
     zIndex: 1000,
   },
-  iconButton: {
+  iconButtonClose: {
     backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    transform: [{ translateY: -48 }], // Changed from -24 to -48 to move it higher
+  },
+  iconButtonCreated: {
+    backgroundColor: 'black',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
