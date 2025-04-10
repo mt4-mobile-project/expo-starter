@@ -16,7 +16,6 @@ import { SearchFilter } from '@/components/molecules/search-filter/search-filter
 import { useEventFilterStore } from '@/store/eventFilterStore';
 import { Text } from '@/components/atoms/typography/text';
 import { H4 } from '@/components/atoms/typography/heading';
-import { Input } from '@/components/atoms/inputs/input';
 import { Button } from '@/components/atoms/buttons/button';
 
 // Add imports
@@ -27,6 +26,7 @@ import { useCreateEvent } from '@/hooks/events/useCreateEvent';
 import { Form } from '@/components/molecules/form/form';
 import { InputGenerator } from '@/utils/generator/input-generator';
 import { EVENT_INPUT_CONFIGS } from '@/configs/inputs/event-input.config';
+import { useCreationModeStore } from '@/stores/creation-mode-store';
 
 interface EventFormData {
   name: string;
@@ -51,7 +51,9 @@ export default function MapScreen() {
   });
 
   const [currentSnapIndex, setCurrentSnapIndex] = useState(1);
-  const [isCreatingMode, setIsCreatingMode] = useState(false);
+  // Remplacer le state local par le store
+  // const [isCreatingMode, setIsCreatingMode] = useState(false);
+  const { isCreating: isCreatingMode, setIsCreating: setIsCreatingMode } = useCreationModeStore();
   const [newMarkerLocation, setNewMarkerLocation] = useState<{
     latitude: number;
     longitude: number;
@@ -131,18 +133,34 @@ export default function MapScreen() {
   const onSubmit = (data: EventFormData) => {
     if (!newMarkerLocation) return;
 
-    createEvent({
-      name: data.name,
-      description: data.description,
-      start_date: data.start_date,
-      end_date: data.end_date,
-      address: {
-        street: data.street,
-        city: data.city,
-        latitude: newMarkerLocation.latitude,
-        longitude: newMarkerLocation.longitude,
+    createEvent(
+      {
+        name: data.name,
+        description: data.description,
+        start_date: data.start_date,
+        end_date: data.end_date,
+        address: {
+          street: data.street,
+          city: data.city,
+          latitude: newMarkerLocation.latitude,
+          longitude: newMarkerLocation.longitude,
+        },
       },
-    });
+      {
+        onSuccess: () => {
+          // Réinitialiser le formulaire après création réussie
+          form.reset();
+
+          // Fermer le bottom sheet et revenir à l'état précédent
+          bottomSheetRef.current?.snapToIndex(1);
+
+          // Réinitialiser l'état de création - maintenant via le store global
+          setIsCreatingMode(false);
+          setNewMarkerLocation(null);
+          setShowCreateNotif(true);
+        },
+      }
+    );
   };
 
   const renderBottomSheetContent = () => {
