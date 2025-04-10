@@ -14,6 +14,7 @@ import { SocketContext } from '@/context/socket';
 import { API_URL } from '@/utils/api';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
+import { asyncStorageToken } from '@/utils/asyncStorageToken';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -22,6 +23,7 @@ const queryClient = new QueryClient();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [socket, setSocket] = useState<Client | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const [loaded] = useFonts({});
 
   useEffect(() => {
@@ -31,12 +33,18 @@ export default function RootLayout() {
   }, [loaded]);
 
   const stompClient = useRef<Client | null>(null);
-  const [messages, setMessages] = useState<any[]>([]);
 
-  const token =
-    'eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdHJpbmciLCJpYXQiOjE3NDQyODgxNjAsImV4cCI6MTc0NDM3NDU2MH0.q0Lun19__832gawO4JCMo9a1vJChhCpsfvO5CDHgWY-0iUUVZBfPuT4sQMlHp_lW';
 
   useEffect(() => {
+    async function fetchToken() {
+        const storedToken = await asyncStorageToken.get();
+        setToken(storedToken);
+    }
+
+    fetchToken();
+
+    if (!token) return;
+
     stompClient.current = new Client({
       webSocketFactory: () => new SockJS(`${API_URL}/ws`),
       reconnectDelay: 5000,
@@ -47,19 +55,6 @@ export default function RootLayout() {
         console.log('Connecté au serveur WebSocket');
 
         setSocket(stompClient.current);
-
-        // TODO code exemple pour gérer la réception de message
-        // stompClient.current?.subscribe(
-        //   `/topic/room.1`,
-        //   (message) => {
-        //     console.log('📩 Message reçu:', message);
-        //     const msg = JSON.parse(message.body);
-        //     setMessages((prev) => [...prev, msg]);
-        //   },
-        //   {
-        //     Authorization: `Bearer ${token}`,
-        //   }
-        // );
       },
       onStompError: (frame) => {
         console.error('❌ Erreur STOMP:', frame.headers['message']);
