@@ -1,10 +1,10 @@
 import { ScrollView, StyleSheet, Keyboard } from 'react-native';
 import { View } from 'tamagui';
-import { EventCard } from '@/components/molecules/event-card/event-card';
-import { SearchFilter } from '@/components/molecules/search-filter/search-filter';
-import { useEventFilterStore } from '@/store/eventFilterStore';
+import { EventCard } from '@/components/molecules/cards/event-card';
+import { SearchFilter } from '@/components/molecules/filters/search-filter';
+import { useEventFilterStore } from '@/stores/events/event-filter-store';
 import { Event } from '@/types/events';
-import { EventDetails } from '@/components/molecules/event-details/event-details';
+import { EventDetailsCard } from '@/components/molecules/cards/event-details';
 
 interface EventListContentProps {
   events: Event[];
@@ -29,7 +29,7 @@ export const EventListContent = ({
   };
 
   if (selectedEvent) {
-    return <EventDetails event={selectedEvent} />;
+    return <EventDetailsCard event={selectedEvent} />;
   }
 
   return (

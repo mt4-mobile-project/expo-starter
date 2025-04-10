@@ -3,7 +3,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useCreateEvent } from './useCreateEvent';
 import { useFileUpload } from '@/hooks/files/useFileUpload';
 import { FileType } from '@/types/files';
-import { useEventCreationStore } from '@/stores/event-creation-store';
+import { useEventCreationStore } from '@/stores/events/event-creation-store';
 import { useEvents } from './useEvents';
 
 interface EventFormData {

@@ -8,7 +8,7 @@ interface EventDetailsProps {
   event: Event;
 }
 
-export const EventDetails = ({ event }: EventDetailsProps) => {
+export const EventDetailsCard = ({ event }: EventDetailsProps) => {
   const imageUrl = event.image
     ? `data:image/jpeg;base64,${event.image}`
     : require('@/assets/images/placeholder.png');

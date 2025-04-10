@@ -2,12 +2,12 @@ import { ScrollView, StyleSheet } from 'react-native';
 import { H4 } from '@/components/atoms/typography/heading';
 import { YStack, XStack, View } from 'tamagui';
 import { Button } from '@/components/atoms/buttons/button';
-import { Form } from '@/components/molecules/form/form';
+import { Form } from '@/components/atoms/form/form';
 import { InputGenerator } from '@/utils/generator/input-generator';
 import { EVENT_INPUT_CONFIGS } from '@/configs/inputs/event-input.config';
 import { Text } from '@/components/atoms/typography/text';
 import { Image } from 'expo-image';
-import { useEventCreationStore } from '@/stores/event-creation-store';
+import { useEventCreationStore } from '@/stores/events/event-creation-store';
 import { useEventForm } from '@/hooks/events/useEventForm';
 
 interface EventCreationFormProps {

@@ -4,15 +4,15 @@ import { View, XStack } from 'tamagui';
 import { useLocation } from '@/hooks/maps/useLocation';
 import { useEvents } from '@/hooks/events/useEvents';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { CustomBottomSheet } from '@/components/molecules/bottom-sheet/bottom-sheet';
-import { useBottomSheet } from '@/hooks/bottomSheet/useBottomSheet';
-import { MapMarkers } from '@/components/molecules/map-markers/map-markers';
+import { CustomBottomSheet } from '@/components/molecules/sheets/bottom-sheet';
+import { useBottomSheet } from '@/hooks/sheets/useBottomSheet';
+import { MapMarkers } from '@/components/molecules/markers/map-markers';
 import { useMarkerPress } from '@/hooks/maps/useMarkerPress';
 import { Text } from '@/components/atoms/typography/text';
-import { useEventCreationStore } from '@/stores/event-creation-store';
+import { useEventCreationStore } from '@/stores/events/event-creation-store';
 import { useMapInteractions } from '@/hooks/maps/useMapInteractions';
-import { EventListContent } from '@/components/molecules/event-list/event-list-content';
-import { EventCreationForm } from '@/components/organisms/forms/event-creation-form';
+import { EventListContent } from '@/components/organisms/lists/event-list-content';
+import { EventCreationForm } from '@/components/molecules/forms/event-creation-form';
 
 export default function MapScreen() {
   const { location } = useLocation();
