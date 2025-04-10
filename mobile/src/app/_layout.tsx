@@ -2,7 +2,7 @@ import { useFonts } from 'expo-font';
 import { Stack, Link } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useColorScheme } from 'react-native';
 import 'react-native-reanimated';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -30,40 +30,42 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
+  const stompClient = useRef<Client | null>(null);
+  const [messages, setMessages] = React.useState<any[]>([]);
+
+  const token =
+    'eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdHJpbmciLCJpYXQiOjE3NDQyNDYxMjgsImV4cCI6MTc0NDMzMjUyOH0.U49RDB4W02BaXtFLuznRqXymmAd1PS9gEg3M6C7ZYeRMIXbZPH_Kmcz_NB-rDGTF';
+
   useEffect(() => {
-    const newSocket = new SockJS(`${API_URL}/ws`);
-    const stompClient = new Client({
-      webSocketFactory: () => newSocket,
-      reconnectDelay: 5000, // auto-reconnect
+    stompClient.current = new Client({
+      webSocketFactory: () => new SockJS("http://localhost:8080/ws"),
+      reconnectDelay: 5000,
+      connectHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
       onConnect: () => {
-        console.log('✅ Connected to STOMP');
-        const token =
-          'eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdHJpbmciLCJpYXQiOjE3NDQyMDkzNDksImV4cCI6MTc0NDI5NTc0OX0.Pp24gKgr4390o0yHfjkia5q2BtskKTdJ5ZGbi09UXq5N0_0jJWtSu9ccT9Gld1SJ';
+        console.log('Connecté au serveur WebSocket');
 
-        const headers = {
+        stompClient.current?.subscribe(`/topic/room.1`, (message) => {
+          console.log('📩 Message reçu:', message);
+          const msg = JSON.parse(message.body);
+          setMessages((prev) => [...prev, msg]);
+        },
+        {
           Authorization: `Bearer ${token}`,
-        };
+        }
+      );
+    },
+    onStompError: (frame) => {
+      console.error('❌ Erreur STOMP:', frame.headers['message']);
+      console.error('Détails:', frame.body);
+    },
+  });
 
-        stompClient.subscribe(
-          `/topic/room.1`,
-          (message) => {
-            console.log('📥 Reçu du WS :', message);
-          },
-          headers
-        );
-      },
-      onStompError: (frame) => {
-        console.error('💥 STOMP Error:', frame);
-      },
-    });
-
-    stompClient.activate(); // C'est ça qui fait la magie
-
-    setSocket(stompClient);
+    stompClient.current.activate();
 
     return () => {
-      stompClient.deactivate();
-      newSocket.close();
+      stompClient.current?.deactivate();
     };
   }, []);
 
