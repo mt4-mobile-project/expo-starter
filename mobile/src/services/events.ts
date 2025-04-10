@@ -23,3 +23,8 @@ export const createEvent = async (data: CreateEventDTO): Promise<Event> => {
   const response = await api.post<Event>('/events', data);
   return response;
 };
+
+export const getLoggedUserEvents = async (): Promise<Event[]> => {
+  const response = await api.get<Event[]>('/events/mes');
+  return response;
+};
