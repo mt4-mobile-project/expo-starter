@@ -1,4 +1,4 @@
-import { StyleSheet, ActivityIndicator } from 'react-native';
+import { StyleSheet, ActivityIndicator, Keyboard } from 'react-native';
 import MapView from 'react-native-maps';
 import { View, ScrollView } from 'tamagui';
 import { useEffect, useRef, useState } from 'react';
@@ -11,7 +11,9 @@ import { EventDetails } from '@/components/molecules/event-details/event-details
 import { MapMarkers } from '@/components/molecules/map-markers/map-markers';
 import { useMarkerPress } from '@/hooks/maps/useMarkerPress';
 import { EventCard } from '@/components/molecules/event-card/event-card';
-import { Event } from '@/types/events'; // Ensure this import is correct
+import { Event } from '@/types/events';
+import { SearchFilter } from '@/components/molecules/search-filter/search-filter';
+import { useEventFilterStore } from '@/store/eventFilterStore';
 
 export default function MapScreen() {
   const mapRef = useRef<MapView | null>(null);
@@ -27,6 +29,13 @@ export default function MapScreen() {
   });
 
   const [currentSnapIndex, setCurrentSnapIndex] = useState(1);
+
+  // Get filter state and methods from the store
+  const { searchTerm, setSearchTerm, activeFilter, setActiveFilter, getFilteredEvents } =
+    useEventFilterStore();
+
+  // Filter events based on search criteria
+  const filteredEvents = getFilteredEvents(events);
 
   // Ajout de useEffect pour centrer la carte sur l'événement sélectionné
   useEffect(() => {
@@ -48,6 +57,7 @@ export default function MapScreen() {
       bottomSheetRef.current?.snapToIndex(1);
       setCurrentSnapIndex(1);
     }
+    Keyboard.dismiss();
   };
 
   const onBottomSheetChange = (index: number) => {
@@ -56,10 +66,6 @@ export default function MapScreen() {
       handleSheetChanges(index);
     }
   };
-
-  useEffect(() => {
-    console.log(events.length);
-  }, [events]);
 
   const handleEventCardPress = (event: Event) => {
     setSelectedEvent(event);
@@ -77,6 +83,10 @@ export default function MapScreen() {
         500
       );
     }
+  };
+
+  const handleSearchSubmit = () => {
+    Keyboard.dismiss();
   };
 
   return (
@@ -100,7 +110,7 @@ export default function MapScreen() {
             onPress={handleMapPress}
           >
             <MapMarkers
-              events={events}
+              events={filteredEvents}
               selectedEvent={selectedEvent}
               userLocation={location}
               onMarkerPress={handleMarkerPress}
@@ -108,8 +118,10 @@ export default function MapScreen() {
           </MapView>
         )}
 
+        {/* Search and filter component with absolute positioning */}
+
         <CustomBottomSheet
-          title={selectedEvent ? selectedEvent.name : 'Événements à proximité'}
+          // title={selectedEvent ? selectedEvent.name : 'Événements à proximité'}
           bottomSheetRef={bottomSheetRef}
           onChange={onBottomSheetChange}
           snapPoints={['5%', '25%', '50%', '90%']}
@@ -124,8 +136,15 @@ export default function MapScreen() {
               scrollEnabled={currentSnapIndex !== 1}
               contentContainerStyle={styles.scrollContent}
             >
-              <View padding="$4" gap="$1">
-                {events.map((event) => (
+              <SearchFilter
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                activeFilter={activeFilter}
+                setActiveFilter={setActiveFilter}
+                onSubmit={handleSearchSubmit}
+              />
+              <View marginTop="$6" gap="$6">
+                {filteredEvents.map((event) => (
                   <EventCard
                     key={event.id}
                     image={event.image || ''}

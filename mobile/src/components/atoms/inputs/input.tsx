@@ -15,7 +15,7 @@ const InputFrame = styled(TamaguiInput, {
   borderColor: '$borderMuted',
   paddingHorizontal: '$4',
   height: 48,
-  color: '$primaryForeground',
+  color: '$foreground', // Changé de $primaryForeground à $foreground
   placeholderTextColor: '$mutedForeground',
   fontWeight: '500',
   width: '100%',
@@ -72,10 +72,10 @@ export const Input = forwardRef<React.ElementRef<typeof InputFrame>, InputProps>
   ) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-    const paddingLeftMap: Record<InputSize, string> = {
-      sm: '$6',
-      md: '$7',
-      lg: '$8',
+    const paddingLeftMap: Record<InputSize, number> = {
+      sm: 40,
+      md: 44,
+      lg: 48,
     };
 
     const togglePasswordVisibility = () => {
@@ -88,11 +88,11 @@ export const Input = forwardRef<React.ElementRef<typeof InputFrame>, InputProps>
           {icon && (
             <YStack
               position="absolute"
-              left="$3"
-              top={0}
-              bottom={0}
+              left={16}
+              zIndex={1}
+              height="100%"
               justifyContent="center"
-              pointerEvents="none"
+              alignItems="center"
             >
               {icon}
             </YStack>
@@ -101,8 +101,8 @@ export const Input = forwardRef<React.ElementRef<typeof InputFrame>, InputProps>
             ref={ref}
             variant={variant}
             size={size}
-            paddingLeft={icon ? paddingLeftMap[size] : '$3'}
-            paddingRight={secureTextEntry ? '$12' : '$4'}
+            paddingLeft={icon ? paddingLeftMap[size] : 16}
+            paddingRight={secureTextEntry ? 48 : 16}
             secureTextEntry={secureTextEntry && !isPasswordVisible}
             {...props}
           />
