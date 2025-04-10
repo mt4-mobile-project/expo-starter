@@ -20,7 +20,7 @@ interface CustomBottomSheetProps {
 export function CustomBottomSheet({
   title,
   children,
-  snapPoints = ['5%', '35%', '50%', '90%'],
+  snapPoints = ['5%', '25%', '50%', '90%'],
   initialIndex = 1,
   onChange,
   bottomSheetRef,
