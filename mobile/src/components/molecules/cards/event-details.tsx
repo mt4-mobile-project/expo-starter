@@ -3,6 +3,7 @@ import { Text } from '@/components/atoms/typography/text';
 import { Event } from '@/types/events';
 import { Image } from 'expo-image';
 import { StyleSheet } from 'react-native';
+import { H5 } from '@/components/atoms/typography/heading';
 
 interface EventDetailsProps {
   event: Event;
@@ -14,23 +15,25 @@ export const EventDetailsCard = ({ event }: EventDetailsProps) => {
     : require('@/assets/images/placeholder.png');
 
   return (
-    <YStack space="$4">
+    <YStack space="$4" margin={16}>
+      <YStack gap="$1">
+        <H5 color="$cardForeground">{event.name}</H5>
+        <YStack>
+          <Text fontSize={14} color="#cardForeground" opacity={0.6} marginTop="$1">
+            {event.address.street}, {event.address.city}
+          </Text>
+          <Text fontSize={14} color="#cardForeground" opacity={0.6} marginTop="$1">
+            {new Date(event.start_date).toLocaleDateString()}
+            {' - '}
+            {new Date(event.end_date).toLocaleDateString()}
+          </Text>
+        </YStack>
+      </YStack>
       <Image
         style={styles.image}
         source={typeof imageUrl === 'string' ? { uri: imageUrl } : imageUrl}
         contentFit="cover"
       />
-      <Text size="base">{event.description}</Text>
-      <Text size="lg" weight="bold">
-        Adresse
-      </Text>
-      <Text size="base">{event.address.street}</Text>
-      <Text size="base">{event.address.city}</Text>
-      <Text size="lg" weight="bold">
-        Date
-      </Text>
-      <Text size="base">Du: {new Date(event.start_date).toLocaleDateString()}</Text>
-      <Text size="base">Au: {new Date(event.end_date).toLocaleDateString()}</Text>
     </YStack>
   );
 };

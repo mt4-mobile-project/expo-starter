@@ -48,7 +48,7 @@ export const EventListContent = ({
             image={event.image || ''}
             title={event.name}
             address={`${event.address.street}, ${event.address.city}`}
-            datetime={event.start_date}
+            datetime={`${new Date(event.start_date).toLocaleDateString()} - ${new Date(event.end_date).toLocaleDateString()}`}
             onPress={() => onEventCardPress(event)}
           />
         ))}

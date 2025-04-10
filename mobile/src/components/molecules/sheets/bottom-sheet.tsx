@@ -1,16 +1,14 @@
 import { ReactNode } from 'react';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { StyleSheet } from 'react-native';
-import { XStack } from 'tamagui';
+import { View } from 'tamagui';
 import { IconButton } from '@/components/atoms/buttons/icon-button';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { H4 } from '@/components/atoms/typography/heading';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useCreationModeStore } from '@/stores/creation-mode-store';
 
 interface CustomBottomSheetProps {
-  title?: string;
   children: ReactNode;
   snapPoints?: string[];
   initialIndex?: number;
@@ -22,7 +20,6 @@ interface CustomBottomSheetProps {
 }
 
 export function CustomBottomSheet({
-  title,
   children,
   snapPoints = ['5%', '25%', '50%', '90%'],
   initialIndex = 1,
@@ -73,14 +70,13 @@ export function CustomBottomSheet({
         animatedPosition={animatedPosition}
       >
         <BottomSheetView style={styles.contentContainer}>
-          <XStack justifyContent="space-between" alignItems="center" marginBottom="$4">
-            {title && <H4>{title}</H4>}
-            {showCloseButton && (
-              <IconButton variant="bottomless" onPress={onClose}>
+          {showCloseButton && (
+            <View style={styles.closeButtonContainer}>
+              <IconButton variant="bottomless" onPress={onClose} backgroundColor="$secondary">
                 <MaterialIcons name="close" size={24} color="black" />
               </IconButton>
-            )}
-          </XStack>
+            </View>
+          )}
           {children}
         </BottomSheetView>
       </BottomSheet>
@@ -91,12 +87,18 @@ export function CustomBottomSheet({
 const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
-    paddingHorizontal: 0, // Remove horizontal padding
-    marginHorizontal: 0, // Remove horizontal margin
+    paddingHorizontal: 0,
+    marginHorizontal: 0,
   },
   floatingButton: {
     position: 'absolute',
     right: 24,
+    zIndex: 1000,
+  },
+  closeButtonContainer: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
     zIndex: 1000,
   },
   iconButtonClose: {
