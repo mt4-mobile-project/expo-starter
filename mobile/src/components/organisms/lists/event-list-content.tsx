@@ -41,7 +41,7 @@ export const EventListContent = ({
         setActiveFilter={setActiveFilter}
         onSubmit={handleSearchSubmit}
       />
-      <View marginTop="$6" gap="$6">
+      <View marginTop="$4" gap="$4" backgroundColor="$muted" padding={16}>
         {filteredEvents.map((event) => (
           <EventCard
             key={event.id}
