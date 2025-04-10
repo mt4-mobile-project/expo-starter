@@ -1,6 +1,6 @@
 import { StyleSheet, ActivityIndicator, Keyboard } from 'react-native';
 import MapView from 'react-native-maps';
-import { View, ScrollView, XStack } from 'tamagui';
+import { View, ScrollView, XStack, YStack } from 'tamagui';
 import { useRef, useState } from 'react';
 import { useLocation } from '@/hooks/maps/useLocation';
 import { useEvents } from '@/hooks/events/useEvents';
@@ -15,6 +15,27 @@ import { Event } from '@/types/events';
 import { SearchFilter } from '@/components/molecules/search-filter/search-filter';
 import { useEventFilterStore } from '@/store/eventFilterStore';
 import { Text } from '@/components/atoms/typography/text';
+import { H4 } from '@/components/atoms/typography/heading';
+import { Input } from '@/components/atoms/inputs/input';
+import { Button } from '@/components/atoms/buttons/button';
+
+// Add imports
+import { useForm } from 'react-hook-form';
+import { useCreateEvent } from '@/hooks/events/useCreateEvent';
+
+// Add these imports at the top
+import { Form } from '@/components/molecules/form/form';
+import { InputGenerator } from '@/utils/generator/input-generator';
+import { EVENT_INPUT_CONFIGS } from '@/configs/inputs/event-input.config';
+
+interface EventFormData {
+  name: string;
+  description: string;
+  start_date: string;
+  end_date: string;
+  street: string;
+  city: string;
+}
 
 export default function MapScreen() {
   const mapRef = useRef<MapView | null>(null);
@@ -43,13 +64,17 @@ export default function MapScreen() {
   // Get filtered events
   const filteredEvents = getFilteredEvents(events);
 
-  // Update handleMapPress to include event type
+  // Add this state with the other states
+  const [showCreateNotif, setShowCreateNotif] = useState(true);
+
+  // Update handleMapPress function
   const handleMapPress = (e: {
     nativeEvent: { coordinate: { latitude: number; longitude: number } };
   }) => {
     if (isCreatingMode) {
       const { latitude, longitude } = e.nativeEvent.coordinate;
       setNewMarkerLocation({ latitude, longitude });
+      setShowCreateNotif(false); // Hide notification when map is clicked
       bottomSheetRef.current?.snapToIndex(2);
       return;
     }
@@ -90,6 +115,87 @@ export default function MapScreen() {
     Keyboard.dismiss();
   };
 
+  const { mutate: createEvent, isPending } = useCreateEvent();
+  const form = useForm<EventFormData>({
+    defaultValues: {
+      name: '',
+      description: '',
+      start_date: '',
+      end_date: '',
+      street: '',
+      city: '',
+    },
+  });
+  const { control } = form;
+
+  const onSubmit = (data: EventFormData) => {
+    if (!newMarkerLocation) return;
+
+    createEvent({
+      name: data.name,
+      description: data.description,
+      start_date: data.start_date,
+      end_date: data.end_date,
+      address: {
+        street: data.street,
+        city: data.city,
+        latitude: newMarkerLocation.latitude,
+        longitude: newMarkerLocation.longitude,
+      },
+    });
+  };
+
+  const renderBottomSheetContent = () => {
+    if (isCreatingMode) {
+      return (
+        <ScrollView>
+          <H4>Créer un événement</H4>
+          <Form form={form} onSubmit={onSubmit}>
+            <YStack gap={12} marginTop={24}>
+              <InputGenerator
+                configs={EVENT_INPUT_CONFIGS}
+                control={control}
+                defaultValues={form.getValues()}
+              />
+              <Button size="lg" onPress={form.handleSubmit(onSubmit)} disabled={isPending}>
+                {isPending ? 'Création...' : 'Créer'}
+              </Button>
+            </YStack>
+          </Form>
+        </ScrollView>
+      );
+    }
+
+    return selectedEvent ? (
+      <EventDetails event={selectedEvent} />
+    ) : (
+      <ScrollView
+        scrollEnabled={currentSnapIndex !== 1}
+        contentContainerStyle={styles.scrollContent}
+      >
+        <SearchFilter
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          activeFilter={activeFilter}
+          setActiveFilter={setActiveFilter}
+          onSubmit={handleSearchSubmit}
+        />
+        <View marginTop="$6" gap="$6">
+          {filteredEvents.map((event) => (
+            <EventCard
+              key={event.id}
+              image={event.image || ''}
+              title={event.name}
+              address={`${event.address.street}, ${event.address.city}`}
+              datetime={event.start_date}
+              onPress={() => handleEventCardPress(event)}
+            />
+          ))}
+        </View>
+      </ScrollView>
+    );
+  };
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <View style={styles.container}>
@@ -97,7 +203,7 @@ export default function MapScreen() {
           <ActivityIndicator size="large" color="#0000ff" />
         ) : (
           <>
-            {isCreatingMode && (
+            {isCreatingMode && showCreateNotif && (
               <XStack
                 position="absolute"
                 top={60}
@@ -144,10 +250,8 @@ export default function MapScreen() {
           </>
         )}
 
-        {/* Search and filter component with absolute positioning */}
-
         <CustomBottomSheet
-          title={selectedEvent?.name} // Only show title for selected event
+          title={selectedEvent?.name}
           bottomSheetRef={bottomSheetRef}
           onChange={onBottomSheetChange}
           snapPoints={['5%', '25%', '50%', '90%']}
@@ -156,34 +260,7 @@ export default function MapScreen() {
           showCloseButton={!!selectedEvent}
           onCreateModeChange={setIsCreatingMode}
         >
-          {selectedEvent ? (
-            <EventDetails event={selectedEvent} />
-          ) : (
-            <ScrollView
-              scrollEnabled={currentSnapIndex !== 1}
-              contentContainerStyle={styles.scrollContent}
-            >
-              <SearchFilter
-                searchTerm={searchTerm}
-                setSearchTerm={setSearchTerm}
-                activeFilter={activeFilter}
-                setActiveFilter={setActiveFilter}
-                onSubmit={handleSearchSubmit}
-              />
-              <View marginTop="$6" gap="$6">
-                {filteredEvents.map((event) => (
-                  <EventCard
-                    key={event.id}
-                    image={event.image || ''}
-                    title={event.name}
-                    address={`${event.address.street}, ${event.address.city}`}
-                    datetime={event.start_date}
-                    onPress={() => handleEventCardPress(event)}
-                  />
-                ))}
-              </View>
-            </ScrollView>
-          )}
+          {renderBottomSheetContent()}
         </CustomBottomSheet>
       </View>
     </GestureHandlerRootView>
