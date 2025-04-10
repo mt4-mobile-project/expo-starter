@@ -7,6 +7,7 @@ import { getCurrentUser } from '@/services/user';
 import { useUsers } from '@/hooks/users/useUsers';
 import { Input } from '@/components/atoms/inputs/input';
 import { UserCard } from '@/components/molecules/users-card/users-card';
+import { Link } from 'expo-router';
 
 export default function HomeScreen() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -84,6 +85,14 @@ export default function HomeScreen() {
             status="En ligne"
           />
         ))}
+      <Link
+        href={{
+          pathname: '/room/[id]',
+          params: { id: 1 },
+        }}
+      >
+        Go To first room
+      </Link>
     </View>
   );
 }
