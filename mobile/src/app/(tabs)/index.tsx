@@ -7,7 +7,7 @@ import { useUsers } from '@/hooks/users/useUsers';
 import { Input } from '@/components/atoms/inputs/input';
 import { UserCard } from '@/components/molecules/users-card/users-card';
 import { Link } from 'expo-router';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/auth/useAuth';
 
 export default function HomeScreen() {
   const [searchTerm, setSearchTerm] = useState('');

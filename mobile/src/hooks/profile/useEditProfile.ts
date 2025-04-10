@@ -3,7 +3,7 @@ import { getProfile, editProfile } from '@/services/profile';
 import { ProfileResponse } from '@/types/profile';
 
 export const useEditProfile = () => {
-  const { data: profile, isLoading: isFetching } = useQuery<ProfileResponse>({
+  const { data: profile, isPending : isFetching } = useQuery<ProfileResponse>({
     queryKey: ['profile'],
     queryFn: getProfile,
   });
@@ -22,6 +22,6 @@ export const useEditProfile = () => {
     profile,
     isFetching,
     editProfile: editProfileMutation.mutate,
-    isUpdating: editProfileMutation.isLoading,
+    isUpdating: editProfileMutation.isPending,
   };
 };
