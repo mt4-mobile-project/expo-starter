@@ -27,6 +27,10 @@ import { Form } from '@/components/molecules/form/form';
 import { InputGenerator } from '@/utils/generator/input-generator';
 import { EVENT_INPUT_CONFIGS } from '@/configs/inputs/event-input.config';
 import { useCreationModeStore } from '@/stores/creation-mode-store';
+import { useFileUpload } from '@/hooks/files/useFileUpload';
+import { FileType } from '@/types/files';
+import * as ImagePicker from 'expo-image-picker';
+import { Image } from 'expo-image';
 
 interface EventFormData {
   name: string;
@@ -43,6 +47,20 @@ export default function MapScreen() {
   const { data: events = [], isLoading } = useEvents();
   const { bottomSheetRef, selectedEvent, setSelectedEvent, handleSheetChanges, handleClose } =
     useBottomSheet();
+
+  // Add form initialization here
+  const form = useForm<EventFormData>({
+    defaultValues: {
+      name: '',
+      description: '',
+      start_date: '',
+      end_date: '',
+      street: '',
+      city: '',
+    },
+  });
+
+  const { control } = form;
 
   const { handleMarkerPress } = useMarkerPress({
     bottomSheetRef,
@@ -117,20 +135,33 @@ export default function MapScreen() {
     Keyboard.dismiss();
   };
 
-  const { mutate: createEvent, isPending } = useCreateEvent();
-  const form = useForm<EventFormData>({
-    defaultValues: {
-      name: '',
-      description: '',
-      start_date: '',
-      end_date: '',
-      street: '',
-      city: '',
-    },
-  });
-  const { control } = form;
+  // Dans votre composant principal
+  const { mutate: createEvent, isPending: isCreatingEventPending } = useCreateEvent();
+  const { mutate: uploadImage, isPending: isUploadingPending } = useFileUpload();
+  // Ajoutez cette ligne pour pouvoir rafraîchir les données
+  const { refetch } = useEvents();
 
-  const onSubmit = (data: EventFormData) => {
+  // Ajoutez ces états pour gérer le formulaire multi-étapes
+  const [formStep, setFormStep] = useState(1);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [createdEventId, setCreatedEventId] = useState<number | null>(null);
+
+  // Fonction pour sélectionner une image depuis la galerie
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [16, 9],
+      quality: 0.8,
+    });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setSelectedImage(result.assets[0].uri);
+    }
+  };
+
+  // Première étape: création de l'événement
+  const onSubmitStep1 = (data: EventFormData) => {
     if (!newMarkerLocation) return;
 
     createEvent(
@@ -147,41 +178,148 @@ export default function MapScreen() {
         },
       },
       {
-        onSuccess: () => {
-          // Réinitialiser le formulaire après création réussie
-          form.reset();
-
-          // Fermer le bottom sheet et revenir à l'état précédent
-          bottomSheetRef.current?.snapToIndex(1);
-
-          // Réinitialiser l'état de création - maintenant via le store global
-          setIsCreatingMode(false);
-          setNewMarkerLocation(null);
-          setShowCreateNotif(true);
+        onSuccess: (response) => {
+          console.log('Événement créé avec succès:', response);
+          // Stocker l'ID de l'événement créé pour l'upload de l'image
+          setCreatedEventId(response.id);
+          // Passer à l'étape suivante
+          setFormStep(2);
         },
       }
     );
   };
 
+  // Deuxième étape: upload de l'image
+  // Dans votre fonction onSubmitStep2
+  const onSubmitStep2 = () => {
+    if (!selectedImage || !createdEventId) return;
+
+    console.log("Tentative d'upload avec:", {
+      uri: selectedImage,
+      filableId: createdEventId,
+      filableType: FileType.Event,
+      filableTypeString: FileType.Event.toString(),
+      filableTypeValue: FileType.Event === 'event' ? 'Égal à event' : 'Différent de event',
+    });
+
+    uploadImage(
+      {
+        uri: selectedImage,
+        filableId: createdEventId,
+        filableType: FileType.Event,
+      },
+      {
+        onSuccess: () => {
+          // Réinitialiser le formulaire après upload réussi
+          form.reset();
+          setSelectedImage(null);
+          setCreatedEventId(null);
+          setFormStep(1);
+
+          // Fermer le bottom sheet et revenir à l'état précédent
+          bottomSheetRef.current?.snapToIndex(1);
+
+          // Réinitialiser l'état de création
+          setIsCreatingMode(false);
+          setNewMarkerLocation(null);
+          setShowCreateNotif(true);
+
+          // Rafraîchir la liste des événements pour afficher la nouvelle image
+          refetch();
+        },
+        onError: (error: unknown) => {
+          console.error("Erreur lors de l'upload de l'image:", error);
+          // Vous pouvez ajouter un toast ou une notification d'erreur ici
+        },
+      }
+    );
+  };
+
+  // Fonction pour annuler et revenir à l'étape précédente
+  const handleCancel = () => {
+    if (formStep === 2) {
+      setFormStep(1);
+    } else {
+      // Annuler complètement
+      form.reset();
+      setSelectedImage(null);
+      setCreatedEventId(null);
+      setFormStep(1);
+      bottomSheetRef.current?.snapToIndex(1);
+      setIsCreatingMode(false);
+      setNewMarkerLocation(null);
+      setShowCreateNotif(true);
+    }
+  };
+
+  // Modifiez la fonction renderBottomSheetContent pour afficher différentes étapes
   const renderBottomSheetContent = () => {
     if (isCreatingMode) {
-      return (
-        <ScrollView>
-          <H4>Créer un événement</H4>
-          <Form form={form} onSubmit={onSubmit}>
+      if (formStep === 1) {
+        // Première étape: formulaire de création d'événement
+        return (
+          <ScrollView>
+            <H4>Créer un événement</H4>
+            <Form form={form} onSubmit={onSubmitStep1}>
+              <YStack gap={12} marginTop={24}>
+                <InputGenerator
+                  configs={EVENT_INPUT_CONFIGS}
+                  control={control}
+                  defaultValues={form.getValues()}
+                />
+                <Button
+                  size="lg"
+                  onPress={form.handleSubmit(onSubmitStep1)}
+                  disabled={isCreatingEventPending}
+                >
+                  {isCreatingEventPending ? 'Création...' : 'Suivant'}
+                </Button>
+                <Button variant="outline" size="lg" onPress={handleCancel}>
+                  Annuler
+                </Button>
+              </YStack>
+            </Form>
+          </ScrollView>
+        );
+      } else {
+        // Deuxième étape: upload d'image
+        return (
+          <ScrollView>
+            <H4>Ajouter une image</H4>
             <YStack gap={12} marginTop={24}>
-              <InputGenerator
-                configs={EVENT_INPUT_CONFIGS}
-                control={control}
-                defaultValues={form.getValues()}
-              />
-              <Button size="lg" onPress={form.handleSubmit(onSubmit)} disabled={isPending}>
-                {isPending ? 'Création...' : 'Créer'}
+              {selectedImage ? (
+                <Image
+                  source={{ uri: selectedImage }}
+                  style={styles.previewImage}
+                  contentFit="cover"
+                />
+              ) : (
+                <View style={styles.imagePlaceholder} alignItems="center" justifyContent="center">
+                  <Text color="$gray10">Aucune image sélectionnée</Text>
+                </View>
+              )}
+
+              <Button size="lg" onPress={pickImage} marginTop={12}>
+                {selectedImage ? "Changer l'image" : 'Sélectionner une image'}
               </Button>
+
+              <XStack gap={12} marginTop={12}>
+                <Button variant="outline" size="lg" onPress={handleCancel} flex={1}>
+                  Retour
+                </Button>
+                <Button
+                  size="lg"
+                  onPress={onSubmitStep2}
+                  disabled={!selectedImage || isUploadingPending}
+                  flex={1}
+                >
+                  {isUploadingPending ? 'Envoi...' : 'Terminer'}
+                </Button>
+              </XStack>
             </YStack>
-          </Form>
-        </ScrollView>
-      );
+          </ScrollView>
+        );
+      }
     }
 
     return selectedEvent ? (
@@ -295,5 +433,16 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
+  },
+  previewImage: {
+    width: '100%',
+    height: 200,
+    borderRadius: 8,
+  },
+  imagePlaceholder: {
+    width: '100%',
+    height: 200,
+    backgroundColor: '$gray3',
+    borderRadius: 8,
   },
 });
