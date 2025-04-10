@@ -35,7 +35,7 @@ export const SearchFilter = ({
           : 'Rechercher';
 
   return (
-    <YStack space="$3">
+    <YStack space="$3" marginHorizontal={16}>
       <Input
         placeholder={placeholder}
         size="lg"
@@ -43,7 +43,7 @@ export const SearchFilter = ({
         onChangeText={setSearchTerm}
         onSubmitEditing={handleSearchSubmit}
         returnKeyType="search"
-        icon={<Octicons name="search" size={20} color="$borderMuted" />}
+        icon={<Octicons name="search" size={20} color="#828282" />}
       />
 
       <XStack space="$2">

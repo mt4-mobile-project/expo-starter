@@ -91,7 +91,8 @@ export function CustomBottomSheet({
 const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
-    paddingHorizontal: 12,
+    paddingHorizontal: 0, // Remove horizontal padding
+    marginHorizontal: 0, // Remove horizontal margin
   },
   floatingButton: {
     position: 'absolute',
