@@ -1,7 +1,7 @@
 import { StyleSheet, ActivityIndicator, Keyboard } from 'react-native';
 import MapView from 'react-native-maps';
-import { View, ScrollView } from 'tamagui';
-import { useEffect, useRef, useState } from 'react';
+import { View, ScrollView, XStack } from 'tamagui';
+import { useRef, useState } from 'react';
 import { useLocation } from '@/hooks/maps/useLocation';
 import { useEvents } from '@/hooks/events/useEvents';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -14,6 +14,7 @@ import { EventCard } from '@/components/molecules/event-card/event-card';
 import { Event } from '@/types/events';
 import { SearchFilter } from '@/components/molecules/search-filter/search-filter';
 import { useEventFilterStore } from '@/store/eventFilterStore';
+import { Text } from '@/components/atoms/typography/text';
 
 export default function MapScreen() {
   const mapRef = useRef<MapView | null>(null);
@@ -95,29 +96,52 @@ export default function MapScreen() {
         {isLoading ? (
           <ActivityIndicator size="large" color="#0000ff" />
         ) : (
-          <MapView
-            ref={mapRef}
-            style={styles.map}
-            initialRegion={{
-              latitude: 48.8566,
-              longitude: 2.3522,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
-            showsUserLocation={true}
-            showsMyLocationButton={true}
-            followsUserLocation={true}
-            onPress={handleMapPress}
-          >
-            <MapMarkers
-              events={filteredEvents}
-              selectedEvent={selectedEvent}
-              userLocation={location}
-              onMarkerPress={handleMarkerPress}
-              newMarkerLocation={newMarkerLocation}
-              isCreatingMode={isCreatingMode}
-            />
-          </MapView>
+          <>
+            {isCreatingMode && (
+              <XStack
+                position="absolute"
+                top={60}
+                zIndex={1000}
+                width="100%"
+                justifyContent="center"
+                paddingHorizontal="$4"
+              >
+                <XStack
+                  backgroundColor="$destructive"
+                  paddingVertical="$2"
+                  paddingHorizontal="$4"
+                  borderRadius={8}
+                >
+                  <Text size="lg" color="white" textAlign="center">
+                    Cliquer sur la map pour créer un événement
+                  </Text>
+                </XStack>
+              </XStack>
+            )}
+            <MapView
+              ref={mapRef}
+              style={styles.map}
+              initialRegion={{
+                latitude: 48.8566,
+                longitude: 2.3522,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+              showsUserLocation={true}
+              showsMyLocationButton={true}
+              followsUserLocation={true}
+              onPress={handleMapPress}
+            >
+              <MapMarkers
+                events={filteredEvents}
+                selectedEvent={selectedEvent}
+                userLocation={location}
+                onMarkerPress={handleMarkerPress}
+                newMarkerLocation={newMarkerLocation}
+                isCreatingMode={isCreatingMode}
+              />
+            </MapView>
+          </>
         )}
 
         {/* Search and filter component with absolute positioning */}
