@@ -30,7 +30,7 @@ export const EventCreationForm = ({ bottomSheetRef }: EventCreationFormProps) =>
 
   if (formStep === 1) {
     return (
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 12 }}>
         <H4>Créer un événement</H4>
         <Form form={form} onSubmit={onSubmitStep1}>
           <YStack gap={12} marginTop={24}>
@@ -55,25 +55,34 @@ export const EventCreationForm = ({ bottomSheetRef }: EventCreationFormProps) =>
     );
   } else {
     return (
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
         <H4>Ajouter une image</H4>
         <YStack gap={12} marginTop={24}>
           {selectedImage ? (
             <Image source={{ uri: selectedImage }} style={styles.previewImage} contentFit="cover" />
           ) : (
-            <View style={styles.imagePlaceholder} alignItems="center" justifyContent="center">
+            <View
+              width="100%"
+              height={200}
+              backgroundColor="$muted"
+              borderRadius={8}
+              borderWidth={1}
+              borderColor="$border"
+              alignItems="center"
+              justifyContent="center"
+            >
               <Text color="$gray10">Aucune image sélectionnée</Text>
             </View>
           )}
 
-          <Button size="lg" onPress={pickImage} marginTop={12}>
+          <Button variant="outline" size="lg" onPress={pickImage} marginTop={12}>
             {selectedImage ? "Changer l'image" : 'Sélectionner une image'}
           </Button>
 
           <XStack gap={12} marginTop={12}>
-            <Button variant="outline" size="lg" onPress={handleCancel} flex={1}>
+            {/* <Button variant="outline" size="lg" onPress={handleCancel} flex={1}>
               Retour
-            </Button>
+            </Button> */}
             <Button
               size="lg"
               onPress={onSubmitStep2}
@@ -98,7 +107,9 @@ const styles = StyleSheet.create({
   imagePlaceholder: {
     width: '100%',
     height: 200,
-    backgroundColor: '$gray3',
+    backgroundColor: '$muted',
     borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '$border',
   },
 });
