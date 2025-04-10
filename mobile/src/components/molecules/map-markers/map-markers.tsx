@@ -6,6 +6,8 @@ interface MapMarkersProps {
   selectedEvent: Event | null;
   userLocation: { latitude: number; longitude: number };
   onMarkerPress: (event: Event) => void;
+  newMarkerLocation: { latitude: number; longitude: number } | null;
+  isCreatingMode: boolean;
 }
 
 export const MapMarkers = ({
@@ -13,6 +15,8 @@ export const MapMarkers = ({
   selectedEvent,
   userLocation,
   onMarkerPress,
+  newMarkerLocation,
+  isCreatingMode,
 }: MapMarkersProps) => {
   return (
     <>
@@ -36,6 +40,10 @@ export const MapMarkers = ({
           onPress={() => onMarkerPress(event)}
         />
       ))}
+
+      {isCreatingMode && newMarkerLocation && (
+        <Marker coordinate={newMarkerLocation} title="Nouvel événement" pinColor="red" />
+      )}
     </>
   );
 };

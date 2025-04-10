@@ -29,30 +29,30 @@ export default function MapScreen() {
   });
 
   const [currentSnapIndex, setCurrentSnapIndex] = useState(1);
+  const [isCreatingMode, setIsCreatingMode] = useState(false);
+  const [newMarkerLocation, setNewMarkerLocation] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
 
-  // Get filter state and methods from the store
+  // Add event filter store
   const { searchTerm, setSearchTerm, activeFilter, setActiveFilter, getFilteredEvents } =
     useEventFilterStore();
 
-  // Filter events based on search criteria
+  // Get filtered events
   const filteredEvents = getFilteredEvents(events);
 
-  // Ajout de useEffect pour centrer la carte sur l'événement sélectionné
-  useEffect(() => {
-    if (selectedEvent && mapRef.current) {
-      mapRef.current.animateToRegion(
-        {
-          latitude: selectedEvent.address.latitude,
-          longitude: selectedEvent.address.longitude,
-          latitudeDelta: 0.005,
-          longitudeDelta: 0.005,
-        },
-        500
-      );
+  // Update handleMapPress to include event type
+  const handleMapPress = (e: {
+    nativeEvent: { coordinate: { latitude: number; longitude: number } };
+  }) => {
+    if (isCreatingMode) {
+      const { latitude, longitude } = e.nativeEvent.coordinate;
+      setNewMarkerLocation({ latitude, longitude });
+      bottomSheetRef.current?.snapToIndex(2);
+      return;
     }
-  }, [selectedEvent]);
 
-  const handleMapPress = () => {
     if (currentSnapIndex === 2 || currentSnapIndex === 3) {
       bottomSheetRef.current?.snapToIndex(1);
       setCurrentSnapIndex(1);
@@ -114,6 +114,8 @@ export default function MapScreen() {
               selectedEvent={selectedEvent}
               userLocation={location}
               onMarkerPress={handleMarkerPress}
+              newMarkerLocation={newMarkerLocation}
+              isCreatingMode={isCreatingMode}
             />
           </MapView>
         )}
@@ -128,6 +130,7 @@ export default function MapScreen() {
           initialIndex={selectedEvent ? 2 : 1}
           onClose={handleClose}
           showCloseButton={!!selectedEvent}
+          onCreateModeChange={setIsCreatingMode}
         >
           {selectedEvent ? (
             <EventDetails event={selectedEvent} />
