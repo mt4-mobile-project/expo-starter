@@ -20,7 +20,7 @@ export default function HomeScreen() {
     const tryLogin = async () => {
       try {
         const credentials = {
-          username: 'string',
+          email: 'string',
           password: 'string',
         };
         await login(credentials);

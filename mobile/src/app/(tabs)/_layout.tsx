@@ -25,7 +25,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="profil"
+        name="edit-profil"
         options={{
           title: 'Profil',
           tabBarLabel: 'Profil',

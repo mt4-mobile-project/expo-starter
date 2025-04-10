@@ -9,7 +9,7 @@ export const useCheckAuth = () => {
   useEffect(() => {
     const checkAuth = async () => {
       const token = await asyncStorageToken.get();
-      
+
       if (!token && !isAuthPage) {
         router.replace('/auth/login');
       } else if (token && isAuthPage) {

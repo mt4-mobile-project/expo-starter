@@ -4,6 +4,7 @@ import { Control, Controller, FieldValues, Path, DefaultValues } from 'react-hoo
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export interface BaseInputConfig {
+  onChange?: (value: string) => void;
   name: string;
   placeholder: string;
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
@@ -11,6 +12,7 @@ export interface BaseInputConfig {
   keyboardType?: 'default' | 'email-address' | 'phone-pad';
   autoCapitalize?: 'none' | 'sentences';
   secureTextEntry?: boolean;
+  maxLength?: number;
   validation?: {
     required?: string;
     minLength?: { value: number; message: string };
@@ -19,7 +21,7 @@ export interface BaseInputConfig {
 }
 
 interface InputGeneratorProps<T extends FieldValues> {
-  control: Control<T>; // Add control prop
+  control: Control<T>;
   configs: BaseInputConfig[];
   defaultValues: DefaultValues<T>;
 }
@@ -27,7 +29,7 @@ interface InputGeneratorProps<T extends FieldValues> {
 export function InputGenerator<T extends FieldValues>({
   configs,
   defaultValues,
-  control, 
+  control,
 }: InputGeneratorProps<T>) {
   return (
     <YStack space="$4" width="100%">
@@ -40,10 +42,14 @@ export function InputGenerator<T extends FieldValues>({
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <Input
               placeholder={config.placeholder}
-              icon={<MaterialCommunityIcons name={config.icon} size={20} color="#aaa"/>}
+              icon={<MaterialCommunityIcons name={config.icon} size={20} color="#aaa" />}
               variant={config.variant}
               value={value}
-              onChangeText={onChange}
+              onChangeText={(text: any) => {
+                onChange(text);
+                config.onChange?.(text);
+              }}
+              maxLength={config.maxLength}
               keyboardType={config.keyboardType}
               autoCapitalize={config.autoCapitalize}
               secureTextEntry={config.secureTextEntry}

@@ -7,7 +7,7 @@ import { LabelButton } from '@/components/atoms/buttons/label-button';
 import { Link } from 'expo-router';
 import { Text } from '@/components/atoms/typography/text';
 import { RegisterCredentials } from '@/types/register';
-import { useRegister } from '@/hooks/useRegister';
+import { useRegister } from '@/hooks/auth/useRegister';
 
 export default function RegisterScreen() {
   const form = useForm<RegisterCredentials>({
@@ -30,11 +30,13 @@ export default function RegisterScreen() {
       flex={1}
       backgroundColor="$background"
       padding="$4"
-      gap="$8"	
+      gap="$8"
       justifyContent="center"
       alignItems="center"
-    >      
-      <Text size="xl" weight="bold">Créer un nouveau compte</Text>
+    >
+      <Text size="xl" weight="bold">
+        Créer un nouveau compte
+      </Text>
       <InputGenerator<RegisterCredentials>
         configs={REGISTER_INPUT_CONFIGS}
         control={form.control}
@@ -50,7 +52,7 @@ export default function RegisterScreen() {
       >
         <Text>S'inscrire</Text>
       </Button>
-      
+
       <Link href="/auth/login" asChild>
         <LabelButton variant="primary" size="md" marginTop="$4">
           <Text>Déjà un compte ? Se connecter</Text>
