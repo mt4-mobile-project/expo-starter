@@ -4,9 +4,10 @@ import { StyleSheet } from 'react-native';
 import { XStack } from 'tamagui';
 import { IconButton } from '@/components/atoms/buttons/icon-button';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { H4 } from '@/components/atoms/typography/heading';
 
 interface CustomBottomSheetProps {
-  // title: string;
+  title?: string;
   children: ReactNode;
   snapPoints?: string[];
   initialIndex?: number;
@@ -17,9 +18,9 @@ interface CustomBottomSheetProps {
 }
 
 export function CustomBottomSheet({
-  // title,
+  title,
   children,
-  snapPoints = ['5%', '25%', '50%', '90%'],
+  snapPoints = ['5%', '35%', '50%', '90%'],
   initialIndex = 1,
   onChange,
   bottomSheetRef,
@@ -36,10 +37,10 @@ export function CustomBottomSheet({
     >
       <BottomSheetView style={styles.contentContainer}>
         <XStack justifyContent="space-between" alignItems="center" marginBottom="$4">
-          {/* <H4>{title}</H4> */}
+          {title && <H4>{title}</H4>}
           {showCloseButton && (
             <IconButton variant="bottomless" onPress={onClose}>
-              <MaterialIcons name="close" size={24} color="$borerMuted" />
+              <MaterialIcons name="close" size={24} color="black" />
             </IconButton>
           )}
         </XStack>

@@ -121,7 +121,7 @@ export default function MapScreen() {
         {/* Search and filter component with absolute positioning */}
 
         <CustomBottomSheet
-          // title={selectedEvent ? selectedEvent.name : 'Événements à proximité'}
+          title={selectedEvent?.name} // Only show title for selected event
           bottomSheetRef={bottomSheetRef}
           onChange={onBottomSheetChange}
           snapPoints={['5%', '25%', '50%', '90%']}
