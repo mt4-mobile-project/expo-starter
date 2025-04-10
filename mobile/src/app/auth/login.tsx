@@ -6,14 +6,14 @@ import { InputGenerator } from '@/utils/generator/input-generator';
 import { LOGIN_INPUT_CONFIGS } from '@/configs/inputs/login-input.config';
 import { LoginCredentials } from '@/types/login';
 import { Button } from '@/components/atoms/buttons/button';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/auth/useAuth';
 import { LabelButton } from '@/components/atoms/buttons/label-button';
 import { Link } from 'expo-router';
 
 export default function LoginScreen() {
   const form = useForm<LoginCredentials>({
     defaultValues: {
-      username: '',
+      email: '',
       password: '',
     },
   });
@@ -33,8 +33,9 @@ export default function LoginScreen() {
       alignItems="center"
       gap="$8"
     >
-  
-        <Text size="xl" weight="bold">Connectez-vous à votre compte</Text>
+      <Text size="xl" weight="bold">
+        Connectez-vous à votre compte
+      </Text>
 
       <Form form={form} onSubmit={handleSubmit}>
         <YStack space="$4" width="100%">
@@ -51,7 +52,7 @@ export default function LoginScreen() {
           >
             Se connecter
           </Button>
-          
+
           <Link href="/auth/register" asChild>
             <LabelButton variant="primary" size="md">
               Pas encore de compte ? S'inscrire

@@ -15,7 +15,7 @@ import { API_URL } from '@/utils/api';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { asyncStorageToken } from '@/utils/asyncStorageToken';
-import { useCheckAuth } from '@/hooks/useCheckAuth';
+import { useCheckAuth } from '@/hooks/auth/useCheckAuth';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -100,6 +100,7 @@ export default function RootLayout() {
               <Stack.Screen name="auth/register"             screenOptions={{
               headerShown: false 
             }}/>
+             <Stack.Screen name="/create-profile" options={{ title: 'Créer votre profil' }} />
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen name="+not-found" />
             </Stack>

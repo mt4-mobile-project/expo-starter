@@ -14,9 +14,9 @@ export const verifyToken = async (): Promise<boolean> => {
   try {
     const token = await asyncStorageToken.get();
     if (!token) return false;
-    
+
     // Appel à votre endpoint de vérification de token
-    await api.get('/users/me' );
+    await api.get('/users/me');
     return true;
   } catch (error) {
     await asyncStorageToken.remove(); // Supprime le token invalide

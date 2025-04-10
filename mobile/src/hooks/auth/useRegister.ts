@@ -7,8 +7,8 @@ export const useRegister = () => {
   const registerMutation = useMutation({
     mutationFn: (data: RegisterCredentials) => register(data),
     onSuccess: () => {
-    router.replace('/auth/login'); 
-    console.log('Registration successful');
+      router.replace('/auth/login');
+      console.log('Registration successful');
     },
     onError: (error: any) => {
       console.error('Registration failed:', error);
