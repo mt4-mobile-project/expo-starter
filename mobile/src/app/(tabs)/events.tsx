@@ -1,85 +1,35 @@
-import { Text, View, ScrollView } from 'tamagui';
-import { Keyboard } from 'react-native';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Input } from '@/components/atoms/inputs/input';
-import { Button } from '@/components/atoms/buttons/button';
+import { View } from 'tamagui';
 import { useMyEvents } from '@/hooks/events/useMyEvents';
-import { EventCard } from '@/components/molecules/cards/event-card';
-import { useEventFilters } from '@/hooks/events/useEventFilters';
-import { useEffect } from 'react';
+import { useState } from 'react';
+import { EventListContent } from '@/components/organisms/lists/event-list-content';
+import type { Event } from '@/types/events';
+import { Text } from '@/components/atoms/typography/text';
 
-export default function HomeScreen() {
+export default function EventsScreen() {
   const { data: events, isLoading, error } = useMyEvents();
-  const { searchTerm, setSearchTerm, activeFilter, setActiveFilter, filteredEvents } =
-    useEventFilters(events || []);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
-  const handleSearchSubmit = () => {
-    Keyboard.dismiss();
-  };
-
-  // Determine the placeholder based on the active filter
-  const placeholder =
-    activeFilter === 'title'
-      ? 'Rechercher par titre'
-      : activeFilter === 'date'
-        ? '(YYYY-MM-DD)'
-        : activeFilter === 'address'
-          ? 'Rechercher par adresse'
-          : 'Rechercher';
-
-  useEffect(() => {
-    console.log('filteredEvents', filteredEvents[1]);
-  }, [filteredEvents]);
+  if (isLoading)
+    return (
+      <View backgroundColor="$background">
+        <Text>Chargement des événements...</Text>
+      </View>
+    );
+  if (error)
+    return (
+      <View backgroundColor="$background">
+        <Text>Erreur lors du chargement.</Text>
+      </View>
+    );
 
   return (
-    <ScrollView>
-      <View flex={1} backgroundColor="$background" padding="$4" gap="$4">
-        <Input
-          placeholder={placeholder}
-          variant="outline"
-          size="lg"
-          value={searchTerm}
-          onChangeText={setSearchTerm}
-          onSubmitEditing={handleSearchSubmit}
-          returnKeyType="search"
-          icon={<FontAwesome name="search" size={18} color="#aaa" />}
-        />
-
-        {/* Filter buttons */}
-        <View flexDirection="row" gap="$2">
-          <Button
-            variant={activeFilter === 'title' ? 'secondary' : 'outline'}
-            onPress={() => setActiveFilter('title')}
-          >
-            Par titre
-          </Button>
-          <Button
-            variant={activeFilter === 'date' ? 'secondary' : 'outline'}
-            onPress={() => setActiveFilter('date')}
-          >
-            Par date
-          </Button>
-          <Button
-            variant={activeFilter === 'address' ? 'secondary' : 'outline'}
-            onPress={() => setActiveFilter('address')}
-          >
-            Par adresse
-          </Button>
-        </View>
-
-        {/* Results section */}
-        {isLoading && <Text>Chargement des événements...</Text>}
-        {error && <Text>Erreur lors du chargement.</Text>}
-        {filteredEvents.map((event) => (
-          <EventCard
-            key={event.id}
-            image={event.image || ''}
-            title={event.name}
-            address={`${event.address.street}, ${event.address.city}`}
-            datetime={event.start_date}
-          />
-        ))}
-      </View>
-    </ScrollView>
+    <View backgroundColor="$background" flex={1}>
+      <EventListContent
+        events={events || []}
+        selectedEvent={selectedEvent}
+        currentSnapIndex={0}
+        onEventCardPress={(event) => setSelectedEvent(event)}
+      />
+    </View>
   );
 }
