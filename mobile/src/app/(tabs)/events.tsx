@@ -3,15 +3,15 @@ import { Keyboard } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Input } from '@/components/atoms/inputs/input';
 import { Button } from '@/components/atoms/buttons/button';
-import { useEvents } from '@/hooks/events/useEvents';
+import { useMyEvents } from '@/hooks/events/useMyEvents';
 import { EventCard } from '@/components/molecules/cards/event-card';
 import { useEventFilters } from '@/hooks/events/useEventFilters';
 import { useEffect } from 'react';
 
 export default function HomeScreen() {
-  const { data: events, isLoading, error } = useEvents();
+  const { data: events, isLoading, error } = useMyEvents();
   const { searchTerm, setSearchTerm, activeFilter, setActiveFilter, filteredEvents } =
-    useEventFilters(events);
+    useEventFilters(events || []);
 
   const handleSearchSubmit = () => {
     Keyboard.dismiss();

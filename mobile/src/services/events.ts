@@ -24,7 +24,7 @@ export const createEvent = async (data: CreateEventDTO): Promise<Event> => {
   return response;
 };
 
-export const getLoggedUserEvents = async (): Promise<Event[]> => {
-  const response = await api.get<Event[]>('/events/mes');
+export const getMyEvents = async (): Promise<Event[]> => {
+  const response = await api.get<Event[]>('/events/me');
   return response;
 };
