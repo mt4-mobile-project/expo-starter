@@ -1,4 +1,4 @@
-import { YStack } from 'tamagui';
+import { View, YStack } from 'tamagui';
 import { Text } from '@/components/atoms/typography/text';
 import { Event } from '@/types/events';
 import { Image } from 'expo-image';
@@ -29,6 +29,10 @@ export const EventDetailsCard = ({ event }: EventDetailsProps) => {
           </Text>
         </YStack>
       </YStack>
+      <View borderBottomWidth={1} borderBottomColor="$secondary" marginVertical="$1" />
+      <Text fontSize={14} color="#cardForeground" opacity={0.7}>
+        {event.description}
+      </Text>
       <Image
         style={styles.image}
         source={typeof imageUrl === 'string' ? { uri: imageUrl } : imageUrl}
