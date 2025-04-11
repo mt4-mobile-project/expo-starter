@@ -24,15 +24,16 @@ export const UserCard = ({
   return (
     <XStack
       padding="$3"
-      borderBottomWidth={1}
-      borderColor="#333"
-      alignItems="center"
-      backgroundColor="#1c1c1e"
+      // borderBottomWidth={1}
+      // borderColor="#333"
+      // alignItems="center"
+      backgroundColor="$muted"
+      borderRadius={8}
     >
       <StyledImage source={{ uri: imageUrl }} />
 
       <YStack marginLeft="$3" justifyContent="center" flex={1}>
-        <Text fontWeight="600" fontSize={16} color="white">
+        <Text fontWeight="600" fontSize={16} color="$cardForeground">
           {name}
         </Text>
         <Text fontSize={14} color="#aaa">
