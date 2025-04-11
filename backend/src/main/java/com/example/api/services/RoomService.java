@@ -1,6 +1,9 @@
 package com.example.api.services;
 
+import com.example.api.dtos.MessageSummaryDto;
 import com.example.api.dtos.RoomDto;
+import com.example.api.dtos.RoomResponseDto;
+import com.example.api.dtos.UserSummaryDto;
 import com.example.api.entities.Room;
 import com.example.api.entities.User;
 import com.example.api.exceptions.ApiException;
@@ -10,7 +13,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import java.util.function.Function;
+import com.example.api.entities.Message;
+import com.example.api.repositories.MessageRepository;
+
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,8 +27,10 @@ import java.util.stream.Collectors;
 public class RoomService {
     private final RoomRepository roomRepository;
     private final RoomMapper roomMapper;
+    private final MessageRepository messageRepository;
 
-    public RoomService(RoomRepository roomRepository, RoomMapper roomMapper) {
+    public RoomService(RoomRepository roomRepository, RoomMapper roomMapper , MessageRepository messageRepository) {
+        this.messageRepository = messageRepository;
         this.roomRepository = roomRepository;
         this.roomMapper = roomMapper;
     }
@@ -37,12 +47,35 @@ public class RoomService {
         return roomMapper.toDto(room);
     }
 
-    public List<RoomDto> getRoomsByUserId(Integer userId) {
-        return roomRepository.findByUser1IdOrUser2Id(userId, userId)
-                .stream()
-                .map(roomMapper::toDto)
-                .collect(Collectors.toList());
+    public List<RoomResponseDto> getRoomsForUser(Integer userId) {
+        List<Room> rooms = roomRepository.findByUser1IdOrUser2Id(userId, userId);
+    
+        return rooms.stream()
+            .map((Function<Room, RoomResponseDto>) room -> {
+                User otherUser = room.getUser1().getId().equals(userId)
+                    ? room.getUser2()
+                    : room.getUser1();
+    
+                Message lastMessage = messageRepository.findTopByRoomOrderByCreatedAtDesc(room);
+    
+                return new RoomResponseDto()
+                    .setId(room.getId())
+                    .setParticipant(new UserSummaryDto()
+                        .setId(otherUser.getId())
+                        .setName(otherUser.getUsername())
+                    )
+                    .setLastMessage(lastMessage != null
+                        ? new MessageSummaryDto()
+                            .setContent(lastMessage.getContent())
+                            .setSentAt(lastMessage.getCreatedAt())
+                            .setSenderId(lastMessage.getUser().getId())
+                        : null
+                    );
+            })
+            .collect(Collectors.toList());
     }
+    
+
 
     @Transactional
     public RoomDto createRoom(RoomDto roomDto) {

@@ -1,6 +1,7 @@
 package com.example.api.repositories;
 
 import com.example.api.entities.Message;
+import com.example.api.entities.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -19,4 +20,7 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 
     @Query("SELECT COUNT(m) FROM Message m WHERE m.room.id = :roomId AND m.user.id != :userId AND m.isRead = false")
     int countUnreadMessagesForUserAndRoom(@Param("userId") Integer userId, @Param("roomId") Integer roomId);
+
+    Message findTopByRoomOrderByCreatedAtDesc(Room room);
+
 }
