@@ -43,7 +43,7 @@ export default function RootLayout() {
           console.log('No token found, cannot connect to WebSocket');
           return;
         }
-        
+
         stompClient.current = new Client({
           webSocketFactory: () => new SockJS(`${API_URL}/ws`),
           reconnectDelay: 5000,
@@ -59,15 +59,15 @@ export default function RootLayout() {
             console.error('Détails:', frame.body);
           },
         });
-        
+
         stompClient.current.activate();
       } catch (error) {
         console.error('Error initializing WebSocket:', error);
       }
     }
-    
+
     initializeSocket();
-    
+
     return () => {
       if (stompClient.current) {
         stompClient.current.deactivate();
