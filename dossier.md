@@ -73,12 +73,6 @@ https://drawsql.app/teams/galacticos/diagrams/musicians-network/embed
 
 ---
 
-## 5. Extrait de code commenté
-
-### TODO
-
----
-
 ## 6. Un test développé
 
 Aucun test unitaire ou fonctionnel n’a été mis en place dans le projet.
@@ -119,6 +113,3 @@ ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook \
 - Ajout de la clé publique à GitHub via son **API REST**
 - Clonage du **repository privé** contenant le backend
 - Copie du fichier `.env` dans le bon répertoire
-
-
-### TODO
