@@ -65,6 +65,7 @@
   "devDependencies": {
     "@babel/core": "7.25.2",
     "@tanstack/react-query-devtools": "5.72.0",
+    "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.5.12",
     "@types/node": "22.14.0",
     "@types/react": "18.3.12",
