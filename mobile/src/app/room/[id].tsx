@@ -7,10 +7,12 @@ import Message from '@/components/molecules/messages/message';
 import { Input } from '@/components/atoms/inputs/input';
 import { IconButton } from '@/components/atoms/buttons/icon-button';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useMessagesRoom } from '@/hooks/messages/useMessages';
 
 export default function RoomScreen() {
   const { id } = useLocalSearchParams();
   const socket = useContext(SocketContext);
+  const { data: messagesRoom } = useMessagesRoom(Number(id));
   const [messages, setMessages] = useState<any>([]);
   const [message, setMessage] = useState<any>('');
   const [sender, setSender] = useState<any>(null);
@@ -46,6 +48,12 @@ export default function RoomScreen() {
       setMessage('');
     }
   }
+
+  useEffect(() => {
+    if (messagesRoom) {
+      setMessages(messagesRoom);
+    }
+  }, [messagesRoom]);
 
   useEffect(() => {
     if (!socket) return;

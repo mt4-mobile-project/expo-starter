@@ -24,7 +24,6 @@ const queryClient = new QueryClient();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [socket, setSocket] = useState<Client | null>(null);
-  const [token, setToken] = useState<string | null>(null);
   const [loaded] = useFonts({});
   useCheckAuth();
 
@@ -37,38 +36,43 @@ export default function RootLayout() {
   const stompClient = useRef<Client | null>(null);
 
   useEffect(() => {
-    async function fetchToken() {
-      const storedToken = await asyncStorageToken.get();
-      setToken(storedToken);
+    async function initializeSocket() {
+      try {
+        const token = await asyncStorageToken.get();
+        if (!token) {
+          console.log('No token found, cannot connect to WebSocket');
+          return;
+        }
+        
+        stompClient.current = new Client({
+          webSocketFactory: () => new SockJS(`${API_URL}/ws`),
+          reconnectDelay: 5000,
+          connectHeaders: {
+            Authorization: `Bearer ${token}`,
+          },
+          onConnect: () => {
+            console.log('Connecté au serveur WebSocket');
+            setSocket(stompClient.current);
+          },
+          onStompError: (frame) => {
+            console.error('❌ Erreur STOMP:', frame.headers['message']);
+            console.error('Détails:', frame.body);
+          },
+        });
+        
+        stompClient.current.activate();
+      } catch (error) {
+        console.error('Error initializing WebSocket:', error);
+      }
     }
-
-    fetchToken();
-
-    if (!token) return;
-
-    stompClient.current = new Client({
-      webSocketFactory: () => new SockJS(`${API_URL}/ws`),
-      reconnectDelay: 5000,
-      connectHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
-      onConnect: () => {
-        console.log('Connecté au serveur WebSocket');
-
-        setSocket(stompClient.current);
-      },
-      onStompError: (frame) => {
-        console.error('❌ Erreur STOMP:', frame.headers['message']);
-        console.error('Détails:', frame.body);
-      },
-    });
-
-    stompClient.current.activate();
-
+    
+    initializeSocket();
+    
     return () => {
-      stompClient.current?.deactivate();
+      if (stompClient.current) {
+        stompClient.current.deactivate();
+      }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!loaded) return null;
