@@ -43,6 +43,14 @@ public class RoomController {
         return ResponseEntity.ok(roomService.createRoom(roomDto));
     }
 
+    @GetMapping("/between/{user1Id}/{user2Id}")
+    public ResponseEntity<RoomDto> getRoomByUser1IdAndUser2Id(
+            @PathVariable Integer user1Id,
+            @PathVariable Integer user2Id
+    ) {
+        return ResponseEntity.ok(roomService.getRoomByUser1IdAndUser2Id(user1Id, user2Id));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRoom(
             @PathVariable Integer id

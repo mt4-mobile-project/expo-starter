@@ -74,8 +74,14 @@ public class RoomService {
             })
             .collect(Collectors.toList());
     }
-    
 
+    public List<RoomDto> getRoomByUser1IdAndUser2Id(Integer user1Id, Integer user2Id) {
+        Room room = roomRepository.findByUser1IdAndUser2Id(user1Id, user2Id);
+        if (room == null) {
+            return List.of();
+        }
+        return List.of(roomMapper.toDto(room));
+    }
 
     @Transactional
     public RoomDto createRoom(RoomDto roomDto) {
