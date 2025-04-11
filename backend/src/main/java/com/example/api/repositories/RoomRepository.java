@@ -14,4 +14,7 @@ public interface RoomRepository extends CrudRepository<Room, Integer> {
 
     @Query("SELECT r FROM Room r WHERE r.user1.id = :userId OR r.user2.id = :userId")
     List<Room> findByUser1IdOrUser2Id(@Param("userId") Integer userId, @Param("userId") Integer sameUserId);
+
+    @Query("SELECT r FROM Room r WHERE (r.user1.id = :user1Id AND r.user2.id = :user2Id) OR (r.user1.id = :user2Id AND r.user2.id = :user1Id)")
+    Room findByUser1IdAndUser2Id(@Param("user1Id") Integer user1Id, @Param("user2Id") Integer user2Id);
 }
