@@ -8,7 +8,7 @@ interface ProfileImageProps {
   borderRadius?: number;
   borderWidth?: number;
   borderColor?: string;
-  source?: string;
+  source: string;
   onPress?: () => void;
 }
 
@@ -18,7 +18,7 @@ export default function ProfileImage({
   borderRadius = 50,
   borderWidth = 2,
   borderColor = 'transparent',
-  source = 'https://picsum.photos/200',
+  source,
   onPress,
 }: ProfileImageProps) {
   const styles = StyleSheet.create({
@@ -41,8 +41,15 @@ export default function ProfileImage({
 
   return (
     <TouchableOpacity onPress={onPress}>
-      <Image style={styles.image} source={source} contentFit="cover" transition={1000} />
-      <MaterialCommunityIcons name="pencil" size={20} color="black" style={styles.icon} />
+      <Image
+        style={styles.image}
+        source={{ uri: source.startsWith('data:') ? source : source }}
+        contentFit="cover"
+        transition={1000}
+      />
+      {onPress && (
+        <MaterialCommunityIcons name="pencil" size={20} color="black" style={styles.icon} />
+      )}
     </TouchableOpacity>
   );
 }

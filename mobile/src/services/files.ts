@@ -10,32 +10,25 @@ export const getFileImage = async (fileType: FileType, fileId: number): Promise<
       responseType: 'arraybuffer',
     });
 
-    // Convert ArrayBuffer to base64
+    // Convertir ArrayBuffer en base64
     const bytes = new Uint8Array(response);
     let binary = '';
     bytes.forEach((byte) => (binary += String.fromCharCode(byte)));
-    return btoa(binary);
+    const base64 = btoa(binary);
+
+    return `data:image/jpeg;base64,${base64}`;
   } catch (error) {
     console.warn(`Failed to fetch image for ${fileType} ${fileId}:`, error);
     return '';
   }
 };
 
-export interface UploadImageData {
-  file: File;
-  filable_type: string;
-  filable_id: number;
-}
-
-export const uploadImage = async (data: UploadImageData): Promise<void> => {
-  const formData = new FormData();
-  formData.append('file', data.file);
-  formData.append('filable_type', data.filable_type);
-  formData.append('filable_id', data.filable_id.toString());
-
-  await api.post('/files/upload', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+export const deleteFileImage = async (fileType: FileType, fileId: number): Promise<void> => {
+  try {
+    await api.delete(`/files/${fileType}/${fileId}`);
+    console.log('Image supprimée avec succès');
+  } catch (error) {
+    console.error("Erreur lors de la suppression de l'image:", error);
+    throw error;
+  }
 };

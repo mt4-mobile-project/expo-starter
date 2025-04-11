@@ -17,22 +17,6 @@ export default function HomeScreen() {
   const { data: users, isLoading, error } = useUsers(submittedSearchTerm);
 
   useEffect(() => {
-    const tryLogin = async () => {
-      try {
-        const credentials = {
-          email: 'string@gmail.com',
-          password: 'string',
-        };
-        await login(credentials);
-      } catch (error) {
-        console.error('Login failed:', error);
-      }
-    };
-
-    tryLogin();
-  }, [login]);
-
-  useEffect(() => {
     const fetchUser = async () => {
       try {
         const user = await getCurrentUser();
