@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Text, View } from 'tamagui';
-import { Keyboard } from 'react-native';
+import { Keyboard, ScrollView } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { getCurrentUser } from '@/services/user';
 import { useUsers } from '@/hooks/users/useUsers';
@@ -43,40 +43,44 @@ export default function HomeScreen() {
   };
 
   return (
-    <View flex={1} backgroundColor="$background" padding="$4" gap="$4">
-      <Input
-        placeholder="Rechercher"
-        variant="outline"
-        size="lg"
-        value={searchTerm}
-        onChangeText={setSearchTerm}
-        onSubmitEditing={handleSearchSubmit}
-        returnKeyType="search"
-        icon={<FontAwesome name="search" size={18} color="#aaa" />}
-      />
+    <View flex={1} backgroundColor="$background">
+      <ScrollView contentContainerStyle={{ padding: 16, gap: 16 }}>
+        <Input
+          placeholder="Rechercher"
+          variant="outline"
+          size="lg"
+          value={searchTerm}
+          onChangeText={setSearchTerm}
+          onSubmitEditing={handleSearchSubmit}
+          returnKeyType="search"
+          icon={<FontAwesome name="search" size={18} color="#aaa" />}
+        />
+  
+        {isLoading && <Text>Chargement des utilisateurs...</Text>}
+        {error && <Text>Erreur lors du chargement.</Text>}
+  
+        {users &&
+          users.length > 0 &&
+          users.map((user) => (
+            <UserCard
+              key={user.id}
+              imageUrl="https://picsum.photos/200"
+              name={user.first_name}
+              region="France"
+              status="En ligne"
+            />
+          ))}
+  
+        <Link
+          href={{
+            pathname: '/room/[id]',
+            params: { id: 1 },
+          }}
+        >
+          Go To first room
+        </Link>
 
-      {isLoading && <Text>Chargement des utilisateurs...</Text>}
-      {error && <Text>Erreur lors du chargement.</Text>}
-
-      {users &&
-        users.length > 0 &&
-        users.map((user) => (
-          <UserCard
-            key={user.id}
-            imageUrl="https://picsum.photos/200"
-            name={user.first_name}
-            region="France"
-            status="En ligne"
-          />
-        ))}
-      <Link
-        href={{
-          pathname: '/room/[id]',
-          params: { id: 1 },
-        }}
-      >
-        Go To first room
-      </Link>
+      </ScrollView>
     </View>
   );
-}
+} 
