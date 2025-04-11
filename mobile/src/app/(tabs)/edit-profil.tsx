@@ -10,7 +10,6 @@ import { PROFILE_INPUT_CONFIGS } from '@/configs/inputs/profile-input.config';
 import { Button } from '@/components/atoms/buttons/button';
 import { useEditProfile } from '@/hooks/profile/useEditProfile';
 import ProfileCard from '@/components/molecules/cards/profil-card';
-import * as ImagePicker from 'expo-image-picker';
 import ProfileImage from '@/components/atoms/profile-cards/profil-image';
 import { LogoutButton } from '@/components/atoms/buttons/logout-button';
 

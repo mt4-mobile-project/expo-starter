@@ -36,7 +36,7 @@ type ProfileFormData = z.infer<typeof profileSchema>;
 
 export default function ProfilScreen() {
   const [profileName, setProfileName] = useState('Nom de profil');
-  const { createProfile, isLoading, pickImage, tempImage } = useCreateProfile();
+  const { createProfile, pickImage, tempImage } = useCreateProfile();
 
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),

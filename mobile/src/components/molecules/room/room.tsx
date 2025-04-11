@@ -15,12 +15,7 @@ const StyledImage = styled(Image, {
   borderRadius: 30,
 });
 
-export const Room = ({
-  imageUrl,
-  name,
-  lastMessage,
-  lastMessageDate,
-}: RoomProps) => {
+export const Room = ({ imageUrl, name, lastMessage, lastMessageDate }: RoomProps) => {
   return (
     <XStack
       padding="$3"
