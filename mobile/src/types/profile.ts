@@ -1,5 +1,7 @@
 export interface ProfileResponse {
   id: number;
+export interface ProfileResponse {
+  id: number;
   username: string;
   description: string;
   instrument_played: string;
