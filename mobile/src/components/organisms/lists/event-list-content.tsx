@@ -29,7 +29,12 @@ export const EventListContent = ({
   };
 
   if (selectedEvent) {
-    return <EventDetailsCard event={selectedEvent} />;
+    return (
+      <EventDetailsCard
+        event={selectedEvent}
+        isJoined={events.some((event) => event.id === selectedEvent.id && event.isJoined)}
+      />
+    );
   }
 
   return (

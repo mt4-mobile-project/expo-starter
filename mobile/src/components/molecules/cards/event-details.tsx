@@ -8,9 +8,10 @@ import { Button } from '@/components/atoms/buttons/button';
 
 interface EventDetailsProps {
   event: Event;
+  isJoined?: boolean; // Make this optional
 }
 
-export const EventDetailsCard = ({ event }: EventDetailsProps) => {
+export const EventDetailsCard = ({ event, isJoined = false }: EventDetailsProps) => {
   const imageUrl = event.image
     ? `data:image/jpeg;base64,${event.image}`
     : require('@/assets/images/placeholder.png');
@@ -30,7 +31,7 @@ export const EventDetailsCard = ({ event }: EventDetailsProps) => {
           </Text>
         </YStack>
       </YStack>
-      <Button>Rejoindre</Button>
+      <Button disabled={isJoined}>{isJoined ? 'Déjà rejoint' : 'Rejoindre'}</Button>
       <Text fontSize={14} color="#cardForeground" opacity={0.7}>
         {event.description}
       </Text>
