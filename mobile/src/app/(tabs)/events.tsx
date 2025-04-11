@@ -1,9 +1,9 @@
 import { View } from 'tamagui';
-import { useState } from 'react';
-import { EventListContent } from '@/components/organisms/lists/event-list-content';
-import type { Event } from '@/types/events';
 import { Text } from '@/components/atoms/typography/text';
 import { useJoinedEvents } from '@/hooks/events/useJoinedEvents';
+import { useState } from 'react';
+import { EventListContent } from '@/components/organisms/lists/event-list-content';
+import { Event } from '@/types/events';
 
 export default function EventsScreen() {
   const { data: events, isLoading, error } = useJoinedEvents();
@@ -29,6 +29,7 @@ export default function EventsScreen() {
         selectedEvent={selectedEvent}
         currentSnapIndex={0}
         onEventCardPress={(event) => setSelectedEvent(event)}
+        onBackPress={() => setSelectedEvent(null)} // Add back button handler
       />
     </View>
   );
