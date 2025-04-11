@@ -7,6 +7,7 @@ import lombok.Data;
 @Builder
 public class ProfileResponseDto {
     private Integer id;
+    private String username;
     private String description;
     private String instrumentPlayed;
     private String musicalInfluence;

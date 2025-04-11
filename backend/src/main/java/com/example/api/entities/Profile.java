@@ -18,6 +18,9 @@ public class Profile {
     private Integer id;
 
     @Column(nullable = false)
+    private String username;
+
+    @Column(nullable = false)
     private String description;
 
     @Column(name = "instrument_played", nullable = false)

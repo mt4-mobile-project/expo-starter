@@ -1,88 +1,35 @@
 import { View } from 'tamagui';
-import { useForm } from 'react-hook-form';
-import { InputGenerator } from '@/utils/generator/input-generator';
-import { REGISTER_INPUT_CONFIGS } from '@/configs/inputs/register-input.config';
-import { Link } from 'expo-router';
-import { Button } from '@/components/atoms/buttons/button';
-
-interface RegisterFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
+import { useState } from 'react';
+import { EventListContent } from '@/components/organisms/lists/event-list-content';
+import type { Event } from '@/types/events';
+import { Text } from '@/components/atoms/typography/text';
+import { useJoinedEvents } from '@/hooks/events/useJoinedEvents';
 
 export default function EventsScreen() {
-  const form = useForm<RegisterFormData>({
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-    },
-  });
+  const { data: events, isLoading, error } = useJoinedEvents();
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
-  const handleRegister = (data: RegisterFormData) => {
-    console.log('Register data:', data);
-  };
+  if (isLoading)
+    return (
+      <View backgroundColor="$background">
+        <Text>Chargement des événements...</Text>
+      </View>
+    );
+  if (error)
+    return (
+      <View backgroundColor="$background">
+        <Text>Erreur lors du chargement.</Text>
+      </View>
+    );
 
   return (
-    <View
-      flex={1}
-      backgroundColor="$background"
-      padding="$4"
-      justifyContent="center"
-      alignItems="center"
-    >
-      <Link
-        href={{
-          pathname: '/event/[id]',
-          params: { id: 567890 },
-        }}
-      >
-        View event 567890 (id in params in href)
-      </Link>
-
-      <Link
-        href={{
-          pathname: '/event/[id]',
-          params: { id: 2 },
-        }}
-      >
-        View event 2 (id in params in href)
-      </Link>
-
-      <Link
-        href={{
-          pathname: '/event/[id]',
-          params: { id: 97661 },
-        }}
-      >
-        View event 97661 (id in params in href)
-      </Link>
-
-      <Link
-        href={{
-          pathname: '/vitoexample',
-        }}
-      >
-        View Vito example page
-      </Link>
-
-      <InputGenerator<RegisterFormData>
-        configs={REGISTER_INPUT_CONFIGS}
-        control={form.control}
-        defaultValues={form.getValues()}
+    <View backgroundColor="$background" flex={1} paddingTop={16}>
+      <EventListContent
+        events={events || []}
+        selectedEvent={selectedEvent}
+        currentSnapIndex={0}
+        onEventCardPress={(event) => setSelectedEvent(event)}
       />
-      <Button
-        variant="default"
-        size="lg"
-        onPress={form.handleSubmit(handleRegister)}
-        width="100%"
-        marginTop="$4"
-      >
-        Register
-      </Button>
     </View>
   );
 }

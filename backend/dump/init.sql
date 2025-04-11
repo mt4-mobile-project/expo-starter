@@ -3,7 +3,9 @@ USE `event-db`;
 
 CREATE TABLE IF NOT EXISTS `users` (
     `id` INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    `username` VARCHAR(255) UNIQUE NOT NULL,
+    `email` VARCHAR(255) UNIQUE NOT NULL,
+    `first_name` VARCHAR(255) NOT NULL,
+    `last_name` VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
     `is_online` BOOLEAN NOT NULL DEFAULT FALSE
 );
@@ -50,6 +52,7 @@ CREATE TABLE IF NOT EXISTS `event_participants` (
 
 CREATE TABLE IF NOT EXISTS `profiles` (
     `id` INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    `username` VARCHAR(50) NOT NULL,
     `description` TEXT NOT NULL,
     `instrument_played` VARCHAR(255) NOT NULL,
     `musical_influence` TEXT NOT NULL,

@@ -7,6 +7,7 @@ import lombok.Data;
 @Builder
 public class UserResponseDto {
     private Integer id;
-    private String username;
+    private String firstName;
+    private String lastName;
     private boolean isOnline;
 }

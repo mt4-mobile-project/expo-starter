@@ -123,10 +123,10 @@ export const tokens = createTokens({
     secondary: '#EEEEEE',
     secondaryForeground: '#262626',
 
-    muted: '#EEEEEE',
+    muted: '#F8F8F8',
     mutedForeground: '#737373',
 
-    accent: '#EEEEEE',
+    accent: '#F8F8F8',
     accentForeground: '#262626',
 
     destructive: '#EF4444',

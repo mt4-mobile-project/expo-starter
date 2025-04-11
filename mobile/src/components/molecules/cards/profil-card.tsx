@@ -2,7 +2,12 @@ import { View } from 'tamagui';
 import ProfileImage from '@/components/atoms/profile-cards/profil-image';
 import ProfileName from '@/components/atoms/profile-cards/profil-name';
 
-export default function ProfileCard() {
+interface ProfileCardProps {
+  profileName: string;
+  profileImage?: React.ReactNode;
+}
+
+export default function ProfileCard({ profileName, profileImage }: ProfileCardProps) {
   return (
     <View alignItems="center" justifyContent="center" padding="$4" borderRadius="$lg">
       <ProfileImage
@@ -14,7 +19,7 @@ export default function ProfileCard() {
       />
 
       <View marginTop="$4">
-        <ProfileName name="Nom de profil" />
+        <ProfileName name={profileName} /> {/* Utilise le nom de profil passé en prop */}
       </View>
     </View>
   );

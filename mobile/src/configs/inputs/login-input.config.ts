@@ -2,13 +2,18 @@ import { BaseInputConfig } from '@/utils/generator/input-generator';
 
 export const LOGIN_INPUT_CONFIGS: BaseInputConfig[] = [
   {
-    name: 'username',
-    placeholder: 'Username',
-    icon: 'account',
+    name: 'email',
+    placeholder: 'Email',
+    icon: 'email',
     variant: 'outline',
+    keyboardType: 'email-address',
     autoCapitalize: 'none',
     validation: {
-      required: 'Username is required',
+      required: "L'email est requis",
+      pattern: {
+        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+        message: 'Email invalide',
+      },
     },
   },
   {

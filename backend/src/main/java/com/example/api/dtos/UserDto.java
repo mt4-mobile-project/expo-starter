@@ -1,6 +1,7 @@
 package com.example.api.dtos;
 
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,8 +13,14 @@ public class UserDto {
     @JsonProperty(access = READ_ONLY)
     private Integer id;
 
-    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
-    private String username;
+    @Email(message = "Email should be valid")
+    private String email;
+
+    @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters")
+    private String firstName;
+
+    @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters")
+    private String lastName;
 
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;

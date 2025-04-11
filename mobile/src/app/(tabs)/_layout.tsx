@@ -25,7 +25,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="profil"
+        name="edit-profil"
         options={{
           title: 'Profil',
           tabBarLabel: 'Profil',
@@ -35,10 +35,19 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="temporary"
+        name="map"
         options={{
-          title: 'Temporary',
-          tabBarLabel: 'Temporary',
+          title: 'Map',
+          tabBarLabel: 'Map',
+          headerShown: false, // Add this line to hide the header
+          tabBarIcon: ({ color }: Color) => <MaterialIcons name="map" size={28} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="showcase"
+        options={{
+          title: 'Showcase',
+          tabBarLabel: 'Showcase',
           tabBarIcon: ({ color }: Color) => <MaterialIcons name="code" size={28} color={color} />,
         }}
       />
