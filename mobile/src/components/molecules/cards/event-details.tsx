@@ -1,9 +1,10 @@
-import { View, YStack } from 'tamagui';
+import { YStack } from 'tamagui';
 import { Text } from '@/components/atoms/typography/text';
 import { Event } from '@/types/events';
 import { Image } from 'expo-image';
 import { StyleSheet } from 'react-native';
 import { H5 } from '@/components/atoms/typography/heading';
+import { Button } from '@/components/atoms/buttons/button';
 
 interface EventDetailsProps {
   event: Event;
@@ -29,7 +30,7 @@ export const EventDetailsCard = ({ event }: EventDetailsProps) => {
           </Text>
         </YStack>
       </YStack>
-      <View borderBottomWidth={1} borderBottomColor="$secondary" marginVertical="$1" />
+      <Button>Rejoindre</Button>
       <Text fontSize={14} color="#cardForeground" opacity={0.7}>
         {event.description}
       </Text>
