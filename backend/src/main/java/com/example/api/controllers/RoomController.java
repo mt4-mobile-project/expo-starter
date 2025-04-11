@@ -44,7 +44,7 @@ public class RoomController {
     }
 
     @GetMapping("/between/{user1Id}/{user2Id}")
-    public ResponseEntity<RoomDto> getRoomByUser1IdAndUser2Id(
+    public ResponseEntity<List<RoomDto>> getRoomByUser1IdAndUser2Id(
             @PathVariable Integer user1Id,
             @PathVariable Integer user2Id
     ) {
