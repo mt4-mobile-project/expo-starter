@@ -6,6 +6,7 @@ import { FileType } from '@/types/files';
 import { useEventCreationStore } from '@/stores/events/event-creation-store';
 import { useEvents } from './useEvents';
 import { useCreationModeStore } from '@/stores/creation-mode-store';
+import { useJoinEvent } from './useJoinEvent';
 
 interface EventFormData {
   name: string;
@@ -42,6 +43,7 @@ export const useEventForm = (bottomSheetRef: any) => {
   const { mutate: createEvent, isPending: isCreatingEventPending } = useCreateEvent();
   const { mutate: uploadImage, isPending: isUploadingPending } = useFileUpload();
   const { refetch } = useEvents();
+  const { mutate: joinEvent } = useJoinEvent();
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -77,6 +79,9 @@ export const useEventForm = (bottomSheetRef: any) => {
           console.log('Événement créé avec succès:', response);
           setCreatedEventId(response.id);
           setFormStep(2);
+
+          // Rejoindre automatiquement la room
+          joinEvent(response.id);
         },
       }
     );
