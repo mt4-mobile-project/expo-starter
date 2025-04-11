@@ -38,13 +38,6 @@ export default function HomeScreen() {
     fetchUser();
   }, []);
 
-  useEffect(() => {
-    if (users) {
-      console.log('users', users);
-      console.log('users.length', users.length);
-    }
-  }, [users]);
-
   const handleSearchSubmit = () => {
     setSubmittedSearchTerm(searchTerm);
     Keyboard.dismiss();
@@ -58,10 +51,10 @@ export default function HomeScreen() {
     }
 
     try {
-      const room = await getRoomBetweenByUser1IdUser2Id({currentUserId, userId});
-      
+      const room = await getRoomBetweenByUser1IdUser2Id({ currentUserId, userId });
+
       let roomId: string;
-      
+
       if (!room || (Array.isArray(room) && room.length === 0)) {
         console.log('Room does not exist, creating a new one...');
         const newRoom = await createRoomMutation({ user2_id: userId });
@@ -69,11 +62,10 @@ export default function HomeScreen() {
       } else {
         roomId = room.id;
       }
-      
+
       router.push({
         pathname: `/room/${roomId}`,
       });
-      
     } catch (error) {
       console.error('Error handling room navigation:', error);
     }
@@ -100,13 +92,13 @@ export default function HomeScreen() {
           users.length > 0 &&
           users.map((user) => (
             <TouchableOpacity key={user.id} onPress={() => handleUserCardPress(user.id)}>
-            <UserCard
-              imageUrl="https://picsum.photos/200"
-              name={user.first_name}
-              region="France"
-              status="En ligne"
-            />
-          </TouchableOpacity>
+              <UserCard
+                imageUrl="https://picsum.photos/200"
+                name={user.first_name}
+                region="France"
+                status="En ligne"
+              />
+            </TouchableOpacity>
           ))}
 
         <Link
