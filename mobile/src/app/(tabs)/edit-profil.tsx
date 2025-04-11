@@ -15,7 +15,6 @@ import { useProfileImage } from '@/hooks/profile/useProfileImage';
 import ProfileImage from '@/components/atoms/profile-cards/profil-image';
 import { LogoutButton } from '@/components/atoms/buttons/logout-button';
 
-
 const profileSchema = z.object({
   fullName: z.string().min(2).max(24),
   description: z.string().min(5).max(200),
@@ -106,7 +105,7 @@ export default function EditProfileScreen() {
       />
       <Form form={form} onSubmit={onSubmit}>
         <YStack space="$4" width="100%" gap={'$8'}>
-        <InputGenerator<ProfileFormData>
+          <InputGenerator<ProfileFormData>
             configs={PROFILE_INPUT_CONFIGS.map((config) =>
               config.name === 'fullName'
                 ? {
@@ -118,7 +117,7 @@ export default function EditProfileScreen() {
             control={form.control}
             defaultValues={form.getValues()}
           />
-          <XStack space="$2" width="100%">
+          <XStack space="$2">
             <Button
               variant="default"
               flex={1}
@@ -127,12 +126,11 @@ export default function EditProfileScreen() {
               disabled={isUpdating}
             >
               <Text>Modifier</Text>
-             
             </Button>
           </XStack>
         </YStack>
       </Form>
-      <LogoutButton flex={1} width="100%" />
+      <LogoutButton />
     </View>
   );
 }
