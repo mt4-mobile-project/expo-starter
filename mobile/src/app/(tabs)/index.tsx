@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Text, View } from 'tamagui';
 import { Keyboard, ScrollView } from 'react-native';
-import { Keyboard, ScrollView } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { getCurrentUser } from '@/services/user';
 import { useUsers } from '@/hooks/users/useUsers';
