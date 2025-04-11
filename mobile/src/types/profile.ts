@@ -4,7 +4,7 @@ export interface ProfileResponse {
   description: string;
   instrument_played: string;
   musical_influence: string;
-  image?: string;
+  image_url?: string;
   created_at?: string;
   updated_at?: string;
 }
