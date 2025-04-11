@@ -13,6 +13,8 @@ import ProfileCard from '@/components/molecules/cards/profil-card';
 import * as ImagePicker from 'expo-image-picker';
 import { useProfileImage } from '@/hooks/profile/useProfileImage';
 import ProfileImage from '@/components/atoms/profile-cards/profil-image';
+import { LogoutButton } from '@/components/atoms/buttons/logout-button';
+
 
 const profileSchema = z.object({
   fullName: z.string().min(2).max(24),
@@ -24,7 +26,7 @@ const profileSchema = z.object({
 type ProfileFormData = z.infer<typeof profileSchema>;
 
 export default function EditProfileScreen() {
-  const [profileName] = useState('Nom de profil');
+  const [profileName, setProfileName] = useState('Nom de profil');
   const { profile, isFetching, editProfile, isUpdating } = useEditProfile();
   const { imageUrl, uploadProfileImage } = useProfileImage(profile?.id || 0);
   const form = useForm<ProfileFormData>({
@@ -45,6 +47,7 @@ export default function EditProfileScreen() {
         instruments: profile.instrument_played,
         influences: profile.musical_influence,
       });
+      setProfileName(profile.username);
     }
   }, [profile, form]);
 
@@ -103,23 +106,33 @@ export default function EditProfileScreen() {
       />
       <Form form={form} onSubmit={onSubmit}>
         <YStack space="$4" width="100%" gap={'$8'}>
-          <InputGenerator<ProfileFormData>
-            configs={PROFILE_INPUT_CONFIGS}
+        <InputGenerator<ProfileFormData>
+            configs={PROFILE_INPUT_CONFIGS.map((config) =>
+              config.name === 'fullName'
+                ? {
+                    ...config,
+                    onChange: (value: string) => setProfileName(value),
+                  }
+                : config
+            )}
             control={form.control}
             defaultValues={form.getValues()}
           />
-          <XStack space="$2">
+          <XStack space="$2" width="100%">
             <Button
               variant="default"
               flex={1}
+              size="lg"
               onPress={form.handleSubmit(onSubmit)}
               disabled={isUpdating}
             >
-              Modifier
+              <Text>Modifier</Text>
+             
             </Button>
           </XStack>
         </YStack>
       </Form>
+      <LogoutButton flex={1} width="100%" />
     </View>
   );
 }

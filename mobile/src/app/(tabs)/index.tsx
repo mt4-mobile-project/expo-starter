@@ -8,8 +8,6 @@ import { Input } from '@/components/atoms/inputs/input';
 import { UserCard } from '@/components/molecules/cards/users-card';
 import { Link } from 'expo-router';
 import { useAuth } from '@/hooks/auth/useAuth';
-import { asyncStorageToken } from '@/utils/asyncStorageToken';
-import { Button } from '@/components/atoms/buttons/button';
 
 export default function HomeScreen() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -60,14 +58,7 @@ export default function HomeScreen() {
     console.log('Search submitted:', searchTerm);
   };
 
-  const handleLogout = async () => {
-    try {
-      await asyncStorageToken.remove();
-      console.log('Déconnexion réussie');
-    } catch (error) {
-      console.error('Erreur lors de la déconnexion:', error);
-    }
-  };
+
 
   return (
     <View flex={1} backgroundColor="$background" padding="$4" gap="$4">
@@ -104,7 +95,6 @@ export default function HomeScreen() {
       >
         Go To first room
       </Link>
-      <Button onPress={handleLogout}>Logout</Button>
     </View>
   );
 }
