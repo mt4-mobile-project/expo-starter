@@ -92,10 +92,10 @@ export default function HomeScreen() {
           returnKeyType="search"
           icon={<FontAwesome name="search" size={18} color="#aaa" />}
         />
-  
+
         {isLoading && <Text>Chargement des utilisateurs...</Text>}
         {error && <Text>Erreur lors du chargement.</Text>}
-  
+
         {users &&
           users.length > 0 &&
           users.map((user) => (
@@ -108,7 +108,7 @@ export default function HomeScreen() {
             />
           </TouchableOpacity>
           ))}
-  
+
         <Link
           href={{
             pathname: '/room/[id]',
@@ -117,8 +117,7 @@ export default function HomeScreen() {
         >
           Go To first room
         </Link>
-
       </ScrollView>
     </View>
   );
-} 
+}
