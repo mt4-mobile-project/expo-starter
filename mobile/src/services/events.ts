@@ -24,7 +24,12 @@ export const createEvent = async (data: CreateEventDTO): Promise<Event> => {
   return response;
 };
 
-export const getMyEvents = async (): Promise<Event[]> => {
-  const response = await api.get<Event[]>('/events/me');
+export const getJoinedEvents = async (): Promise<Event[]> => {
+  const response = await api.get<Event[]>('/events/joined');
   return response;
+};
+// Ajouter cette fonction à votre fichier events.ts existant
+
+export const joinEvent = async (eventId: number): Promise<void> => {
+  await api.post(`/events/${eventId}/join`);
 };

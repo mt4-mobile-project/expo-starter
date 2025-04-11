@@ -3,7 +3,6 @@ import MapView from 'react-native-maps';
 import { View, XStack } from 'tamagui';
 import { useLocation } from '@/hooks/maps/useLocation';
 import { useEvents } from '@/hooks/events/useEvents';
-import { useMyEvents } from '@/hooks/events/useMyEvents';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { CustomBottomSheet } from '@/components/molecules/sheets/bottom-sheet';
 import { useBottomSheet } from '@/hooks/sheets/useBottomSheet';
@@ -18,13 +17,7 @@ import { EventCreationForm } from '@/components/molecules/forms/event-creation-f
 export default function MapScreen() {
   const { location } = useLocation();
   const { data: allEvents = [], isLoading } = useEvents();
-  const { data: myEvents = [] } = useMyEvents();
 
-  // Combine events and mark which ones are joined
-  const events = allEvents.map((event) => ({
-    ...event,
-    isJoined: myEvents.some((myEvent) => myEvent.id === event.id),
-  }));
   const { bottomSheetRef, selectedEvent, setSelectedEvent, handleClose } = useBottomSheet();
 
   const { isCreatingMode, showCreateNotif, newMarkerLocation } = useEventCreationStore();
@@ -45,7 +38,7 @@ export default function MapScreen() {
 
     return (
       <EventListContent
-        events={events}
+        events={allEvents}
         selectedEvent={selectedEvent}
         currentSnapIndex={currentSnapIndex}
         onEventCardPress={handleEventCardPress}
@@ -96,7 +89,7 @@ export default function MapScreen() {
               onPress={handleMapPress}
             >
               <MapMarkers
-                events={events}
+                events={allEvents}
                 selectedEvent={selectedEvent}
                 userLocation={location}
                 onMarkerPress={handleMarkerPress}

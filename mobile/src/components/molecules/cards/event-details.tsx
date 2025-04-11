@@ -5,6 +5,8 @@ import { Image } from 'expo-image';
 import { StyleSheet } from 'react-native';
 import { H5 } from '@/components/atoms/typography/heading';
 import { Button } from '@/components/atoms/buttons/button';
+import { useJoinEvent } from '@/hooks/events/useJoinEvent';
+import { useState, useEffect } from 'react';
 
 interface EventDetailsProps {
   event: Event;
@@ -16,23 +18,41 @@ export const EventDetailsCard = ({ event, isJoined = false }: EventDetailsProps)
     ? `data:image/jpeg;base64,${event.image}`
     : require('@/assets/images/placeholder.png');
 
+  const [localIsJoined, setLocalIsJoined] = useState(isJoined);
+  const { mutate: joinEvent, isPending } = useJoinEvent();
+
+  // Mettre à jour l'état local si la prop isJoined change
+  useEffect(() => {
+    setLocalIsJoined(isJoined);
+  }, [isJoined]);
+
+  const handleJoinEvent = () => {
+    joinEvent(event.id, {
+      onSuccess: () => {
+        setLocalIsJoined(true);
+      },
+    });
+  };
+
   return (
     <YStack space="$4" margin={16}>
       <YStack gap="$1">
         <H5 color="$cardForeground">{event.name}</H5>
         <YStack>
-          <Text fontSize={14} color="#cardForeground" opacity={0.6} marginTop="$1">
+          <Text fontSize={14} color="$cardForeground" opacity={0.6} marginTop="$1">
             {event.address.street}, {event.address.city}
           </Text>
-          <Text fontSize={14} color="#cardForeground" opacity={0.6} marginTop="$1">
+          <Text fontSize={14} color="$cardForeground" opacity={0.6} marginTop="$1">
             {new Date(event.start_date).toLocaleDateString()}
             {' - '}
             {new Date(event.end_date).toLocaleDateString()}
           </Text>
         </YStack>
       </YStack>
-      <Button disabled={isJoined}>{isJoined ? 'Déjà rejoint' : 'Rejoindre'}</Button>
-      <Text fontSize={14} color="#cardForeground" opacity={0.7}>
+      <Button disabled={localIsJoined || isPending} onPress={handleJoinEvent}>
+        {localIsJoined ? 'Déjà rejoint' : isPending ? 'En cours...' : 'Rejoindre'}
+      </Button>
+      <Text fontSize={14} color="$cardForeground" opacity={0.7}>
         {event.description}
       </Text>
       <Image

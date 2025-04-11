@@ -1,12 +1,12 @@
 import { View } from 'tamagui';
-import { useMyEvents } from '@/hooks/events/useMyEvents';
 import { useState } from 'react';
 import { EventListContent } from '@/components/organisms/lists/event-list-content';
 import type { Event } from '@/types/events';
 import { Text } from '@/components/atoms/typography/text';
+import { useJoinedEvents } from '@/hooks/events/useJoinedEvents';
 
 export default function EventsScreen() {
-  const { data: events, isLoading, error } = useMyEvents();
+  const { data: events, isLoading, error } = useJoinedEvents();
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   if (isLoading)
@@ -23,7 +23,7 @@ export default function EventsScreen() {
     );
 
   return (
-    <View backgroundColor="$background" flex={1}>
+    <View backgroundColor="$background" flex={1} paddingTop={16}>
       <EventListContent
         events={events || []}
         selectedEvent={selectedEvent}

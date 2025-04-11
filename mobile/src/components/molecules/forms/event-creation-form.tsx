@@ -79,7 +79,7 @@ export const EventCreationForm = ({ bottomSheetRef }: EventCreationFormProps) =>
             {selectedImage ? "Changer l'image" : 'Sélectionner une image'}
           </Button>
 
-          <XStack gap={12} marginTop={12}>
+          <XStack gap={12} marginTop={4}>
             {/* <Button variant="outline" size="lg" onPress={handleCancel} flex={1}>
               Retour
             </Button> */}

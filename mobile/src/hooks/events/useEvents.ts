@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getAllEvents, getMyEvents } from '@/services/events';
+import { getAllEvents, getJoinedEvents } from '@/services/events';
 import type { Event } from '@/types/events';
 import { getFileImage } from '@/services/files';
 import { FileType } from '@/types/files';
@@ -8,7 +8,7 @@ export const useEvents = () => {
   return useQuery<Event[]>({
     queryKey: ['events'],
     queryFn: async () => {
-      const [allEvents, myEvents] = await Promise.all([getAllEvents(), getMyEvents()]);
+      const [allEvents, joinedEvents] = await Promise.all([getAllEvents(), getJoinedEvents()]);
 
       const eventsWithImages = await Promise.all(
         allEvents.map(async (event) => {
@@ -16,7 +16,7 @@ export const useEvents = () => {
           return {
             ...event,
             image: imageUrl,
-            isJoined: myEvents.some((myEvent) => myEvent.id === event.id),
+            isJoined: joinedEvents.some((joinedEvent) => joinedEvent.id === event.id),
           };
         })
       );
