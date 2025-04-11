@@ -11,7 +11,7 @@ export const LogoutButton = ({ variant = 'destructive', size = 'lg' }: LogoutBut
 
   return (
     <Button variant={variant} size={size} onPress={logout}>
-      Se déconnecter{' '}
+      Se déconnecter
     </Button>
   );
 };

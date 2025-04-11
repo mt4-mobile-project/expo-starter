@@ -11,6 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/atoms/form/form';
 import { CreateProfileData } from '@/types/profile';
 import { useCreateProfile } from '@/hooks/profile/useCreateProfile';
+import ProfileImage from '@/components/atoms/profile-cards/profil-image';
 
 const profileSchema = z.object({
   fullName: z
@@ -35,7 +36,7 @@ type ProfileFormData = z.infer<typeof profileSchema>;
 
 export default function ProfilScreen() {
   const [profileName, setProfileName] = useState('Nom de profil');
-  const { createProfile } = useCreateProfile();
+  const { createProfile, isLoading, pickImage, tempImage } = useCreateProfile();
 
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
@@ -71,7 +72,12 @@ export default function ProfilScreen() {
       alignItems="center"
       gap={'$10'}
     >
-      <ProfileCard profileName={profileName} />
+      <ProfileCard
+        profileName={profileName}
+        profileImage={
+          <ProfileImage source={tempImage || 'https://picsum.photos/200'} onPress={pickImage} />
+        }
+      />
 
       <Form form={form} onSubmit={onSubmit}>
         <YStack space="$4" width="100%" gap={'$8'}>

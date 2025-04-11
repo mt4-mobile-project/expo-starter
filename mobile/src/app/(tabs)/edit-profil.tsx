@@ -11,7 +11,6 @@ import { Button } from '@/components/atoms/buttons/button';
 import { useEditProfile } from '@/hooks/profile/useEditProfile';
 import ProfileCard from '@/components/molecules/cards/profil-card';
 import * as ImagePicker from 'expo-image-picker';
-import { useProfileImage } from '@/hooks/profile/useProfileImage';
 import ProfileImage from '@/components/atoms/profile-cards/profil-image';
 import { LogoutButton } from '@/components/atoms/buttons/logout-button';
 
@@ -26,8 +25,8 @@ type ProfileFormData = z.infer<typeof profileSchema>;
 
 export default function EditProfileScreen() {
   const [profileName, setProfileName] = useState('Nom de profil');
-  const { profile, isFetching, editProfile, isUpdating } = useEditProfile();
-  const { imageUrl, uploadProfileImage } = useProfileImage(profile?.id || 0);
+  const { profile, isFetching, editProfile, isUpdating, pickImage } = useEditProfile();
+
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -49,24 +48,6 @@ export default function EditProfileScreen() {
       setProfileName(profile.username);
     }
   }, [profile, form]);
-
-  const handleImageUpload = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      quality: 1,
-    });
-
-    if (!result.canceled && result.assets && result.assets[0].uri) {
-      const file = {
-        uri: result.assets[0].uri,
-        name: 'profile.jpg',
-        type: 'image/jpeg',
-      } as unknown as File;
-
-      await uploadProfileImage(file);
-    }
-  };
 
   const onSubmit = (data: ProfileFormData) => {
     editProfile({
@@ -98,8 +79,8 @@ export default function EditProfileScreen() {
         profileName={profileName}
         profileImage={
           <ProfileImage
-            source={imageUrl || 'https://picsum.photos/200'}
-            onPress={handleImageUpload}
+            source={profile?.image_url || 'https://picsum.photos/200'}
+            onPress={pickImage}
           />
         }
       />
