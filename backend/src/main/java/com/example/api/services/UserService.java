@@ -74,9 +74,11 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public User getUserByProfileUsername(String username) {
-        // Use the custom repository method instead
-        return userRepository.findByProfileUsername(username)
-                .orElseThrow(() -> new ApiException("No user found with profile username: " + username, HttpStatus.NOT_FOUND));
+    public List<User> searchUsersByName(String searchTerm) {
+        List<User> users = userRepository.findByFirstNameOrLastNameContainingIgnoreCase(searchTerm);
+        if (users.isEmpty()) {
+            throw new ApiException("No users found matching: " + searchTerm, HttpStatus.NOT_FOUND);
+        }
+        return users;
     }
 }

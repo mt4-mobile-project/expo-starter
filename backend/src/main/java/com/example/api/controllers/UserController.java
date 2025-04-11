@@ -45,11 +45,13 @@ public class UserController {
         return ResponseEntity.ok(userMapper.toDto(user));
     }
 
-    @GetMapping("/username/{username}")
-    public ResponseEntity<UserDto> getUserByUsername(@PathVariable String username) {
-    // Look up the user by the username in their profile
-    User user = userService.getUserByProfileUsername(username);
-    return ResponseEntity.ok(userMapper.toDto(user));
+    @GetMapping("/username/{searchTerm}")
+    public ResponseEntity<List<UserDto>> searchUsersByName(@PathVariable String searchTerm) {
+        List<User> users = userService.searchUsersByName(searchTerm);
+        List<UserDto> userDtos = users.stream()
+                .map(userMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(userDtos);
     }
 
     @PutMapping("/{id}")
@@ -69,15 +71,12 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    // Add this new endpoint
     @PutMapping("/me")
     public ResponseEntity<UserDto> updateCurrentUser(@Valid @RequestBody UserDto userDto) {
-        // Get the current authenticated user from the security context
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
         Integer userId = currentUser.getId();
         
-        // Use the existing update logic with the current user's ID
         User user = userMapper.toEntity(userDto);
         user.setId(userId);
         User updatedUser = userService.updateUser(userId, user);
