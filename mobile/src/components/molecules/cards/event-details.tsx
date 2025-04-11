@@ -7,13 +7,17 @@ import { H5 } from '@/components/atoms/typography/heading';
 import { Button } from '@/components/atoms/buttons/button';
 import { useJoinEvent } from '@/hooks/events/useJoinEvent';
 import { useState, useEffect } from 'react';
+import { useSegments } from 'expo-router';
 
 interface EventDetailsProps {
   event: Event;
-  isJoined?: boolean; // Make this optional
+  isJoined?: boolean;
 }
 
 export const EventDetailsCard = ({ event, isJoined = false }: EventDetailsProps) => {
+  const segments = useSegments();
+  const isEventsPage = segments[segments.length - 1] === 'events';
+
   const imageUrl = event.image
     ? `data:image/jpeg;base64,${event.image}`
     : require('@/assets/images/placeholder.png');
@@ -21,7 +25,6 @@ export const EventDetailsCard = ({ event, isJoined = false }: EventDetailsProps)
   const [localIsJoined, setLocalIsJoined] = useState(isJoined);
   const { mutate: joinEvent, isPending } = useJoinEvent();
 
-  // Mettre à jour l'état local si la prop isJoined change
   useEffect(() => {
     setLocalIsJoined(isJoined);
   }, [isJoined]);
@@ -49,9 +52,11 @@ export const EventDetailsCard = ({ event, isJoined = false }: EventDetailsProps)
           </Text>
         </YStack>
       </YStack>
-      <Button disabled={localIsJoined || isPending} onPress={handleJoinEvent}>
-        {localIsJoined ? 'Déjà rejoint' : isPending ? 'En cours...' : 'Rejoindre'}
-      </Button>
+      {!isEventsPage && (
+        <Button disabled={localIsJoined || isPending} onPress={handleJoinEvent}>
+          {localIsJoined ? 'Déjà rejoint' : isPending ? 'En cours...' : 'Rejoindre'}
+        </Button>
+      )}
       <Text fontSize={14} color="$cardForeground" opacity={0.7}>
         {event.description}
       </Text>

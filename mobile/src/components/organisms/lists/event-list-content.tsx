@@ -5,12 +5,14 @@ import { SearchFilter } from '@/components/molecules/filters/search-filter';
 import { useEventFilterStore } from '@/stores/events/event-filter-store';
 import { Event } from '@/types/events';
 import { EventDetailsCard } from '@/components/molecules/cards/event-details';
+import { Button } from '@/components/atoms/buttons/button';
 
 interface EventListContentProps {
   events: Event[];
   selectedEvent: Event | null;
   currentSnapIndex: number;
   onEventCardPress: (event: Event) => void;
+  onBackPress?: () => void; // Add back button handler
 }
 
 export const EventListContent = ({
@@ -18,6 +20,7 @@ export const EventListContent = ({
   selectedEvent,
   currentSnapIndex,
   onEventCardPress,
+  onBackPress,
 }: EventListContentProps) => {
   const { searchTerm, setSearchTerm, activeFilter, setActiveFilter, getFilteredEvents } =
     useEventFilterStore();
@@ -29,11 +32,18 @@ export const EventListContent = ({
   };
 
   if (selectedEvent) {
+    const eventWithJoinStatus =
+      events.find((event) => event.id === selectedEvent.id) || selectedEvent;
+
     return (
-      <EventDetailsCard
-        event={selectedEvent}
-        isJoined={events.some((event) => event.id === selectedEvent.id && event.isJoined)}
-      />
+      <View style={styles.detailsContainer}>
+        {onBackPress && (
+          <Button variant="outline" onPress={onBackPress} style={styles.backButton}>
+            Retour
+          </Button>
+        )}
+        <EventDetailsCard event={selectedEvent} isJoined={eventWithJoinStatus.isJoined || false} />
+      </View>
     );
   }
 
@@ -65,5 +75,15 @@ export const EventListContent = ({
 const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
+  },
+  detailsContainer: {
+    flex: 1,
+    position: 'relative',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 16,
+    right: 16, // Changed from left to right
+    zIndex: 10,
   },
 });
