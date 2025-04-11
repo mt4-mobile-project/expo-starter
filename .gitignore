@@ -73,3 +73,5 @@ backend/mvnw
 /obj/
 
 uploads/
+
+pnpm-lock.yaml
