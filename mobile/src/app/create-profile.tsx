@@ -5,6 +5,7 @@ import { InputGenerator } from '@/utils/generator/input-generator';
 import { PROFILE_INPUT_CONFIGS } from '@/configs/inputs/profile-input.config';
 import { Button } from '@/components/atoms/buttons/button';
 import { z } from 'zod';
+import { Text } from '@/components/atoms/typography/text';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/atoms/form/form';
@@ -94,7 +95,7 @@ export default function ProfilScreen() {
               onPress={form.handleSubmit(onSubmit)}
               disabled={form.formState.isSubmitting}
             >
-              Valider
+              <Text>Valider</Text>
             </Button>
           </XStack>
         </YStack>
