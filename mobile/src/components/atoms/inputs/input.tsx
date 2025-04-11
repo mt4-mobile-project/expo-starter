@@ -15,7 +15,7 @@ const InputFrame = styled(TamaguiInput, {
   borderColor: '$borderMuted',
   paddingHorizontal: '$4',
   height: 48,
-  color: '$foreground', 
+  color: '$foreground',
   placeholderTextColor: '$mutedForeground',
   fontWeight: '500',
   width: '100%',

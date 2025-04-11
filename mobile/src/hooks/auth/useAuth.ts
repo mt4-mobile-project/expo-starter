@@ -10,7 +10,7 @@ export const useAuth = () => {
     mutationFn: (data: LoginCredentials) => login(data),
     onSuccess: async (response: LoginResponse) => {
       if (response.token) {
-        console.log(response.token, "kkkkkkkkkkkkk");
+        console.log(response.token, 'kkkkkkkkkkkkk');
         await asyncStorageToken.set(response.token);
         try {
           console.log('Vérification du profil...');

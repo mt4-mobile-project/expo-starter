@@ -58,8 +58,6 @@ export default function HomeScreen() {
     console.log('Search submitted:', searchTerm);
   };
 
-
-
   return (
     <View flex={1} backgroundColor="$background" padding="$4" gap="$4">
       <Input
