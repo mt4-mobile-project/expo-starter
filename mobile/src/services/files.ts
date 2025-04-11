@@ -1,5 +1,5 @@
-import { FileType } from "@/types/files";
-import { api } from "@/utils/api";
+import { FileType } from '@/types/files';
+import { api } from '@/utils/api';
 
 export const getFileImage = async (fileType: FileType, fileId: number): Promise<string> => {
   try {
@@ -10,13 +10,25 @@ export const getFileImage = async (fileType: FileType, fileId: number): Promise<
       responseType: 'arraybuffer',
     });
 
-    // Convert ArrayBuffer to base64
+    // Convertir ArrayBuffer en base64
     const bytes = new Uint8Array(response);
     let binary = '';
     bytes.forEach((byte) => (binary += String.fromCharCode(byte)));
-    return btoa(binary);
+    const base64 = btoa(binary);
+
+    return `data:image/jpeg;base64,${base64}`;
   } catch (error) {
     console.warn(`Failed to fetch image for ${fileType} ${fileId}:`, error);
     return '';
+  }
+};
+
+export const deleteFileImage = async (fileType: FileType, fileId: number): Promise<void> => {
+  try {
+    await api.delete(`/files/${fileType}/${fileId}`);
+    console.log('Image supprimée avec succès');
+  } catch (error) {
+    console.error("Erreur lors de la suppression de l'image:", error);
+    throw error;
   }
 };

@@ -22,6 +22,8 @@ export default function ShowcaseScreen() {
         <Link href="/showcase/profile-cards">Profile Cards Showcase</Link>
 
         <Link href="/showcase/login">Login Showcase</Link>
+
+        <Link href="/showcase/map">Map Showcase</Link>
       </YStack>
     </View>
   );

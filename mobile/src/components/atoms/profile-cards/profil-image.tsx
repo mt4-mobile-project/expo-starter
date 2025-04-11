@@ -1,5 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 interface ProfileImageProps {
   width?: number;
@@ -7,7 +8,8 @@ interface ProfileImageProps {
   borderRadius?: number;
   borderWidth?: number;
   borderColor?: string;
-  source?: string;
+  source: string;
+  onPress?: () => void;
 }
 
 export default function ProfileImage({
@@ -16,7 +18,8 @@ export default function ProfileImage({
   borderRadius = 50,
   borderWidth = 2,
   borderColor = 'transparent',
-  source = 'https://picsum.photos/200',
+  source,
+  onPress,
 }: ProfileImageProps) {
   const styles = StyleSheet.create({
     image: {
@@ -26,7 +29,27 @@ export default function ProfileImage({
       borderWidth,
       borderColor,
     },
+    icon: {
+      position: 'absolute',
+      bottom: 0,
+      right: 0,
+      backgroundColor: 'white',
+      borderRadius: 15,
+      padding: 4,
+    },
   });
 
-  return <Image style={styles.image} source={source} contentFit="cover" transition={1000} />;
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <Image
+        style={styles.image}
+        source={{ uri: source.startsWith('data:') ? source : source }}
+        contentFit="cover"
+        transition={1000}
+      />
+      {onPress && (
+        <MaterialCommunityIcons name="pencil" size={20} color="black" style={styles.icon} />
+      )}
+    </TouchableOpacity>
+  );
 }

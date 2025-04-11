@@ -5,7 +5,8 @@ export interface Event {
   start_date: string;
   end_date: string;
   user_id: number;
-  image?: string; // Add this line for the image URL
+  image?: string;
+  isJoined?: boolean; // Add this line
   address: {
     id: number;
     street: string;

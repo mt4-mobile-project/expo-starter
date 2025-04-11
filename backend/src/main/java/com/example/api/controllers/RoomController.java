@@ -1,6 +1,7 @@
 package com.example.api.controllers;
 
 import com.example.api.dtos.RoomDto;
+import com.example.api.dtos.RoomResponseDto;
 import com.example.api.dtos.RoomUpdateDto;
 import com.example.api.entities.User;
 import com.example.api.services.RoomService;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+
 
 @Slf4j
 @RestController
@@ -23,9 +25,9 @@ public class RoomController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RoomDto>> getMyRooms(Authentication authentication) {
+    public ResponseEntity<List<RoomResponseDto>> getMyRooms(Authentication authentication) {
         User currentUser = (User) authentication.getPrincipal();
-        return ResponseEntity.ok(roomService.getRoomsByUserId(currentUser.getId()));
+        return ResponseEntity.ok(roomService.getRoomsForUser(currentUser.getId()));
     }
 
     @GetMapping("/{id}")

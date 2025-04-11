@@ -7,7 +7,7 @@ type TextWeight = 'normal' | 'medium' | 'semibold' | 'bold';
 
 export const Text = styled(TText, {
   name: 'Text',
-  color: '$foreground',
+  color: '$white',
   fontSize: 14,
   fontWeight: '600',
   lineHeight: 16.8,
