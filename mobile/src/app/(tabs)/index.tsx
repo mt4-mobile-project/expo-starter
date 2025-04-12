@@ -1,115 +1,127 @@
-import { useState, useEffect } from 'react';
-import { Text, View } from 'tamagui';
-import { Keyboard, TouchableOpacity, ScrollView } from 'react-native';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { getCurrentUser } from '@/services/user';
-import { useUsers } from '@/hooks/users/useUsers';
-import { Input } from '@/components/atoms/inputs/input';
-import { UserCard } from '@/components/molecules/cards/users-card';
-import { Link, useRouter } from 'expo-router';
-import { useAuth } from '@/hooks/auth/useAuth';
-import { useCreateRoom } from '@/hooks/rooms/useCreateRoom';
-import { useRoomBetweenByUser1IdUser2Id } from '@/hooks/rooms/useRoomBetweenByUser1IdUser2Id';
+import { StyleSheet, ActivityIndicator } from 'react-native';
+import MapView from 'react-native-maps';
+import { View, XStack } from 'tamagui';
+import { useLocation } from '@/hooks/maps/useLocation';
+import { useEvents } from '@/hooks/events/useEvents';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { CustomBottomSheet } from '@/components/molecules/sheets/bottom-sheet';
+import { useBottomSheet } from '@/hooks/sheets/useBottomSheet';
+import { MapMarkers } from '@/components/molecules/markers/map-markers';
+import { useMarkerPress } from '@/hooks/maps/useMarkerPress';
+import { Text } from '@/components/atoms/typography/text';
+import { useEventCreationStore } from '@/stores/events/event-creation-store';
+import { useMapInteractions } from '@/hooks/maps/useMapInteractions';
+import { EventListContent } from '@/components/organisms/lists/event-list-content';
+import { EventCreationForm } from '@/components/molecules/forms/event-creation-form';
 
-export default function HomeScreen() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
-  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
-  const { login } = useAuth();
-  const router = useRouter();
-  const { mutateAsync: createRoomMutation } = useCreateRoom();
-  const { mutateAsync: getRoomBetweenByUser1IdUser2Id } = useRoomBetweenByUser1IdUser2Id();
+export default function MapScreen() {
+  const { location } = useLocation();
+  const { data: allEvents = [], isLoading } = useEvents();
 
-  const { data: users, isLoading, error } = useUsers(submittedSearchTerm);
+  const { bottomSheetRef, selectedEvent, setSelectedEvent, handleClose } = useBottomSheet();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const user = await getCurrentUser();
-        console.log('Current user:', user);
-        if (user && user.id) {
-          setCurrentUserId(user.id);
-        }
-      } catch (error) {
-        console.error('Failed to fetch user:', error);
-      }
-    };
+  const { isCreatingMode, showCreateNotif, newMarkerLocation } = useEventCreationStore();
 
-    fetchUser();
-  }, []);
+  const { handleMarkerPress } = useMarkerPress({
+    bottomSheetRef,
+    selectedEvent,
+    setSelectedEvent,
+  });
 
-  const handleSearchSubmit = () => {
-    setSubmittedSearchTerm(searchTerm);
-    Keyboard.dismiss();
-    console.log('Search submitted:', searchTerm);
-  };
+  const { mapRef, currentSnapIndex, handleMapPress, handleEventCardPress, onBottomSheetChange } =
+    useMapInteractions(bottomSheetRef, setSelectedEvent);
 
-  const handleUserCardPress = async (userId: number) => {
-    if (!currentUserId) {
-      console.error('Current user ID is not available');
-      return;
+  const renderBottomSheetContent = () => {
+    if (isCreatingMode) {
+      return <EventCreationForm bottomSheetRef={bottomSheetRef} />;
     }
 
-    try {
-      const room = await getRoomBetweenByUser1IdUser2Id({ currentUserId, userId });
-
-      let roomId: string;
-
-      if (!room || (Array.isArray(room) && room.length === 0)) {
-        console.log('Room does not exist, creating a new one...');
-        const newRoom = await createRoomMutation({ user2_id: userId });
-        roomId = newRoom.id;
-      } else {
-        roomId = room.id;
-      }
-
-      router.push({
-        pathname: `/room/${roomId}`,
-      });
-    } catch (error) {
-      console.error('Error handling room navigation:', error);
-    }
+    return (
+      <EventListContent
+        events={allEvents}
+        selectedEvent={selectedEvent}
+        currentSnapIndex={currentSnapIndex}
+        onEventCardPress={handleEventCardPress}
+      />
+    );
   };
 
   return (
-    <View flex={1} backgroundColor="$background">
-      <ScrollView contentContainerStyle={{ padding: 16, gap: 16 }}>
-        <Input
-          placeholder="Rechercher"
-          variant="outline"
-          size="lg"
-          value={searchTerm}
-          onChangeText={setSearchTerm}
-          onSubmitEditing={handleSearchSubmit}
-          returnKeyType="search"
-          icon={<FontAwesome name="search" size={18} color="#aaa" />}
-        />
-
-        {isLoading && <Text>Chargement des utilisateurs...</Text>}
-        {error && <Text>Erreur lors du chargement.</Text>}
-
-        {users &&
-          users.length > 0 &&
-          users.map((user) => (
-            <TouchableOpacity key={user.id} onPress={() => handleUserCardPress(user.id)}>
-              <UserCard
-                imageUrl="https://picsum.photos/200"
-                name={user.first_name}
-                region="France"
-                status="En ligne"
+    <GestureHandlerRootView style={styles.container}>
+      <View style={styles.container}>
+        {isLoading ? (
+          <ActivityIndicator size="large" color="#0000ff" />
+        ) : (
+          <>
+            {isCreatingMode && showCreateNotif && (
+              <XStack
+                position="absolute"
+                top={60}
+                zIndex={1000}
+                width="100%"
+                justifyContent="center"
+                paddingHorizontal="$4"
+              >
+                <XStack
+                  backgroundColor="$destructive"
+                  paddingVertical="$2"
+                  paddingHorizontal="$4"
+                  borderRadius={8}
+                >
+                  <Text size="lg" color="white" textAlign="center">
+                    Cliquer sur la map pour créer un événement
+                  </Text>
+                </XStack>
+              </XStack>
+            )}
+            <MapView
+              ref={mapRef}
+              style={styles.map}
+              initialRegion={{
+                latitude: 48.8566,
+                longitude: 2.3522,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+              showsUserLocation={true}
+              showsMyLocationButton={true}
+              followsUserLocation={true}
+              onPress={handleMapPress}
+            >
+              <MapMarkers
+                events={allEvents}
+                selectedEvent={selectedEvent}
+                userLocation={location}
+                onMarkerPress={handleMarkerPress}
+                newMarkerLocation={newMarkerLocation}
+                isCreatingMode={isCreatingMode}
               />
-            </TouchableOpacity>
-          ))}
+            </MapView>
+          </>
+        )}
 
-        <Link
-          href={{
-            pathname: '/room/[id]',
-            params: { id: 1 },
-          }}
+        <CustomBottomSheet
+          bottomSheetRef={bottomSheetRef}
+          onChange={onBottomSheetChange}
+          snapPoints={['5%', '25%', '50%', '90%']}
+          initialIndex={selectedEvent ? 2 : 1}
+          onClose={handleClose}
+          showCloseButton={!!selectedEvent}
+          onCreateModeChange={useEventCreationStore().setIsCreatingMode}
         >
-          Go To first room
-        </Link>
-      </ScrollView>
-    </View>
+          {renderBottomSheetContent()}
+        </CustomBottomSheet>
+      </View>
+    </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  map: {
+    width: '100%',
+    height: '100%',
+  },
+});
